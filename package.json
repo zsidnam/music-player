@@ -1,22 +1,22 @@
 {
-  "name": "music-player",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "NODE_OPTIONS='--inspect=9259' next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
-    "axios": "^0.20.0",
-    "cookie": "^0.4.1",
-    "next": "^9.5.5",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "spotify-web-api-js": "^1.5.0",
-    "spotify-web-api-node": "^5.0.0"
-  }
+    "name": "music-player",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "NODE_OPTIONS='--inspect=9229' next dev -p 3001",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
+        "@material-ui/lab": "^4.0.0-alpha.56",
+        "axios": "^0.20.0",
+        "cookie": "^0.4.1",
+        "next": "^9.5.5",
+        "react": "16.13.1",
+        "react-dom": "16.13.1",
+        "spotify-web-api-js": "^1.5.0",
+        "spotify-web-api-node": "^5.0.0"
+    }
 }

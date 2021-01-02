@@ -1,49 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/router';
+import React from 'react';
+import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
-import { getURLHash } from '../utils/window';
-import { UserContextProvider } from '../context/userContext';
+import { AuthContextProvider } from '../context/authContext';
+import RouteProtector from '../components/auth/RouteProtector';
+import theme from '../styles/theme';
+
+const NoOp = ({ children }) => children;
 
 function MyApp({ Component, pageProps }) {
-    const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
-
-    useEffect(() => {
-        const hash = getURLHash();
-        window.location.hash = '';
-
-        const token = hash.access_token;
-        if (token) {
-            updateAccessToken(token);
-            console.log(token);
-
-            axios
-                .get('https://api.spotify.com/v1/me', {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                    },
-                })
-                .then((data) => {
-                    console.log(data);
-                    return data;
-                })
-                .then(({ data }) =>
-                    updateUser({
-                        id: data.id,
-                        name: data.display_name,
-                        email: data.email,
-                        profilePic: data.images[0],
-                    })
-                );
-            router.replace('/');
-        }
-    }, []);
+    const Layout = Component.Layout || NoOp;
 
     return (
-        <UserContextProvider initUser={user} initAccessToken={accessToken}>
-            <Component {...pageProps} />;
-        </UserContextProvider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <AuthContextProvider>
+                <RouteProtector>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </RouteProtector>
+            </AuthContextProvider>
+        </ThemeProvider>
     );
 }
 
