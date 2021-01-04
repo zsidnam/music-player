@@ -1,10 +1,8 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, useTheme } from '@material-ui/core';
 
 import Player from '../components/player/Player';
 import Header from '../components/app/Header';
-
-// TODO: Remove temp height around main content
 
 const MainLayout = ({ children }) => {
     return (

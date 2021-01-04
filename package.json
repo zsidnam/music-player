@@ -18,5 +18,8 @@
         "react-dom": "16.13.1",
         "spotify-web-api-js": "^1.5.0",
         "spotify-web-api-node": "^5.0.0"
+    },
+    "devDependencies": {
+        "@svgr/webpack": "^5.5.0"
     }
 }

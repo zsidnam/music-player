@@ -4,7 +4,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../keys';
 
-const REDIRECT_URI = 'http://localhost:3000/api/auth/callback';
+const REDIRECT_URI = 'http://localhost:3001/api/auth/callback';
 const RESPONSE_TYPE = 'code';
 const SHOW_DIALOG = true;
 const SCOPES = [
