@@ -4,6 +4,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 // Special exports
 export const HEADER_COLOR = 'rgba(28, 28, 28, 0.7)';
 export const PLAYER_COLOR = '#131313';
+export const CONTENT_PADDING = 20; // spacing units
 
 // Shared colors
 const WHITE = '#fff';
@@ -86,6 +87,7 @@ let theme = createMuiTheme({
             fontSize: '0.875rem',
             fontWeight: 'bold',
             textTransform: 'uppercase',
+            letterSpacing: '1px',
         },
     },
     shape: {
@@ -98,7 +100,16 @@ let theme = createMuiTheme({
 theme = {
     ...theme,
     props: {},
-    overrides: {},
+    overrides: {
+        MuiButton: {
+            root: {
+                padding: '0.75rem 2rem',
+            },
+            containedPrimary: {
+                color: theme.palette.common.white,
+            },
+        },
+    },
 };
 
 export default responsiveFontSizes(theme);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
 import { AuthContextProvider } from '../context/authContext';
@@ -10,15 +10,23 @@ const NoOp = ({ children }) => children;
 function MyApp({ Component, pageProps }) {
     const Layout = Component.Layout || NoOp;
 
+    useEffect(() => {
+        // Remove the server-side injected CSS.
+        const jssStyles = document.querySelector('#jss-server-side');
+        if (jssStyles) {
+            jssStyles.parentElement.removeChild(jssStyles);
+        }
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <AuthContextProvider>
-                <RouteProtector>
-                    <Layout>
+                <Layout>
+                    <RouteProtector>
                         <Component {...pageProps} />
-                    </Layout>
-                </RouteProtector>
+                    </RouteProtector>
+                </Layout>
             </AuthContextProvider>
         </ThemeProvider>
     );
