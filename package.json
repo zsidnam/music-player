@@ -8,18 +8,20 @@
         "start": "next start"
     },
     "dependencies": {
-        "@material-ui/core": "^4.11.0",
-        "@material-ui/icons": "^4.9.1",
+        "@material-ui/core": "^4.11.2",
+        "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.56",
-        "axios": "^0.20.0",
+        "axios": "^0.21.1",
         "cookie": "^0.4.1",
-        "next": "^9.5.5",
+        "latest": "^0.2.0",
+        "next": "^10.0.4",
         "react": "16.13.1",
         "react-dom": "16.13.1",
         "spotify-web-api-js": "^1.5.0",
         "spotify-web-api-node": "^5.0.0"
     },
     "devDependencies": {
+        "@babel/core": "^7.12.10",
         "@svgr/webpack": "^5.5.0"
     }
 }

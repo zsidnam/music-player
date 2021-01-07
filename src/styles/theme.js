@@ -9,7 +9,8 @@ export const CONTENT_PADDING = 20; // spacing units
 // Shared colors
 const WHITE = '#fff';
 const BLACK = '#000';
-const DARK_GREY = '#2E2E2E';
+const GREY = '#6b6b6b';
+const DARK_GREY = '#2e2e2e';
 
 // Constants
 let theme = createMuiTheme({
@@ -26,6 +27,7 @@ let theme = createMuiTheme({
         common: {
             white: WHITE,
             black: BLACK,
+            grey: GREY,
             darkGrey: DARK_GREY,
         },
     },
@@ -103,6 +105,9 @@ theme = {
     overrides: {
         MuiButton: {
             root: {
+                padding: '0.75rem 2rem',
+            },
+            text: {
                 padding: '0.75rem 2rem',
             },
             containedPrimary: {

@@ -15,6 +15,6 @@ export const setCookie = (res, name, value, options = {}) => {
 export const clearCookie = (res, name) => {
     res.setHeader(
         'Set-Cookie',
-        serialize(name, null, { expires: Date.now() + 1, maxAge: 0 })
+        serialize(name, null, { expires: new Date(), maxAge: 0 })
     );
 };

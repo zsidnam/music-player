@@ -46,6 +46,10 @@ export const AuthContextProvider = ({ children }) => {
         accessToken,
         user,
         isLoading,
+        logout: () => {
+            setUser(null);
+            setAccessToken(null);
+        },
     };
 
     return (

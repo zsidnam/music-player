@@ -7,7 +7,7 @@ import UserMenu from './UserMenu';
 import { HEADER_COLOR, CONTENT_PADDING } from '../../styles/theme';
 
 const Header = () => {
-    const { user } = useAuthContext();
+    const { user, logout } = useAuthContext();
 
     return (
         <Box
@@ -23,7 +23,7 @@ const Header = () => {
                     <SearchBar loggedIn={!!user} />
                 </Grid>
                 <Grid item>
-                    <UserMenu user={user} />
+                    <UserMenu user={user} logout={logout} />
                 </Grid>
             </Grid>
         </Box>

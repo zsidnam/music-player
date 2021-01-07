@@ -12,6 +12,11 @@ export default async (req, res) => {
         return res.status(404).end();
     }
 
+    // If user cancels auth request, return to landing page
+    if (req.query.error && req.query.error === 'access_denied') {
+        return res.redirect('/');
+    }
+
     const { code, state } = req.query;
     const storedState = req.cookies ? req.cookies[SPOTIFY_STATE_KEY] : null;
 
@@ -20,13 +25,12 @@ export default async (req, res) => {
         return res.status(400).redirect('/error');
     }
 
-    // Clear
-    // TODO: Fix this
-    //clearCookie(res, SPOTIFY_STATE_KEY);
+    clearCookie(res, SPOTIFY_STATE_KEY);
 
     try {
         const { body } = await getTokens(code);
 
+        // TODO: Revisit this and figure out how to persist login state across page refresh
         // Store refresh token in cookie, expose access
         // token to client so it can be saved in app state.
         setCookie(res, SPOTIFY_REFRESH_TOKEN_KEY, body.refresh_token);
@@ -42,6 +46,6 @@ export default async (req, res) => {
         console.log(
             `Error retrieving access and refresh tokens: ${err.message}`
         );
-        return res.status(500).end();
+        return res.redirect('/error');
     }
 };

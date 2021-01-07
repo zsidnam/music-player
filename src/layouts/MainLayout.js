@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import Player from '../components/player/Player';
 import Header from '../components/app/Header';
