@@ -4,6 +4,7 @@ import { Box, Grid } from '@material-ui/core';
 import { useAuthContext } from '../../context/authContext';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
+import LoginButton from './LoginButton';
 import { HEADER_COLOR, CONTENT_PADDING } from '../../styles/theme';
 
 const Header = () => {
@@ -12,7 +13,7 @@ const Header = () => {
     return (
         <Box
             px={CONTENT_PADDING}
-            height={100}
+            height={75}
             bgcolor={HEADER_COLOR}
             display={'flex'}
             justifyContent={'space-between'}
@@ -23,7 +24,11 @@ const Header = () => {
                     <SearchBar loggedIn={!!user} />
                 </Grid>
                 <Grid item>
-                    <UserMenu user={user} logout={logout} />
+                    {user ? (
+                        <UserMenu user={user} logout={logout} />
+                    ) : (
+                        <LoginButton />
+                    )}
                 </Grid>
             </Grid>
         </Box>
