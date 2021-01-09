@@ -105,3 +105,6 @@ dist
 
 # API Keys
 keys.js
+
+# IDE
+.vscode

@@ -9,6 +9,7 @@ export const CONTENT_PADDING = 20; // spacing units
 // Shared colors
 const WHITE = '#fff';
 const BLACK = '#000';
+const LIGHT_GREY = '#b3b3b3';
 const GREY = '#6b6b6b';
 const DARK_GREY = '#2e2e2e';
 
@@ -23,11 +24,13 @@ let theme = createMuiTheme({
         },
         text: {
             primary: WHITE,
+            secondary: BLACK,
         },
         common: {
             white: WHITE,
             black: BLACK,
             grey: GREY,
+            lightGrey: LIGHT_GREY,
             darkGrey: DARK_GREY,
         },
     },
@@ -101,7 +104,11 @@ let theme = createMuiTheme({
 // Overrides
 theme = {
     ...theme,
-    props: {},
+    props: {
+        MuiInput: {
+            disableUnderline: true,
+        },
+    },
     overrides: {
         MuiButton: {
             root: {
@@ -112,6 +119,21 @@ theme = {
             },
             containedPrimary: {
                 color: theme.palette.common.white,
+            },
+        },
+        MuiInput: {
+            root: {
+                backgroundColor: theme.palette.common.white,
+                color: theme.palette.common.black,
+                borderRadius: 500,
+                padding: theme.spacing(0, 1.5),
+                height: 35,
+            },
+            disabled: {
+                backgroundColor: theme.palette.common.darkGrey,
+            },
+            focused: {
+                boxShadow: `0 0 0 2pt ${theme.palette.primary.main}`,
             },
         },
     },

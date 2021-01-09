@@ -5,6 +5,7 @@ import { useAuthContext } from '../../context/authContext';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
 import LoginButton from './LoginButton';
+import NavControls from './NavControls';
 import { HEADER_COLOR, CONTENT_PADDING } from '../../styles/theme';
 
 const Header = () => {
@@ -21,7 +22,14 @@ const Header = () => {
         >
             <Grid container justify={'space-between'} alignItems={'center'}>
                 <Grid item>
-                    <SearchBar loggedIn={!!user} />
+                    <Grid container spacing={1} alignItems={'center'}>
+                        <Grid item>
+                            <NavControls />
+                        </Grid>
+                        <Grid item>
+                            <SearchBar loggedIn={!!user} />
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item>
                     {user ? (

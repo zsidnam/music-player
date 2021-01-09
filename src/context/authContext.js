@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import spotifyApi from '../services/spotify-api';
 import { useRouter } from 'next/router';
 
@@ -13,6 +14,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log('ran hook');
         async function fetchUser() {
             setLoading(true);
             const { data } = await spotifyApi.get('/v1/me');
@@ -40,6 +42,7 @@ export const AuthContextProvider = ({ children }) => {
         } else {
             setLoading(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const store = {
@@ -55,6 +58,10 @@ export const AuthContextProvider = ({ children }) => {
     return (
         <AuthContext.Provider value={store}>{children}</AuthContext.Provider>
     );
+};
+
+AuthContextProvider.propTypes = {
+    children: PropTypes.node,
 };
 
 export const useAuthContext = () => useContext(AuthContext);
