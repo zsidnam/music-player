@@ -19,7 +19,9 @@ const SearchBar = ({ loggedIn }) => {
         <Box>
             <TextField
                 onClick={() => {
-                    router.push('/search');
+                    if (router.pathname !== '/search') {
+                        router.push('/search');
+                    }
                 }}
                 disabled={!loggedIn}
                 InputProps={{
