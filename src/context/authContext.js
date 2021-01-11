@@ -14,7 +14,6 @@ export const AuthContextProvider = ({ children }) => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log('ran hook');
         async function fetchUser() {
             setLoading(true);
             const { data } = await spotifyApi.get('/v1/me');

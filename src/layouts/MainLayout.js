@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
-import Player from '../components/player/Player';
+import PlayerContainer from '../components/player/PlayerContainer';
 import Header from '../components/app/Header';
 
 const MainLayout = ({ children }) => {
@@ -35,10 +36,14 @@ const MainLayout = ({ children }) => {
             </Box>
 
             <Box id={'player-container'} flex={'none'}>
-                <Player />
+                <PlayerContainer />
             </Box>
         </Box>
     );
+};
+
+MainLayout.propTypes = {
+    children: PropTypes.node,
 };
 
 export default MainLayout;

@@ -1,14 +1,12 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-import PlayingInfo from './PlayingInfo';
-import PrimaryControls from './PrimaryControls';
-import SecondaryControls from './SecondaryControls';
+import WebPlayer from './web-player/WebPlayer';
 import { useAuthContext } from '../../context/authContext';
 import { PLAYER_COLOR } from '../../styles/theme';
 
-const Player = () => {
-    const { user, isLoading } = useAuthContext();
+const PlayerContainer = () => {
+    const { user, accessToken } = useAuthContext();
 
     return (
         <Box
@@ -19,11 +17,13 @@ const Player = () => {
             alignItems={'center'}
             px={4}
         >
-            <PlayingInfo loggedIn={!!user} />
-            <PrimaryControls loggedIn={!!user} />
-            <SecondaryControls loggedIn={!!user} />
+            {user ? (
+                <WebPlayer token={accessToken} />
+            ) : (
+                <Box>Log in to user player</Box>
+            )}
         </Box>
     );
 };
 
-export default Player;
+export default PlayerContainer;

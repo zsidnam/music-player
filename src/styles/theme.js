@@ -9,6 +9,7 @@ export const CONTENT_PADDING = 20; // spacing units
 // Shared colors
 const WHITE = '#fff';
 const BLACK = '#000';
+const OFF_WHITE = '#ececec';
 const LIGHT_GREY = '#b3b3b3';
 const GREY = '#6b6b6b';
 const DARK_GREY = '#2e2e2e';
@@ -28,6 +29,7 @@ let theme = createMuiTheme({
         },
         common: {
             white: WHITE,
+            offWhite: OFF_WHITE,
             black: BLACK,
             grey: GREY,
             lightGrey: LIGHT_GREY,
@@ -55,12 +57,10 @@ let theme = createMuiTheme({
         },
         h5: {
             fontSize: '1.25rem',
-            fontWeight: 'bold',
             letterSpacing: '-0.3px',
         },
         h6: {
             fontSize: '1rem',
-            fontWeight: 'bold',
         },
         subtitle1: {
             fontSize: '1.25rem',
@@ -120,6 +120,9 @@ theme = {
             containedPrimary: {
                 color: theme.palette.common.white,
             },
+            textSecondary: {
+                color: theme.palette.common.black,
+            },
         },
         MuiInput: {
             root: {
@@ -134,6 +137,11 @@ theme = {
             },
             focused: {
                 boxShadow: `0 0 0 2pt ${theme.palette.primary.main}`,
+            },
+        },
+        MuiDialog: {
+            paper: {
+                backgroundColor: theme.palette.common.offWhite,
             },
         },
     },
