@@ -3,6 +3,7 @@
 // See Web Playback SDK guide for more info on loading sequence
 // https://developer.spotify.com/documentation/web-playback-sdk/quick-start/
 
+// TODO: Set max time to wait, handle error
 const _waitForSpotifyWebPlaybackSDKToLoad = () => {
     return new Promise((resolve) => {
         if (window.Spotify) {
@@ -15,54 +16,7 @@ const _waitForSpotifyWebPlaybackSDKToLoad = () => {
     });
 };
 
-const _handleScriptLoad = async (token, onStateUpdate, cb) => {
-    const { Player } = await _waitForSpotifyWebPlaybackSDKToLoad();
-    const player = new Player({
-        name: 'Web Playback SDK Quick Start Player',
-        getOAuthToken: (tcb) => {
-            tcb(token);
-        },
-    });
-
-    // Error handling
-    player.addListener('initialization_error', ({ message }) => {
-        console.error(message);
-    });
-    player.addListener('authentication_error', ({ message }) => {
-        console.error(message);
-    });
-    player.addListener('account_error', ({ message }) => {
-        console.error(message);
-    });
-    player.addListener('playback_error', ({ message }) => {
-        console.error(message);
-    });
-
-    // Playback status updates
-    player.addListener('player_state_changed', (state) => {
-        onStateUpdate(state);
-    });
-
-    // Ready
-    player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
-    });
-
-    // Not Ready
-    player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-    });
-
-    // Connect to the player!
-    const connected = await player.connect();
-    if (connected) {
-        return cb(player);
-    }
-
-    return cb(null);
-};
-
-const loadWebPlayer = (token, onStateUpdate, cb) => {
+const loadWebPlayer = async (cb) => {
     const existingScript = document.getElementById('web-player');
 
     if (existingScript) {
@@ -71,11 +25,14 @@ const loadWebPlayer = (token, onStateUpdate, cb) => {
     }
 
     const newScript = document.createElement('script');
+    newScript.crossOrigin = true;
     newScript.src = 'https://sdk.scdn.co/spotify-player.js';
     newScript.id = 'web-player';
 
     document.body.appendChild(newScript);
-    _handleScriptLoad(token, onStateUpdate, cb);
+    await _waitForSpotifyWebPlaybackSDKToLoad();
+
+    return cb();
 };
 
 export default loadWebPlayer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
     Grid,
     IconButton,
@@ -25,10 +26,9 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PrimaryControls = ({ playbackControls, playerState }) => {
+const PrimaryControls = ({ playerState, onPlayToggle, onNext, onPrev }) => {
     const classes = useStyles();
 
-    const { togglePlay, seek, prev, next } = playbackControls;
     const { duration, position, paused, shuffle, repeat_mode } = playerState;
 
     return (
@@ -48,13 +48,13 @@ const PrimaryControls = ({ playbackControls, playerState }) => {
                 </Grid>
 
                 <Grid item>
-                    <IconButton color={'secondary'} onClick={prev}>
+                    <IconButton color={'secondary'} onClick={onPrev}>
                         <PrevIcon fontSize={'large'} />
                     </IconButton>
                 </Grid>
 
                 <Grid item>
-                    <IconButton color={'secondary'} onClick={togglePlay}>
+                    <IconButton color={'secondary'} onClick={onPlayToggle}>
                         {paused ? (
                             <PlayIcon fontSize={'large'} />
                         ) : (
@@ -64,7 +64,7 @@ const PrimaryControls = ({ playbackControls, playerState }) => {
                 </Grid>
 
                 <Grid item>
-                    <IconButton color={'secondary'} onClick={next}>
+                    <IconButton color={'secondary'} onClick={onNext}>
                         <NextIcon fontSize={'large'} />
                     </IconButton>
                 </Grid>
@@ -109,6 +109,18 @@ const PrimaryControls = ({ playbackControls, playerState }) => {
     );
 };
 
-PrimaryControls.propTypes = {};
+PrimaryControls.propTypes = {
+    playerState: PropTypes.shape({
+        duration: PropTypes.number,
+        position: PropTypes.number,
+        paused: PropTypes.bool,
+        shuffle: PropTypes.bool,
+        repeat_mode: PropTypes.number,
+    }),
+    onPlayToggle: PropTypes.func.isRequired,
+    onNext: PropTypes.func.isRequired,
+    onPrev: PropTypes.func.isRequired,
+    onSeek: PropTypes.func.isRequired,
+};
 
 export default PrimaryControls;
