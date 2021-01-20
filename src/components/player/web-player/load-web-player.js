@@ -15,7 +15,7 @@ const _waitForSpotifyWebPlaybackSDKToLoad = () => {
     });
 };
 
-const _handleScriptLoad = async (token, cb) => {
+const _handleScriptLoad = async (token, onStateUpdate, cb) => {
     const { Player } = await _waitForSpotifyWebPlaybackSDKToLoad();
     const player = new Player({
         name: 'Web Playback SDK Quick Start Player',
@@ -40,7 +40,7 @@ const _handleScriptLoad = async (token, cb) => {
 
     // Playback status updates
     player.addListener('player_state_changed', (state) => {
-        console.log(state);
+        onStateUpdate(state);
     });
 
     // Ready
@@ -62,7 +62,7 @@ const _handleScriptLoad = async (token, cb) => {
     return cb(null);
 };
 
-const loadWebPlayer = (token, cb) => {
+const loadWebPlayer = (token, onStateUpdate, cb) => {
     const existingScript = document.getElementById('web-player');
 
     if (existingScript) {
@@ -75,7 +75,7 @@ const loadWebPlayer = (token, cb) => {
     newScript.id = 'web-player';
 
     document.body.appendChild(newScript);
-    _handleScriptLoad(token, cb);
+    _handleScriptLoad(token, onStateUpdate, cb);
 };
 
 export default loadWebPlayer;

@@ -13,6 +13,7 @@ const MainLayout = ({ children }) => {
             flexDirection={'column'}
             justifyContent={'space-between'}
             height={'100vh'}
+            minWidth={'850px'}
         >
             <Box
                 id={'primary-container'}

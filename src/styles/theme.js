@@ -61,6 +61,7 @@ let theme = createMuiTheme({
         },
         h6: {
             fontSize: '1rem',
+            fontWeight: 'bold',
         },
         subtitle1: {
             fontSize: '1.25rem',
@@ -112,10 +113,10 @@ theme = {
     overrides: {
         MuiButton: {
             root: {
-                padding: '0.75rem 2rem',
+                padding: theme.spacing(1.5, 4),
             },
             text: {
-                padding: '0.75rem 2rem',
+                padding: theme.spacing(1.5, 4),
             },
             containedPrimary: {
                 color: theme.palette.common.white,
@@ -142,6 +143,43 @@ theme = {
         MuiDialog: {
             paper: {
                 backgroundColor: theme.palette.common.offWhite,
+            },
+        },
+        MuiDialogContent: {
+            root: {
+                padding: theme.spacing(3),
+            },
+        },
+        MuiDialogActions: {
+            root: {
+                padding: theme.spacing(1.5),
+            },
+        },
+        MuiIconButton: {
+            root: {
+                padding: 5,
+            },
+            colorSecondary: {
+                color: theme.palette.common.lightGrey,
+                '&:hover': {
+                    backgroundColor: theme.palette.common.darkGrey,
+                },
+            },
+        },
+        MuiSlider: {
+            rail: {
+                backgroundColor: theme.palette.common.darkGrey,
+                opacity: 1,
+            },
+            thumb: {
+                backgroundColor: 'transparent',
+                '&:focus': {
+                    boxShadow: 'none',
+                },
+                '&:hover': {
+                    boxShadow: 'none',
+                    backgroundColor: theme.palette.primary.main,
+                },
             },
         },
     },
