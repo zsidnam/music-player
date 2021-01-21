@@ -30,9 +30,9 @@ const loadWebPlayer = async (cb) => {
     newScript.id = 'web-player';
 
     document.body.appendChild(newScript);
-    await _waitForSpotifyWebPlaybackSDKToLoad();
+    const { Player } = await _waitForSpotifyWebPlaybackSDKToLoad();
 
-    return cb();
+    return cb(Player);
 };
 
 export default loadWebPlayer;

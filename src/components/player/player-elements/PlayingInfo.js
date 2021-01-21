@@ -17,14 +17,18 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PlayingInfo = ({ currentTrack }) => {
+const PlayingInfo = ({ playerState }) => {
     const classes = useStyles();
 
-    if (!currentTrack) {
+    if (
+        !playerState ||
+        !playerState.track_window ||
+        !playerState.track_window
+    ) {
         return null;
     }
 
-    const { name, artists, album } = currentTrack;
+    const { name, artists, album } = playerState.track_window.current_track;
 
     const smallestImgUrl = album.images.length
         ? [...album.images].sort((a, b) => a.width - b.width)[0].url
@@ -87,24 +91,28 @@ const PlayingInfo = ({ currentTrack }) => {
 };
 
 PlayingInfo.propTypes = {
-    currentTrack: PropTypes.shape({
-        name: PropTypes.string,
-        artists: PropTypes.arrayOf(
-            PropTypes.shape({
+    playerState: PropTypes.shape({
+        track_window: PropTypes.shape({
+            current_track: PropTypes.shape({
                 name: PropTypes.string,
-                uri: PropTypes.string,
-            })
-        ),
-        album: PropTypes.shape({
-            name: PropTypes.string,
-            uri: PropTypes.string,
-            images: PropTypes.arrayOf(
-                PropTypes.shape({
-                    width: PropTypes.number,
-                    height: PropTypes.number,
-                    url: PropTypes.string,
-                })
-            ),
+                artists: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        name: PropTypes.string,
+                        uri: PropTypes.string,
+                    })
+                ),
+                album: PropTypes.shape({
+                    name: PropTypes.string,
+                    uri: PropTypes.string,
+                    images: PropTypes.arrayOf(
+                        PropTypes.shape({
+                            width: PropTypes.number,
+                            height: PropTypes.number,
+                            url: PropTypes.string,
+                        })
+                    ),
+                }),
+            }),
         }),
     }),
 };

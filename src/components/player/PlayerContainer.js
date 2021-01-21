@@ -17,11 +17,7 @@ const PlayerContainer = () => {
             alignItems={'center'}
             px={4}
         >
-            {user ? (
-                <WebPlayer token={accessToken} />
-            ) : (
-                <Box>Log in to user player</Box>
-            )}
+            {user ? <WebPlayer token={accessToken} /> : null}
         </Box>
     );
 };

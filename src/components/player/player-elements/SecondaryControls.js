@@ -1,13 +1,13 @@
 import React from 'react';
-import { Box, Grid, Slider, IconButton } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Grid, IconButton } from '@material-ui/core';
 
+import VolumeSlider from './VolumeSlider';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import DevicesIcon from '@material-ui/icons/Devices';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import VolumeDownIcon from '@material-ui/icons/VolumeDown';
-import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 
-const SecondaryControls = () => {
+const SecondaryControls = ({ volume, onVolumeChange }) => {
+    // TODO: Consider memoizing this component
     return (
         <Grid container justify={'flex-end'} alignItems={'center'} spacing={1}>
             <Grid item>
@@ -21,23 +21,15 @@ const SecondaryControls = () => {
                 </IconButton>
             </Grid>
             <Grid item>
-                <Grid container alignItems={'flex-start'}>
-                    <Grid item>
-                        <IconButton color={'secondary'}>
-                            <VolumeUpIcon fontSize={'small'} />
-                        </IconButton>
-                    </Grid>
-                    <Grid item>
-                        <Box width={100}>
-                            <Slider />
-                        </Box>
-                    </Grid>
-                </Grid>
+                <VolumeSlider volume={volume} onVolumeChange={onVolumeChange} />
             </Grid>
         </Grid>
     );
 };
 
-SecondaryControls.propTypes = {};
+SecondaryControls.propTypes = {
+    volume: PropTypes.number,
+    onVolumeChange: PropTypes.func.isRequired,
+};
 
 export default SecondaryControls;
