@@ -7,6 +7,16 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 
+const _getVolumeIcon = (volume) => {
+    if (volume === 0) {
+        return <VolumeOffIcon fontSize={'small'} />;
+    } else if (volume < 0.5) {
+        return <VolumeDownIcon fontSize={'small'} />;
+    }
+
+    return <VolumeUpIcon fontSize={'small'} />;
+};
+
 // TODO: Consider avoiding player volume altogether and just using api
 const VolumeSlider = ({ volume, onVolumeChange }) => {
     const [localVolume, setLocalVolume] = useState(0);
@@ -21,10 +31,16 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
         onVolumeChange(value);
     };
 
+    const handleIconClick = () => {
+        const newVolume = localVolume > 0 ? 0 : 0.5;
+        setLocalVolume(newVolume);
+        onVolumeChange(newVolume);
+    };
+
     return (
         <Box display={'flex'} alignItems={'flex-start'}>
-            <IconButton color={'secondary'}>
-                <VolumeUpIcon fontSize={'small'} />
+            <IconButton color={'secondary'} onClick={handleIconClick}>
+                {_getVolumeIcon(localVolume)}
             </IconButton>
             <Box width={100}>
                 <Slider

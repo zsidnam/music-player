@@ -52,6 +52,15 @@ class WebPlayer extends React.Component {
         // If player is no longer in use, playerState will get set to null
         if (isEmpty(this.state.playerState)) return;
 
+        // TODO: Clean this up
+        // Player has been selected again
+        if (
+            isEmpty(prevState.playerState) &&
+            !isEmpty(this.state.playerState)
+        ) {
+            this._setPermanentIntervals();
+        }
+
         // While a song is playing, continue to update player state so playback position
         // is shown correctly.
         if (prevState.playerState.paused !== this.state.playerState.paused) {
