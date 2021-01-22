@@ -57,11 +57,11 @@ const ProgressBar = ({ playerState, onSeek }) => {
 };
 
 ProgressBar.propTypes = {
+    onSeek: PropTypes.func.isRequired,
     playerState: PropTypes.shape({
         duration: PropTypes.number,
         position: PropTypes.number,
     }),
-    onSeek: PropTypes.func.isRequired,
 };
 
 export default ProgressBar;

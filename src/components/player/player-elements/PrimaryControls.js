@@ -67,14 +67,14 @@ const PrimaryControls = ({ playerState, onPlayToggle, onNext, onPrev }) => {
 };
 
 PrimaryControls.propTypes = {
+    onPlayToggle: PropTypes.func.isRequired,
+    onNext: PropTypes.func.isRequired,
+    onPrev: PropTypes.func.isRequired,
     playerState: PropTypes.shape({
         paused: PropTypes.bool,
         shuffle: PropTypes.bool,
         repeat_mode: PropTypes.number,
     }),
-    onPlayToggle: PropTypes.func.isRequired,
-    onNext: PropTypes.func.isRequired,
-    onPrev: PropTypes.func.isRequired,
 };
 
 export default PrimaryControls;

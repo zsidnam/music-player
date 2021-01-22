@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Grid, Box, makeStyles } from '@material-ui/core';
+import _get from 'lodash.get';
 
 import TextLink from '../../common/TextLink';
 
@@ -20,15 +21,12 @@ const useStyles = makeStyles(() => ({
 const PlayingInfo = ({ playerState }) => {
     const classes = useStyles();
 
-    if (
-        !playerState ||
-        !playerState.track_window ||
-        !playerState.track_window
-    ) {
+    const currentTrack = _get(playerState, 'track_window.current_track');
+    if (!currentTrack) {
         return null;
     }
 
-    const { name, artists, album } = playerState.track_window.current_track;
+    const { name, artists, album } = currentTrack;
 
     const smallestImgUrl = album.images.length
         ? [...album.images].sort((a, b) => a.width - b.width)[0].url

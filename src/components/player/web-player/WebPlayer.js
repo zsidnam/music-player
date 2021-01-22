@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Box } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import isEmpty from 'lodash.isempty';
 
 import spotifyApi from '../../../services/spotify-api';
 import loadWebPlayer from './load-web-player';
-import PlayingInfo from '../player-elements/PlayingInfo';
-import PrimaryControls from '../player-elements/PrimaryControls';
-import SecondaryControls from '../player-elements/SecondaryControls';
 import PlaybackTransferModal from './PlaybackTransferModal';
-import ProgressBar from '../player-elements/ProgressBar';
+import PlayerInterface from '../player-elements/PlayerInterface';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
@@ -239,35 +236,15 @@ class WebPlayer extends React.Component {
 
         return (
             <>
-                <Grid container justify={'space-between'} alignItems={'center'}>
-                    <Grid item xs={4} lg={3} xl={2}>
-                        <PlayingInfo playerState={this.state.playerState} />
-                    </Grid>
-                    <Grid item xs={4} lg={6} xl={8}>
-                        <Grid container direction={'column'}>
-                            <Grid item>
-                                <PrimaryControls
-                                    playerState={this.state.playerState}
-                                    onPlayToggle={this.handlePlayToggle}
-                                    onNext={this.handleNext}
-                                    onPrev={this.handlePrev}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <ProgressBar
-                                    playerState={this.state.playerState}
-                                    onSeek={this.handleSeek}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={4} lg={3} xl={2}>
-                        <SecondaryControls
-                            volume={this.state.playerVolume}
-                            onVolumeChange={this.handleVolumeChange}
-                        />
-                    </Grid>
-                </Grid>
+                <PlayerInterface
+                    playerState={this.state.playerState}
+                    volume={this.state.playerVolume}
+                    onPlayToggle={this.handlePlayToggle}
+                    onNext={this.handleNext}
+                    onPrev={this.handlePrev}
+                    onSeek={this.handleSeek}
+                    onVolumeChange={this.handleVolumeChange}
+                />
 
                 <PlaybackTransferModal
                     open={this.state.showPlaybackModal}
