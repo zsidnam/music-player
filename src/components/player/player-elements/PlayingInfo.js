@@ -18,10 +18,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const PlayingInfo = ({ playerState }) => {
+// TODO: memoize
+
+const PlayingInfo = ({ currentTrack }) => {
     const classes = useStyles();
 
-    const currentTrack = _get(playerState, 'track_window.current_track');
     if (!currentTrack) {
         return null;
     }
@@ -89,28 +90,24 @@ const PlayingInfo = ({ playerState }) => {
 };
 
 PlayingInfo.propTypes = {
-    playerState: PropTypes.shape({
-        track_window: PropTypes.shape({
-            current_track: PropTypes.shape({
+    currentTrack: PropTypes.shape({
+        name: PropTypes.string,
+        artists: PropTypes.arrayOf(
+            PropTypes.shape({
                 name: PropTypes.string,
-                artists: PropTypes.arrayOf(
-                    PropTypes.shape({
-                        name: PropTypes.string,
-                        uri: PropTypes.string,
-                    })
-                ),
-                album: PropTypes.shape({
-                    name: PropTypes.string,
-                    uri: PropTypes.string,
-                    images: PropTypes.arrayOf(
-                        PropTypes.shape({
-                            width: PropTypes.number,
-                            height: PropTypes.number,
-                            url: PropTypes.string,
-                        })
-                    ),
-                }),
-            }),
+                uri: PropTypes.string,
+            })
+        ),
+        album: PropTypes.shape({
+            name: PropTypes.string,
+            uri: PropTypes.string,
+            images: PropTypes.arrayOf(
+                PropTypes.shape({
+                    width: PropTypes.number,
+                    height: PropTypes.number,
+                    url: PropTypes.string,
+                })
+            ),
         }),
     }),
 };

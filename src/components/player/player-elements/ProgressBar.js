@@ -4,10 +4,9 @@ import { Box, Slider, Typography } from '@material-ui/core';
 
 import { formatTime } from '../utils';
 
-const ProgressBar = ({ playerState, onSeek }) => {
+const ProgressBar = ({ position, duration, onSeek }) => {
     const [localPosition, setLocalPosition] = useState(0);
     const [locked, setLocked] = useState(false);
-    const { duration, position } = playerState;
 
     useEffect(() => {
         if (!locked) {
@@ -58,10 +57,8 @@ const ProgressBar = ({ playerState, onSeek }) => {
 
 ProgressBar.propTypes = {
     onSeek: PropTypes.func.isRequired,
-    playerState: PropTypes.shape({
-        duration: PropTypes.number,
-        position: PropTypes.number,
-    }),
+    duration: PropTypes.number,
+    position: PropTypes.number,
 };
 
 export default ProgressBar;

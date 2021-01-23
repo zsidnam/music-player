@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@material-ui/core';
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 
 import VolumeSlider from './VolumeSlider';
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
-import DevicesIcon from '@material-ui/icons/Devices';
+import DeviceMenu from './DeviceMenu';
 
 const SecondaryControls = ({ volume, onVolumeChange }) => {
     // TODO: Consider memoizing this component
@@ -16,9 +16,7 @@ const SecondaryControls = ({ volume, onVolumeChange }) => {
                 </IconButton>
             </Grid>
             <Grid item>
-                <IconButton color={'secondary'}>
-                    <DevicesIcon fontSize={'small'} />
-                </IconButton>
+                <DeviceMenu />
             </Grid>
             <Grid item>
                 <VolumeSlider volume={volume} onVolumeChange={onVolumeChange} />

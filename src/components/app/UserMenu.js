@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     menu: {
         backgroundColor: theme.palette.common.grey,
         marginTop: '0.5rem',
+        padding: 0,
     },
     menuItemList: {
         padding: 0,

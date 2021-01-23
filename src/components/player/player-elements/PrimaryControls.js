@@ -14,9 +14,16 @@ const RepeatSetting = {
     FULL_REPEAT: 2,
 };
 
-const PrimaryControls = ({ playerState, onPlayToggle, onNext, onPrev }) => {
-    const { paused, shuffle, repeat_mode } = playerState;
+// TODO: memoize
 
+const PrimaryControls = ({
+    paused,
+    shuffle,
+    repeat_mode,
+    onPlayToggle,
+    onNext,
+    onPrev,
+}) => {
     return (
         <Grid container justify={'center'} alignItems={'center'} spacing={1}>
             <Grid item>
@@ -70,11 +77,9 @@ PrimaryControls.propTypes = {
     onPlayToggle: PropTypes.func.isRequired,
     onNext: PropTypes.func.isRequired,
     onPrev: PropTypes.func.isRequired,
-    playerState: PropTypes.shape({
-        paused: PropTypes.bool,
-        shuffle: PropTypes.bool,
-        repeat_mode: PropTypes.number,
-    }),
+    paused: PropTypes.bool,
+    shuffle: PropTypes.bool,
+    repeat_mode: PropTypes.number,
 };
 
 export default PrimaryControls;

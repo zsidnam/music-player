@@ -1,10 +1,4 @@
-import { green } from '@material-ui/core/colors';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
-
-// Special exports
-export const HEADER_COLOR = 'rgba(28, 28, 28, 0.7)';
-export const PLAYER_COLOR = '#131313';
-export const CONTENT_PADDING = 20; // spacing units
 
 // Shared colors
 const WHITE = '#fff';
@@ -13,6 +7,12 @@ const OFF_WHITE = '#ececec';
 const LIGHT_GREY = '#b3b3b3';
 const GREY = '#6b6b6b';
 const DARK_GREY = '#2e2e2e';
+const NEAR_BLACK = '#131313';
+
+// Special exports
+export const HEADER_COLOR = 'rgba(28, 28, 28, 0.7)';
+export const PLAYER_COLOR = NEAR_BLACK;
+export const CONTENT_PADDING = 20; // spacing units
 
 // Constants
 let theme = createMuiTheme({
@@ -34,6 +34,7 @@ let theme = createMuiTheme({
             grey: GREY,
             lightGrey: LIGHT_GREY,
             darkGrey: DARK_GREY,
+            nearBlack: NEAR_BLACK,
         },
     },
     typography: {
@@ -180,6 +181,17 @@ theme = {
                     boxShadow: 'none',
                     backgroundColor: theme.palette.primary.main,
                 },
+            },
+        },
+        MuiPopover: {
+            paper: {
+                backgroundColor: theme.palette.common.darkGrey,
+                padding: theme.spacing(2),
+            },
+        },
+        MuiDivider: {
+            root: {
+                backgroundColor: theme.palette.common.lightGrey,
             },
         },
     },
