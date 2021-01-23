@@ -7,6 +7,7 @@ import spotifyApi from '../../../services/spotify-api';
 import loadWebPlayer from './load-web-player';
 import PlaybackTransferModal from './PlaybackTransferModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
+import ConnectPlayer from './ConnectPlayer';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
@@ -46,20 +47,27 @@ class WebPlayer extends React.Component {
     }
 
     componentDidUpdate(_, prevState) {
-        // If player is no longer in use, playerState will get set to null
+        // WebPlayer is no longer active device
+        if (
+            !isEmpty(prevState.playerState) &&
+            isEmpty(this.state.playerState)
+        ) {
+            this._removeAllPolling();
+        }
+
+        // No updated needed if WebPlayer remains inactive
         if (isEmpty(this.state.playerState)) return;
 
-        // TODO: Clean this up
-        // Player has been selected again
+        // WebPlayer is now active device
         if (
             isEmpty(prevState.playerState) &&
             !isEmpty(this.state.playerState)
         ) {
-            this._setPermanentIntervals();
+            this._setActiveDevicePolling();
         }
 
         // While a song is playing, continue to update player state so playback position
-        // is shown correctly.
+        // is shown correctly. If paused, stop unnecessary polling.
         if (prevState.playerState.paused !== this.state.playerState.paused) {
             this._setPlayerQueryInterval();
         }
@@ -67,18 +75,32 @@ class WebPlayer extends React.Component {
 
     componentWillUnmount() {
         if (this.player) {
-            this._clearAllIntervals();
+            this._removeAllPolling();
             this._removePlayerListeners();
             this.player.disconnect();
         }
     }
 
-    _setPlayerQueryInterval() {
-        if (this.state.playerState.paused) {
-            this.playerStateInterval && clearInterval(this.playerStateInterval);
-        } else {
-            this.playerStateInterval = setInterval(this.pollPlayerState, 1000);
+    async initPlayer(Player) {
+        if (!Player) {
+            console.error('Failed to load Spotify Web Player');
+            return;
         }
+
+        this.player = new Player({
+            name: 'Music Player App',
+            volume: 0.75,
+            getOAuthToken: (cb) => {
+                cb(this.props.token);
+            },
+        });
+
+        this._setPlayerListeners();
+        await this.player.connect();
+        this.setState({
+            loaded: true,
+            playerVolume: this.player._options.volume,
+        });
     }
 
     _setPlayerListeners() {
@@ -124,12 +146,22 @@ class WebPlayer extends React.Component {
 
     // Set any intervals here that do not rely on player state
     // (eg volume can always be retrieved, but player state should only
-    // be polled when a song is playing).
-    _setPermanentIntervals() {
-        this.playerVolumeInterval = setInterval(null, 1000);
+    // be polled when a song is playing). These pollers should only
+    // be used while web player device is active.
+    _setActiveDevicePolling() {
+        // TODO: Research whether polling volume is necessary. Leave out for now.
+        this.playerVolumeInterval = setInterval(this.pollPlayerVolume, 1000);
     }
 
-    _clearAllIntervals() {
+    _setPlayerQueryInterval() {
+        if (this.state.playerState.paused) {
+            this.playerStateInterval && clearInterval(this.playerStateInterval);
+        } else {
+            this.playerStateInterval = setInterval(this.pollPlayerState, 1000);
+        }
+    }
+
+    _removeAllPolling() {
         if (this.playerStateInterval) {
             clearInterval(this.playerStateInterval);
         }
@@ -137,30 +169,6 @@ class WebPlayer extends React.Component {
         if (this.playerVolumeInterval) {
             clearInterval(this.playerVolumeInterval);
         }
-    }
-
-    async initPlayer(Player) {
-        if (!Player) {
-            console.error('Failed to load Spotify Web Player');
-        }
-
-        this.player = new Player({
-            name: 'Music Player App',
-            volume: 0.75,
-            getOAuthToken: (cb) => {
-                cb(this.props.token);
-            },
-        });
-
-        this._setPlayerListeners();
-
-        await this.player.connect();
-
-        this._setPermanentIntervals();
-        this.setState({
-            loaded: true,
-            playerVolume: this.player._options.volume,
-        });
     }
 
     async pollPlayerState() {
@@ -183,16 +191,8 @@ class WebPlayer extends React.Component {
     }
 
     handleStateUpdate(newPlayerState) {
-        // If playerState gets set to null, that means that the player is no
-        // longer in use. (Ex: user switches playback to another device).
-        // Stop polling player state and set it to empty object.
-        if (!newPlayerState) {
-            this._clearAllIntervals();
-            this.setState({ playerState: {} });
-            return;
-        }
-
-        this.setState({ playerState: newPlayerState });
+        // Return empty object instead of null if player becomes inactive
+        this.setState({ playerState: newPlayerState || {} });
     }
 
     transferPlayback() {
@@ -230,21 +230,25 @@ class WebPlayer extends React.Component {
     }
 
     render() {
-        if (!this.state.loaded || !this.player) {
+        if (!this.state.loaded) {
             return <Box>Loading...</Box>;
         }
 
         return (
             <>
-                <PlayerInterface
-                    playerState={this.state.playerState}
-                    volume={this.state.playerVolume}
-                    onPlayToggle={this.handlePlayToggle}
-                    onNext={this.handleNext}
-                    onPrev={this.handlePrev}
-                    onSeek={this.handleSeek}
-                    onVolumeChange={this.handleVolumeChange}
-                />
+                {!isEmpty(this.state.playerState) ? (
+                    <PlayerInterface
+                        playerState={this.state.playerState}
+                        volume={this.state.playerVolume}
+                        onPlayToggle={this.handlePlayToggle}
+                        onNext={this.handleNext}
+                        onPrev={this.handlePrev}
+                        onSeek={this.handleSeek}
+                        onVolumeChange={this.handleVolumeChange}
+                    />
+                ) : (
+                    <ConnectPlayer />
+                )}
 
                 <PlaybackTransferModal
                     open={this.state.showPlaybackModal}

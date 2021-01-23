@@ -59,6 +59,8 @@ const DeviceMenuItem = ({ device, onDeviceSelect, forcedActiveDeviceId }) => {
 
     const handleClick = async () => {
         try {
+            if (showActive) return;
+
             await spotifyApi.put('/v1/me/player', {
                 device_ids: [id],
                 play: true,

@@ -6,7 +6,7 @@ import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import VolumeSlider from './VolumeSlider';
 import DeviceMenu from './DeviceMenu';
 
-const SecondaryControls = ({ volume, onVolumeChange }) => {
+const SecondaryControls = ({ volume, onVolumeChange, connectMode }) => {
     // TODO: Consider memoizing this component
     return (
         <Grid container justify={'flex-end'} alignItems={'center'} spacing={1}>
@@ -16,7 +16,7 @@ const SecondaryControls = ({ volume, onVolumeChange }) => {
                 </IconButton>
             </Grid>
             <Grid item>
-                <DeviceMenu />
+                <DeviceMenu connectMode={connectMode} />
             </Grid>
             <Grid item>
                 <VolumeSlider volume={volume} onVolumeChange={onVolumeChange} />
@@ -28,6 +28,7 @@ const SecondaryControls = ({ volume, onVolumeChange }) => {
 SecondaryControls.propTypes = {
     volume: PropTypes.number,
     onVolumeChange: PropTypes.func.isRequired,
+    connectMode: PropTypes.bool,
 };
 
 export default SecondaryControls;

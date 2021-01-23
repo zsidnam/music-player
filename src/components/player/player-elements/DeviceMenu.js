@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import DevicesIcon from '@material-ui/icons/Devices';
-
 import {
     Box,
     IconButton,
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 // Device Menu implementation is the same regardless of whether Web Player
 // or Connect Player is active. Component will fetch it's own data instead of
 // relying on player for implementation.
-const DeviceMenu = () => {
+const DeviceMenu = ({ connectMode }) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [devices, setDevices] = useState([]);
@@ -71,7 +71,10 @@ const DeviceMenu = () => {
 
     return (
         <>
-            <IconButton color={'secondary'} onClick={handleClick}>
+            <IconButton
+                color={connectMode ? 'primary' : 'secondary'}
+                onClick={handleClick}
+            >
                 <DevicesIcon fontSize={'small'} />
             </IconButton>
 
@@ -123,6 +126,10 @@ const DeviceMenu = () => {
             </Popover>
         </>
     );
+};
+
+DeviceMenu.propTypes = {
+    connectMode: PropTypes.bool,
 };
 
 export default DeviceMenu;
