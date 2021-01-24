@@ -149,7 +149,6 @@ class WebPlayer extends React.Component {
     // be polled when a song is playing). These pollers should only
     // be used while web player device is active.
     _setActiveDevicePolling() {
-        // TODO: Research whether polling volume is necessary. Leave out for now.
         this.playerVolumeInterval = setInterval(this.pollPlayerVolume, 1000);
     }
 
@@ -233,6 +232,8 @@ class WebPlayer extends React.Component {
         if (!this.state.loaded) {
             return <Box>Loading...</Box>;
         }
+
+        // TODO: Add shuffle and repeat functions
 
         return (
             <>

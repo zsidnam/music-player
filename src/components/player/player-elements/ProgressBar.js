@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Slider, Typography } from '@material-ui/core';
 
-import { formatTime } from '../utils';
+import { formatTime } from '../../../utils/format';
 
 const ProgressBar = ({ position, duration, onSeek }) => {
     const [localPosition, setLocalPosition] = useState(0);
