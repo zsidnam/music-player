@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Grid, Slider, IconButton } from '@material-ui/core';
+import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { Box, Slider, IconButton } from '@material-ui/core';
+import debounce from 'lodash.debounce';
 
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
-import DevicesIcon from '@material-ui/icons/Devices';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
@@ -25,10 +25,15 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
         setLocalVolume(volume);
     }, [volume]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedHandleVolumeChange = useCallback(
+        debounce(onVolumeChange, 350),
+        []
+    );
+
     const handleChangeStart = (_, value) => {
-        // TODO: Debounce this
         setLocalVolume(value);
-        onVolumeChange(value);
+        debouncedHandleVolumeChange(value);
     };
 
     const handleIconClick = () => {
@@ -54,6 +59,9 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
     );
 };
 
-VolumeSlider.propTypes = {};
+VolumeSlider.propTypes = {
+    volume: PropTypes.number,
+    onVolumeChange: PropTypes.func.isRequired,
+};
 
 export default VolumeSlider;

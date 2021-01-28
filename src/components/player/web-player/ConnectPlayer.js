@@ -7,9 +7,10 @@ import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
 // This needs to be set to 1000ms for normal use. During development,
 // raise as needed to avoid hitting Spotify API too frequently.
-const POLL_INTERVAL = 1000;
+//const POLL_INTERVAL = 1000;
+const POLL_INTERVAL = 1000 * 10;
 
-// Clean up console errors; move api calls to helper library?
+// TODO: Clean up console errors; move api calls to helper library?
 
 // TODO: Add optimistic updates for player controls
 
@@ -109,12 +110,12 @@ class ConnectPlayer extends Component {
 
     async handleVolumeChange(vol) {
         // volume must be integer between 0 - 100, not 0 - 1 like web player
-        const adjustedVol = vol;
+        const adjustedVol = parseInt(vol * 100, 10);
 
         try {
-            await spotifyApi.put('/v1/me/player/volume', {
-                volume_percent: adjustedVol,
-            });
+            await spotifyApi.put(
+                `/v1/me/player/volume?volume_percent=${adjustedVol}`
+            );
         } catch (err) {
             console.error('Unable to change volume');
         }

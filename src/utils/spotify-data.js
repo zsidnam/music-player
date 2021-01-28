@@ -14,7 +14,8 @@ const _getRepeatSettingFromAPI = (webApiRepeatSetting) =>
 export const getPlayerStateFromAPI = (webApiPlayerState) => {
     if (!webApiPlayerState || isEmpty(webApiPlayerState)) return {};
 
-    const volume = _get(webApiPlayerState, 'device.volume_percent');
+    const volume =
+        (_get(webApiPlayerState, 'device.volume_percent') || 0) / 100;
     const shuffle = _get(webApiPlayerState, 'shuffle_state');
     const repeat_mode = _getRepeatSettingFromAPI(
         _get(webApiPlayerState, 'repeat_state')
