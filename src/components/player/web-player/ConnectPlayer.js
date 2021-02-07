@@ -19,7 +19,9 @@ class ConnectPlayer extends Component {
         super(props);
 
         this.state = {
-            playerState: {},
+            playerState: {
+                volume: 0,
+            },
         };
 
         this.playerStateInterval = null;

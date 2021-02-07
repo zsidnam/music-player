@@ -18,6 +18,8 @@
         "lodash.debounce": "^4.0.8",
         "lodash.get": "^4.4.2",
         "lodash.isempty": "^4.4.0",
+        "lodash.pick": "^4.4.0",
+        "moment": "^2.29.1",
         "next": "^10.0.4",
         "react": "16.13.1",
         "react-dom": "16.13.1",

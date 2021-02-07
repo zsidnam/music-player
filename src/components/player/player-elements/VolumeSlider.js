@@ -17,7 +17,6 @@ const _getVolumeIcon = (volume) => {
     return <VolumeUpIcon fontSize={'small'} />;
 };
 
-// TODO: Consider avoiding player volume altogether and just using api
 const VolumeSlider = ({ volume, onVolumeChange }) => {
     const [localVolume, setLocalVolume] = useState(0);
 

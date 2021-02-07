@@ -4,42 +4,47 @@ import PropTypes from 'prop-types';
 
 import PlayerContainer from '../components/player/PlayerContainer';
 import Header from '../components/app/Header';
+import GlobalContextMenu from '../components/contextMenu/GlobalContextMenu';
 
 const MainLayout = ({ children }) => {
     return (
-        <Box
-            id={'app-container'}
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'space-between'}
-            height={'100vh'}
-            minWidth={'850px'}
-        >
+        <>
             <Box
-                id={'primary-container'}
-                flex={1}
+                id={'app-container'}
                 display={'flex'}
-                overflow={'hidden'}
+                flexDirection={'column'}
+                justifyContent={'space-between'}
+                height={'100vh'}
+                minWidth={'850px'}
             >
-                <Box overflow={'auto'} flex={1}>
-                    <Box
-                        id={'header-container'}
-                        position={'sticky'}
-                        top={0}
-                        zIndex={100}
-                    >
-                        <Header />
+                <Box
+                    id={'primary-container'}
+                    flex={1}
+                    display={'flex'}
+                    overflow={'hidden'}
+                >
+                    <Box overflow={'auto'} flex={1}>
+                        <Box
+                            id={'header-container'}
+                            position={'sticky'}
+                            top={0}
+                            zIndex={100}
+                        >
+                            <Header />
+                        </Box>
+                        <Box id={'content-container'} p={5}>
+                            {children}
+                        </Box>
                     </Box>
-                    <Box id={'content-container'} p={5}>
-                        {children}
-                    </Box>
+                </Box>
+
+                <Box id={'player-container'} flex={'none'}>
+                    <PlayerContainer />
                 </Box>
             </Box>
 
-            <Box id={'player-container'} flex={'none'}>
-                <PlayerContainer />
-            </Box>
-        </Box>
+            <GlobalContextMenu />
+        </>
     );
 };
 

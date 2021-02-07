@@ -8,6 +8,7 @@ const LIGHT_GREY = '#b3b3b3';
 const GREY = '#6b6b6b';
 const DARK_GREY = '#2e2e2e';
 const NEAR_BLACK = '#131313';
+const MIDNIGHT = '#0f0f0f';
 
 // Special exports
 export const HEADER_COLOR = 'rgba(28, 28, 28, 0.7)';
@@ -30,11 +31,12 @@ let theme = createMuiTheme({
         common: {
             white: WHITE,
             offWhite: OFF_WHITE,
-            black: BLACK,
-            grey: GREY,
             lightGrey: LIGHT_GREY,
+            grey: GREY,
             darkGrey: DARK_GREY,
             nearBlack: NEAR_BLACK,
+            midnight: MIDNIGHT,
+            black: BLACK,
         },
     },
     typography: {
@@ -192,6 +194,41 @@ theme = {
         MuiDivider: {
             root: {
                 backgroundColor: theme.palette.common.lightGrey,
+            },
+        },
+        MuiPaper: {
+            root: {
+                backgroundColor: theme.palette.common.midnight,
+            },
+        },
+        MuiTableCell: {
+            head: {
+                borderBottom: `1px solid ${theme.palette.common.grey}`,
+            },
+            body: {
+                borderBottom: `1px solid ${theme.palette.common.darkGrey}`,
+            },
+        },
+        MuiTableRow: {
+            root: {
+                '-webkit-user-select': 'none',
+                '-moz-user-select': 'none',
+                '&:hover': {
+                    backgroundColor: theme.palette.common.nearBlack,
+                },
+                '&$selected, &$selected:hover': {
+                    backgroundColor: theme.palette.common.darkGrey,
+                },
+            },
+        },
+        MuiTableSortLabel: {
+            root: {
+                '&:hover': {
+                    color: 'red',
+                },
+            },
+            active: {
+                color: 'red',
             },
         },
     },

@@ -3,7 +3,7 @@
 /**
  * Accepts time in milliseconds and returns time string in format mm:ss
  *
- * @param {Number} ms time in sec
+ * @param {Number} sec time in sec
  */
 export const formatTime = (sec) => {
     if (typeof sec !== 'number' || isNaN(sec) || sec < 0) {

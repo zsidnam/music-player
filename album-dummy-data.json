@@ -1,0 +1,388 @@
+{
+    "album_type": "album",
+    "artists": [
+        {
+            "external_urls": {
+                "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+            },
+            "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+            "id": "41SQP16hv1TioVYqdckmxT",
+            "name": "Real Estate",
+            "type": "artist",
+            "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+        }
+    ],
+    "copyrights": [
+        {
+            "text": "2017 Domino Recording Co Ltd",
+            "type": "C"
+        },
+        {
+            "text": "2017 Domino Recording Co Ltd",
+            "type": "P"
+        }
+    ],
+    "external_ids": {
+        "upc": "887828037865"
+    },
+    "external_urls": {
+        "spotify": "https://open.spotify.com/album/7IQn4jT1WciC5O9DZrxeKv"
+    },
+    "genres": [],
+    "href": "https://api.spotify.com/v1/albums/7IQn4jT1WciC5O9DZrxeKv",
+    "id": "7IQn4jT1WciC5O9DZrxeKv",
+    "images": [
+        {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2735be34ac9533490e9a764fadd",
+            "width": 640
+        },
+        {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e025be34ac9533490e9a764fadd",
+            "width": 300
+        },
+        {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048515be34ac9533490e9a764fadd",
+            "width": 64
+        }
+    ],
+    "label": "Domino Recording Co",
+    "name": "In Mind",
+    "popularity": 57,
+    "release_date": "2017-03-17",
+    "release_date_precision": "day",
+    "total_tracks": 11,
+    "tracks": {
+        "href": "https://api.spotify.com/v1/albums/7IQn4jT1WciC5O9DZrxeKv/tracks?offset=0&limit=50",
+        "items": [
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 260386,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/36PQh1G6h7n9VWB799fXpI"
+                },
+                "href": "https://api.spotify.com/v1/tracks/36PQh1G6h7n9VWB799fXpI",
+                "id": "36PQh1G6h7n9VWB799fXpI",
+                "is_local": false,
+                "name": "Darling",
+                "preview_url": "https://p.scdn.co/mp3-preview/147fdd0e2bf3b36b5ee3d694b7f1d25bb84284f6?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 1,
+                "type": "track",
+                "uri": "spotify:track:36PQh1G6h7n9VWB799fXpI"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 193746,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/375X9Xzitw4XAtIUSd4tUI"
+                },
+                "href": "https://api.spotify.com/v1/tracks/375X9Xzitw4XAtIUSd4tUI",
+                "id": "375X9Xzitw4XAtIUSd4tUI",
+                "is_local": false,
+                "name": "Serve The Song",
+                "preview_url": "https://p.scdn.co/mp3-preview/a40dcabb74b7ad1d1e8413132a4265bdf6acf032?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 2,
+                "type": "track",
+                "uri": "spotify:track:375X9Xzitw4XAtIUSd4tUI"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 234400,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/7BT9NNN1mNFU3l3u8hX6MW"
+                },
+                "href": "https://api.spotify.com/v1/tracks/7BT9NNN1mNFU3l3u8hX6MW",
+                "id": "7BT9NNN1mNFU3l3u8hX6MW",
+                "is_local": false,
+                "name": "Stained Glass",
+                "preview_url": "https://p.scdn.co/mp3-preview/0b91efdc8ab0f02b0678e15a47e1b0a46fdded46?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 3,
+                "type": "track",
+                "uri": "spotify:track:7BT9NNN1mNFU3l3u8hX6MW"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 290533,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/18sdaEqkLRDAftknWl3dRV"
+                },
+                "href": "https://api.spotify.com/v1/tracks/18sdaEqkLRDAftknWl3dRV",
+                "id": "18sdaEqkLRDAftknWl3dRV",
+                "is_local": false,
+                "name": "After The Moon",
+                "preview_url": "https://p.scdn.co/mp3-preview/d2b7fd515402feb3ec467ec2f84b1e8fb135b524?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 4,
+                "type": "track",
+                "uri": "spotify:track:18sdaEqkLRDAftknWl3dRV"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 410640,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/7EYFJXPN6UmgKQoTDU7enR"
+                },
+                "href": "https://api.spotify.com/v1/tracks/7EYFJXPN6UmgKQoTDU7enR",
+                "id": "7EYFJXPN6UmgKQoTDU7enR",
+                "is_local": false,
+                "name": "Two Arrows",
+                "preview_url": "https://p.scdn.co/mp3-preview/18ef62ba00c06a26d719367d66e9aba8627248f6?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 5,
+                "type": "track",
+                "uri": "spotify:track:7EYFJXPN6UmgKQoTDU7enR"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 194960,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/6OaLmOFr3oCNZgEjZGAcsB"
+                },
+                "href": "https://api.spotify.com/v1/tracks/6OaLmOFr3oCNZgEjZGAcsB",
+                "id": "6OaLmOFr3oCNZgEjZGAcsB",
+                "is_local": false,
+                "name": "White Light",
+                "preview_url": "https://p.scdn.co/mp3-preview/38a125d5ed453610c697b9f715b4ff1ef4cb2ee0?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 6,
+                "type": "track",
+                "uri": "spotify:track:6OaLmOFr3oCNZgEjZGAcsB"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 226373,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/5Zpgvrpw9nnjTUC4eODiOQ"
+                },
+                "href": "https://api.spotify.com/v1/tracks/5Zpgvrpw9nnjTUC4eODiOQ",
+                "id": "5Zpgvrpw9nnjTUC4eODiOQ",
+                "is_local": false,
+                "name": "Holding Pattern",
+                "preview_url": "https://p.scdn.co/mp3-preview/8bb268333749c95d23b373ea58eac2dfe2330e9c?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 7,
+                "type": "track",
+                "uri": "spotify:track:5Zpgvrpw9nnjTUC4eODiOQ"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 229813,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/1W9bk3oCPR6EGwtTuZQZNs"
+                },
+                "href": "https://api.spotify.com/v1/tracks/1W9bk3oCPR6EGwtTuZQZNs",
+                "id": "1W9bk3oCPR6EGwtTuZQZNs",
+                "is_local": false,
+                "name": "Time",
+                "preview_url": "https://p.scdn.co/mp3-preview/f4aa2bc5b4af468e91595e3101cd905413fb349d?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 8,
+                "type": "track",
+                "uri": "spotify:track:1W9bk3oCPR6EGwtTuZQZNs"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 154359,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/0s8XILGWPmpPbZwV8BniOi"
+                },
+                "href": "https://api.spotify.com/v1/tracks/0s8XILGWPmpPbZwV8BniOi",
+                "id": "0s8XILGWPmpPbZwV8BniOi",
+                "is_local": false,
+                "name": "Diamond Eyes",
+                "preview_url": "https://p.scdn.co/mp3-preview/7a147c667c18489d298f595be240902850fcc3f0?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 9,
+                "type": "track",
+                "uri": "spotify:track:0s8XILGWPmpPbZwV8BniOi"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 197653,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/7nN9uE73bLABqMZ6TywbGw"
+                },
+                "href": "https://api.spotify.com/v1/tracks/7nN9uE73bLABqMZ6TywbGw",
+                "id": "7nN9uE73bLABqMZ6TywbGw",
+                "is_local": false,
+                "name": "Same Sun",
+                "preview_url": "https://p.scdn.co/mp3-preview/865bcc7059a05ffc0fe9f82d462e18a22080bf3f?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 10,
+                "type": "track",
+                "uri": "spotify:track:7nN9uE73bLABqMZ6TywbGw"
+            },
+            {
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT",
+                        "id": "41SQP16hv1TioVYqdckmxT",
+                        "name": "Real Estate",
+                        "type": "artist",
+                        "uri": "spotify:artist:41SQP16hv1TioVYqdckmxT"
+                    }
+                ],
+
+                "disc_number": 1,
+                "duration_ms": 283026,
+                "explicit": false,
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/track/50wiHcvfcpQSo5P5rbyozc"
+                },
+                "href": "https://api.spotify.com/v1/tracks/50wiHcvfcpQSo5P5rbyozc",
+                "id": "50wiHcvfcpQSo5P5rbyozc",
+                "is_local": false,
+                "name": "Saturday",
+                "preview_url": "https://p.scdn.co/mp3-preview/25ff040231bd029d1009d53f837007273b1aa0ba?cid=d69c5109ea0f4113bf10291f42d7903d",
+                "track_number": 11,
+                "type": "track",
+                "uri": "spotify:track:50wiHcvfcpQSo5P5rbyozc"
+            }
+        ],
+        "limit": 50,
+        "next": null,
+        "offset": 0,
+        "previous": null,
+        "total": 11
+    },
+    "type": "album",
+    "uri": "spotify:album:7IQn4jT1WciC5O9DZrxeKv"
+}
