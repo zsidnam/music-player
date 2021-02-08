@@ -4,13 +4,11 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import moment from 'moment';
 
-import ColorizedContainer from '../common/ColorizedContainer';
-
 // TODO: Remove this
 import dummyData from '../../../album-dummy-data.json';
-const albumArtImgSrc = dummyData.images[0].url;
-//const albumArtImgSrc =
-//    'https://i.scdn.co/image/ab67616d00001e0273e509d7beb066e9746946d2';
+//const albumArtImgSrc = dummyData.images[0].url;
+const albumArtImgSrc =
+    'https://i.scdn.co/image/ab67616d00001e0273e509d7beb066e9746946d2';
 
 const useStyles = makeStyles((theme) => ({
     iconButton: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AlbumSummary = ({ primaryDarkColor, primaryLightColor }) => {
+const AlbumSummary = ({ primaryColor }) => {
     const classes = useStyles();
 
     // TODO: Remove dummy data
@@ -40,44 +38,41 @@ const AlbumSummary = ({ primaryDarkColor, primaryLightColor }) => {
     )}, ${total_tracks} songs`;
 
     return (
-        <ColorizedContainer primaryColor={primaryDarkColor}>
-            <Box px={5} pb={5} pt={12} display={'flex'}>
-                <img src={albumArtImgSrc} style={{ maxWidth: 300 }} />
+        <Box display={'flex'}>
+            <img src={albumArtImgSrc} style={{ maxWidth: 300 }} />
 
-                <Box ml={4} mt={5}>
-                    <Typography variant={'h2'} className={classes.titleText}>
-                        {name}
+            <Box ml={4} mt={5}>
+                <Typography variant={'h2'} className={classes.titleText}>
+                    {name}
+                </Typography>
+
+                <Typography variant={'h4'}>{artists[0].name}</Typography>
+
+                <Box mt={1}>
+                    <Typography variant={'caption'}>
+                        {metaDataString}
                     </Typography>
+                </Box>
 
-                    <Typography variant={'h4'}>{artists[0].name}</Typography>
-
-                    <Box mt={1}>
-                        <Typography variant={'caption'}>
-                            {metaDataString}
-                        </Typography>
-                    </Box>
-
-                    <Box mt={2}>
-                        <IconButton
-                            className={classes.iconButton}
-                            style={{ backgroundColor: primaryLightColor }}
-                        >
-                            {paused ? (
-                                <PlayIcon className={classes.icon} />
-                            ) : (
-                                <PauseIcon className={classes.icon} />
-                            )}
-                        </IconButton>
-                    </Box>
+                <Box mt={2}>
+                    <IconButton
+                        className={classes.iconButton}
+                        style={{ backgroundColor: primaryColor }}
+                    >
+                        {paused ? (
+                            <PlayIcon className={classes.icon} />
+                        ) : (
+                            <PauseIcon className={classes.icon} />
+                        )}
+                    </IconButton>
                 </Box>
             </Box>
-        </ColorizedContainer>
+        </Box>
     );
 };
 
 AlbumSummary.propTypes = {
-    primaryDarkColor: PropTypes.string,
-    primaryLightColor: PropTypes.string,
+    primaryColor: PropTypes.string,
 };
 
 export default AlbumSummary;

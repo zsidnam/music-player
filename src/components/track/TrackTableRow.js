@@ -21,8 +21,8 @@ const albumName = dummyData.name;
 const artists = dummyData.artists;
 
 const useStyles = makeStyles((theme) => ({
-    dynamicColor: ({ isPlaying, primaryLightColor }) => ({
-        color: isPlaying ? primaryLightColor : theme.palette.text.primary,
+    dynamicColor: ({ isPlaying, primaryColor }) => ({
+        color: isPlaying ? primaryColor : theme.palette.text.primary,
     }),
 }));
 
@@ -32,11 +32,12 @@ const TrackTableRow = ({
     onSelect,
     isSelected,
     isPlaying,
-    primaryLightColor,
+    primaryColor,
 }) => {
-    const classes = useStyles({ isPlaying, primaryLightColor });
+    const classes = useStyles({ isPlaying, primaryColor });
     const [showControls, setControlsDisplay] = useState(false);
     const { open, close, isOpen } = useMenuContext();
+
     const { id, track_number, name, duration_ms } = track;
 
     const handleContextClick = (e) => {
@@ -99,7 +100,7 @@ const TrackTableRow = ({
 };
 
 TrackTableRow.propTypes = {
-    primaryLightColor: PropTypes.string,
+    primaryColor: PropTypes.string,
 };
 
 export default TrackTableRow;
