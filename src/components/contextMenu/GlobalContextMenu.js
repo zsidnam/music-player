@@ -31,7 +31,9 @@ const ContextMenu = () => {
 
     return (
         <Menu
+            elevation={16}
             keepMounted
+            transitionDuration={0}
             open={isOpen}
             onClose={() => close()}
             anchorReference={'anchorPosition'}

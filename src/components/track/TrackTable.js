@@ -1,13 +1,7 @@
 import PropTypes from 'prop-types';
 import pick from 'lodash.pick';
 import { useState } from 'react';
-import {
-    Box,
-    Paper,
-    Table,
-    TableBody,
-    TableContainer,
-} from '@material-ui/core';
+import { Table, TableBody, TableContainer } from '@material-ui/core';
 
 import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
@@ -18,7 +12,7 @@ import { useOutsideClick } from '../../hooks/useOutsideClick';
 import dummyData from '../../../album-dummy-data.json';
 const dummyTracks = dummyData.tracks.items;
 
-const TrackTable = ({ allowSorting }) => {
+const TrackTable = ({ allowSorting, primaryLightColor }) => {
     const [tracks] = useState(dummyTracks);
     const [selectedTracks, setSelectedTracks] = useState([]);
 
@@ -56,35 +50,31 @@ const TrackTable = ({ allowSorting }) => {
     };
 
     return (
-        <Box mt={10}>
-            <Paper>
-                <TableContainer ref={tableRef}>
-                    <Table>
-                        <TrackTableHead allowSorting={allowSorting} />
-                        <TableBody>
-                            {tracks.map((track, idx) => (
-                                <TrackTableRow
-                                    key={track.id}
-                                    track={track}
-                                    index={idx}
-                                    onSelect={handleTrackSelect}
-                                    // TODO: Remove this hard coding
-                                    isPlaying={idx === 4}
-                                    isSelected={selectedTracks.includes(
-                                        track.id
-                                    )}
-                                />
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-        </Box>
+        <TableContainer ref={tableRef}>
+            <Table>
+                <TrackTableHead allowSorting={allowSorting} />
+                <TableBody>
+                    {tracks.map((track, idx) => (
+                        <TrackTableRow
+                            key={track.id}
+                            track={track}
+                            index={idx}
+                            onSelect={handleTrackSelect}
+                            // TODO: Remove this hard coding
+                            isPlaying={idx === 4}
+                            isSelected={selectedTracks.includes(track.id)}
+                            primaryLightColor={primaryLightColor}
+                        />
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 };
 
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
+    primaryLightColor: PropTypes.string,
 };
 
 export default TrackTable;

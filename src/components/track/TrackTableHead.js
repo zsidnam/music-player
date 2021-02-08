@@ -19,27 +19,27 @@ const TrackTableHead = ({ allowSorting }) => {
             <TableRow>
                 <TableCell />
                 <TableCell>
-                    <Typography variant={'overline'}>
+                    <Typography variant={'overline'} color={'textSecondary'}>
                         {_wrapSortLabel('#')}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography variant={'overline'}>
+                    <Typography variant={'overline'} color={'textSecondary'}>
                         {_wrapSortLabel('TITLE')}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography variant={'overline'}>
+                    <Typography variant={'overline'} color={'textSecondary'}>
                         {_wrapSortLabel('ALBUM')}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography variant={'overline'}>
+                    <Typography variant={'overline'} color={'textSecondary'}>
                         {_wrapSortLabel('ARTISTS')}
                     </Typography>
                 </TableCell>
                 <TableCell align={'right'}>
-                    <Typography variant={'overline'}>
+                    <Typography variant={'overline'} color={'textSecondary'}>
                         {_wrapSortLabel('TIME')}
                     </Typography>
                 </TableCell>

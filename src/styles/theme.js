@@ -11,9 +11,7 @@ const NEAR_BLACK = '#131313';
 const MIDNIGHT = '#0f0f0f';
 
 // Special exports
-export const HEADER_COLOR = 'rgba(28, 28, 28, 0.7)';
 export const PLAYER_COLOR = NEAR_BLACK;
-export const CONTENT_PADDING = 20; // spacing units
 
 // Constants
 let theme = createMuiTheme({
@@ -26,7 +24,7 @@ let theme = createMuiTheme({
         },
         text: {
             primary: WHITE,
-            secondary: BLACK,
+            secondary: LIGHT_GREY,
         },
         common: {
             white: WHITE,
@@ -74,9 +72,9 @@ let theme = createMuiTheme({
             fontSize: '0.75rem',
         },
         overline: {
-            fontSize: '0.688rem',
+            fontSize: '0.813rem',
             fontWeight: 'bold',
-            letterSpacing: '1.02px',
+            letterSpacing: '2.02px',
             textTransform: 'uppercase',
         },
         body1: {
@@ -158,6 +156,11 @@ theme = {
                 padding: theme.spacing(1.5),
             },
         },
+        MuiDialogContentText: {
+            root: {
+                color: theme.palette.common.black,
+            },
+        },
         MuiIconButton: {
             root: {
                 padding: 5,
@@ -201,12 +204,19 @@ theme = {
                 backgroundColor: theme.palette.common.midnight,
             },
         },
+        MuiTable: {
+            root: {
+                backgroundColor: theme.palette.common.black,
+            },
+        },
         MuiTableCell: {
             head: {
                 borderBottom: `1px solid ${theme.palette.common.grey}`,
+                padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
             },
             body: {
                 borderBottom: `1px solid ${theme.palette.common.darkGrey}`,
+                padding: `${theme.spacing(1.25)} ${theme.spacing(2)}`,
             },
         },
         MuiTableRow: {
@@ -218,6 +228,11 @@ theme = {
                 },
                 '&$selected, &$selected:hover': {
                     backgroundColor: theme.palette.common.darkGrey,
+                },
+            },
+            head: {
+                '&:hover': {
+                    backgroundColor: 'inherit',
                 },
             },
         },

@@ -6,16 +6,15 @@ import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
 import LoginButton from './LoginButton';
 import NavControls from './NavControls';
-import { HEADER_COLOR, CONTENT_PADDING } from '../../styles/theme';
 
 const Header = () => {
     const { user, logout } = useAuthContext();
 
     return (
         <Box
-            px={CONTENT_PADDING}
+            px={5}
             height={75}
-            bgcolor={HEADER_COLOR}
+            bgcolor={'transparent'}
             display={'flex'}
             justifyContent={'space-between'}
             alignItems={'center'}

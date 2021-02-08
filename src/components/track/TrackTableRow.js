@@ -6,10 +6,12 @@ import {
     TableRow,
     Typography,
     IconButton,
+    makeStyles,
 } from '@material-ui/core';
 import PlayIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseIcon from '@material-ui/icons/PauseCircleOutline';
 
+import TrackContextMenu from '../contextMenu/TrackContextMenu';
 import { formatTime } from '../../utils/format';
 import { useMenuContext } from '../../context/menuContext';
 
@@ -18,20 +20,35 @@ import dummyData from '../../../album-dummy-data.json';
 const albumName = dummyData.name;
 const artists = dummyData.artists;
 
-const TrackTableRow = ({ track, index, onSelect, isSelected, isPlaying }) => {
+const useStyles = makeStyles((theme) => ({
+    dynamicColor: ({ isPlaying, primaryLightColor }) => ({
+        color: isPlaying ? primaryLightColor : theme.palette.text.primary,
+    }),
+}));
+
+const TrackTableRow = ({
+    track,
+    index,
+    onSelect,
+    isSelected,
+    isPlaying,
+    primaryLightColor,
+}) => {
+    const classes = useStyles({ isPlaying, primaryLightColor });
     const [showControls, setControlsDisplay] = useState(false);
     const { open, close, isOpen } = useMenuContext();
     const { id, track_number, name, duration_ms } = track;
 
     const handleContextClick = (e) => {
         e.preventDefault();
-        isOpen ? close() : open(e.clientX, e.clientY, []);
+        onSelect(e, id, index);
+        isOpen ? close() : open(e.clientX, e.clientY, TrackContextMenu, {});
     };
 
     return (
         <TableRow
-            onClick={(e) => onSelect(e, id, index)}
             selected={isSelected}
+            onClick={(e) => onSelect(e, id, index)}
             onMouseEnter={() => setControlsDisplay(true)}
             onMouseLeave={() => setControlsDisplay(false)}
             onContextMenu={handleContextClick}
@@ -42,7 +59,7 @@ const TrackTableRow = ({ track, index, onSelect, isSelected, isPlaying }) => {
                 style={{ width: 75, cursor: 'pointer' }}
             >
                 {showControls || isPlaying ? (
-                    <IconButton color={isPlaying ? 'primary' : 'inherit'}>
+                    <IconButton className={classes.dynamicColor}>
                         {isPlaying ? <PauseIcon /> : <PlayIcon />}
                     </IconButton>
                 ) : (
@@ -51,46 +68,29 @@ const TrackTableRow = ({ track, index, onSelect, isSelected, isPlaying }) => {
             </TableCell>
 
             <TableCell>
-                <Typography
-                    color={isPlaying ? 'primary' : 'textPrimary'}
-                    variant={'body2'}
-                >
+                <Typography className={classes.dynamicColor}>
                     {track_number}
                 </Typography>
             </TableCell>
 
             <TableCell>
-                <Typography
-                    color={isPlaying ? 'primary' : 'textPrimary'}
-                    variant={'body2'}
-                >
-                    {name}
-                </Typography>
+                <Typography className={classes.dynamicColor}>{name}</Typography>
             </TableCell>
 
             <TableCell>
-                <Typography
-                    color={isPlaying ? 'primary' : 'textPrimary'}
-                    variant={'body2'}
-                >
+                <Typography className={classes.dynamicColor}>
                     {albumName}
                 </Typography>
             </TableCell>
 
             <TableCell>
-                <Typography
-                    color={isPlaying ? 'primary' : 'textPrimary'}
-                    variant={'body2'}
-                >
+                <Typography className={classes.dynamicColor}>
                     {artists.map((x) => x.name).join(', ')}
                 </Typography>
             </TableCell>
 
             <TableCell align={'right'}>
-                <Typography
-                    color={isPlaying ? 'primary' : 'textPrimary'}
-                    variant={'body2'}
-                >
+                <Typography className={classes.dynamicColor}>
                     {formatTime(duration_ms / 1000)}
                 </Typography>
             </TableCell>
@@ -98,6 +98,8 @@ const TrackTableRow = ({ track, index, onSelect, isSelected, isPlaying }) => {
     );
 };
 
-TrackTableRow.propTypes = {};
+TrackTableRow.propTypes = {
+    primaryLightColor: PropTypes.string,
+};
 
 export default TrackTableRow;

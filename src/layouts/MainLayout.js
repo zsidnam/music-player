@@ -26,15 +26,14 @@ const MainLayout = ({ children }) => {
                     <Box overflow={'auto'} flex={1}>
                         <Box
                             id={'header-container'}
-                            position={'sticky'}
+                            position={'absolute'}
+                            width={'100%'}
                             top={0}
                             zIndex={100}
                         >
                             <Header />
                         </Box>
-                        <Box id={'content-container'} p={5}>
-                            {children}
-                        </Box>
+                        <Box id={'content-container'}>{children}</Box>
                     </Box>
                 </Box>
 
