@@ -1,45 +1,59 @@
-import { Box } from '@material-ui/core';
-import { usePalette } from 'react-palette';
+import { useQuery, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
 
-import AlbumSummary from '../../components/album/AlbumSummary';
-import AlbumInfoFooter from '../../components/album/AlbumInfoFooter';
+import AlbumDetails from '../../components/album/AlbumDetails';
 import MainLayout from '../../layouts/MainLayout';
-import TrackTable from '../../components/track/TrackTable';
-import ColorizedContainer from '../../components/common/ColorizedContainer';
 
-// TODO: Remove dummy data
-import dummyData from '../../../album-dummy-data.json';
-//const albumArtImgSrc = dummyData.images[0].url;
-const albumArtImgSrc =
-    'https://i.scdn.co/image/ab67616d00001e0273e509d7beb066e9746946d2';
-
-const HORIZ_PADDING_SPACES = 5;
+const ALBUM_QUERY = gql`
+    query GetAlbum($id: ID!) {
+        album(id: $id) {
+            id
+            name
+            release_date
+            total_tracks
+            copyrights {
+                text
+                type
+            }
+            images {
+                height
+                width
+                url
+            }
+            artists {
+                id
+                name
+            }
+            tracks {
+                items {
+                    id
+                    name
+                    duration_ms
+                    track_number
+                }
+            }
+        }
+    }
+`;
 
 const AlbumPage = () => {
-    // Extract colors from artwork to use in album display
-    const { data, loading, error } = usePalette(albumArtImgSrc);
-    const primaryDarkColor =
-        data && !loading && !error ? data.darkVibrant : 'inherit';
-    const primaryLightColor =
-        data && !loading && !error ? data.lightVibrant : 'inherit';
+    const router = useRouter();
+    const { albumId } = router.query;
 
-    return (
-        <Box mb={10}>
-            <ColorizedContainer primaryColor={primaryDarkColor}>
-                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={12}>
-                    <AlbumSummary primaryColor={primaryLightColor} />
-                </Box>
-            </ColorizedContainer>
+    // TODO: Update error handling
+    const { loading, error, data } = useQuery(ALBUM_QUERY, {
+        variables: {
+            id: albumId,
+        },
+    });
 
-            <Box px={HORIZ_PADDING_SPACES}>
-                <TrackTable primaryColor={primaryLightColor} />
-            </Box>
+    // TODO: Add skeleton
+    if (loading) return <p>Loading...</p>;
 
-            <Box px={HORIZ_PADDING_SPACES} mt={6}>
-                <AlbumInfoFooter copyrights={dummyData.copyrights} />
-            </Box>
-        </Box>
-    );
+    // TODO: Redirect/Display error message
+    if (error) return <p>There was an error</p>;
+
+    return <AlbumDetails album={data.album} />;
 };
 
 AlbumPage.Layout = MainLayout;

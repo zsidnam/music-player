@@ -18,7 +18,12 @@ const AlbumInfoFooter = ({ copyrights }) => {
 };
 
 AlbumInfoFooter.propTypes = {
-    copyrights: PropTypes.arrayOf(PropTypes.string),
+    copyrights: PropTypes.arrayOf(
+        PropTypes.shape({
+            type: PropTypes.string,
+            text: PropTypes.string,
+        })
+    ),
 };
 
 export default AlbumInfoFooter;

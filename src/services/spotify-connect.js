@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: Get rid of web-api-node and use axios directly
+
 import SpotifyWebApi from 'spotify-web-api-node';
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../keys';

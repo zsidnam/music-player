@@ -4,12 +4,6 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import moment from 'moment';
 
-// TODO: Remove this
-import dummyData from '../../../album-dummy-data.json';
-//const albumArtImgSrc = dummyData.images[0].url;
-const albumArtImgSrc =
-    'https://i.scdn.co/image/ab67616d00001e0273e509d7beb066e9746946d2';
-
 const useStyles = makeStyles((theme) => ({
     iconButton: {
         color: theme.palette.common.black,
@@ -25,17 +19,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AlbumSummary = ({ primaryColor }) => {
+const AlbumSummary = ({ album, primaryColor }) => {
     const classes = useStyles();
 
+    const { artists, name, release_date, total_tracks, images } = album;
+
     // TODO: Remove dummy data
-    const album = dummyData;
     const paused = false;
-    const { artists, name, release_date, total_tracks } = album;
 
     const metaDataString = `${moment(release_date).format(
         'MMM YYYY'
     )}, ${total_tracks} songs`;
+
+    const albumArtImgSrc = images.length && images[0].url;
 
     return (
         <Box display={'flex'}>
@@ -73,6 +69,25 @@ const AlbumSummary = ({ primaryColor }) => {
 
 AlbumSummary.propTypes = {
     primaryColor: PropTypes.string,
+    album: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        release_date: PropTypes.string.isRequired,
+        total_tracks: PropTypes.number.isRequired,
+        images: PropTypes.arrayOf(
+            PropTypes.shape({
+                height: PropTypes.number.isRequired,
+                width: PropTypes.number.isRequired,
+                url: PropTypes.string.isRequired,
+            })
+        ).isRequired,
+        artists: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                name: PropTypes.string.isRequired,
+            })
+        ).isRequired,
+    }).isRequired,
 };
 
 export default AlbumSummary;

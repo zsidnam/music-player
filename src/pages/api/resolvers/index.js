@@ -1,46 +1,24 @@
-const dummyData = [
-    {
-        species: 'mouse',
-        name: 'jerry',
-        friends: [
-            {
-                name: 'rick',
-                occupation: 'inventor',
-            },
-        ],
-    },
-    {
-        species: 'cat',
-        name: 'tom',
-        friends: [
-            {
-                name: 'spongeBob',
-                occupation: 'chef',
-            },
-            {
-                name: 'patrick',
-                occupation: 'bum',
-            },
-        ],
-    },
-];
+import axios from 'axios';
 
 export const resolvers = {
     Query: {
-        getCharacters: async () => {
-            return dummyData;
-        },
-    },
-    Mutation: {
-        addCharacter: async (_, args) => {
-            const newChar = {
-                species: args.species,
-                name: args.name,
-            };
+        album: async (_, args, context) => {
+            try {
+                const { data } = await axios.get(
+                    `https://api.spotify.com/v1/albums/${args.id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.spotifyToken}`,
+                        },
+                    }
+                );
 
-            dummyData.push(newChar);
-
-            return newChar;
+                return data;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
         },
     },
 };

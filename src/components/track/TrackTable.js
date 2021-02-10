@@ -1,19 +1,14 @@
 import PropTypes from 'prop-types';
 import pick from 'lodash.pick';
 import { useState } from 'react';
-import { Box, Table, TableBody, TableContainer } from '@material-ui/core';
+import { Table, TableBody, TableContainer } from '@material-ui/core';
 
 import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
 import { getMultipleTrackSelection } from './helpers';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 
-// TODO: Remove
-import dummyData from '../../../album-dummy-data.json';
-const dummyTracks = dummyData.tracks.items;
-
-const TrackTable = ({ allowSorting, primaryColor }) => {
-    const [tracks] = useState(dummyTracks);
+const TrackTable = ({ tracks, allowSorting, primaryColor }) => {
     const [selectedTracks, setSelectedTracks] = useState([]);
 
     const unSelectTracks = () => {
@@ -75,6 +70,20 @@ const TrackTable = ({ allowSorting, primaryColor }) => {
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
     primaryColor: PropTypes.string,
+    tracks: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            duration_ms: PropTypes.number.isRequired,
+            track_number: PropTypes.number.isRequired,
+            artists: PropTypes.arrayOf(
+                PropTypes.shape({
+                    id: PropTypes.string.isRequired,
+                    name: PropTypes.string.isRequired,
+                })
+            ),
+        })
+    ),
 };
 
 export default TrackTable;

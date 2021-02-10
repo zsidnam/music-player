@@ -1,22 +1,55 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
-    type Character {
-        species: String
+    type Artist {
+        id: ID
         name: String
-        friends: [Friend]
     }
 
-    type Friend {
+    type Copyright {
+        text: String
+        type: String
+    }
+
+    type Image {
+        height: Int
+        width: Int
+        url: String
+    }
+
+    type Track {
+        id: ID
         name: String
-        occupation: String
+        artists: [Artist]
+        duration_ms: Int
+        explicit: Boolean
+        track_number: Int
+    }
+
+    type TrackPage {
+        items: [Track]
+        limit: Int
+        offset: Int
+        total: Int
+        previous: String
+        next: String
+    }
+
+    type Album {
+        id: ID
+        name: String
+        artists: [Artist]
+        images: [Image]
+        label: String
+        popularity: Int
+        release_date: String
+        release_date_precision: String
+        total_tracks: Int
+        tracks: TrackPage
+        copyrights: [Copyright]
     }
 
     type Query {
-        getCharacters: [Character]
-    }
-
-    type Mutation {
-        addCharacter(species: String, name: String): Character
+        album(id: ID!): Album!
     }
 `;

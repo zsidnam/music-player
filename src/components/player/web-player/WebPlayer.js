@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Box } from '@material-ui/core';
 import isEmpty from 'lodash.isempty';
 
@@ -91,7 +90,8 @@ class WebPlayer extends React.Component {
             name: 'Music Player App',
             volume: 0.75,
             getOAuthToken: (cb) => {
-                cb(this.props.token);
+                const token = localStorage.getItem('spotifyToken');
+                cb(token);
             },
         });
 
@@ -260,9 +260,5 @@ class WebPlayer extends React.Component {
         );
     }
 }
-
-WebPlayer.propTypes = {
-    token: PropTypes.string.isRequired,
-};
 
 export default WebPlayer;
