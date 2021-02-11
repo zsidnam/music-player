@@ -1,8 +1,14 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
-import spotifyApi from '../services/spotify-api';
 import { useRouter } from 'next/router';
 
+import spotifyApi from '../services/spotify-api';
 import { getURLHash } from '../utils/window';
 
 const AuthContext = createContext({});
@@ -10,12 +16,10 @@ const AuthContext = createContext({});
 export const AuthContextProvider = ({ children }) => {
     const router = useRouter();
     const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
     const [isLoading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchUser() {
-            setLoading(true);
+    const fetchUser = useCallback(async () => {
+        try {
             const { data } = await spotifyApi.get('/v1/me');
             setUser({
                 id: data.id,
@@ -23,34 +27,51 @@ export const AuthContextProvider = ({ children }) => {
                 email: data.email,
                 profilePic: data.images[0],
             });
-
-            // Remove hash from URL
-            router.replace('/');
-
-            setLoading(false);
+        } catch (err) {
+            console.error(err);
+            setUser(null);
         }
-
-        const hash = getURLHash();
-        window.location.hash = '';
-
-        const token = hash.access_token;
-        if (token) {
-            setAccessToken(token);
-            spotifyApi.defaults.headers.Authorization = `Bearer ${token}`;
-            fetchUser();
-        } else {
-            setLoading(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        async function initAuth() {
+            // Check if token already exists in local storage,
+            const existingToken = localStorage.getItem('accessToken');
+            if (existingToken) {
+                spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
+                await fetchUser(existingToken);
+            } else {
+                // Get tokens from url hash as part of login flow
+                const hash = getURLHash();
+                window.location.hash = '';
+                const { access_token, refresh_token } = hash;
+
+                if (access_token && refresh_token) {
+                    localStorage.setItem('accessToken', access_token);
+                    localStorage.setItem('refreshToken', refresh_token);
+                    spotifyApi.defaults.headers.Authorization = `Bearer ${access_token}`;
+                    await fetchUser(access_token);
+                    router.replace('/');
+                }
+            }
+
+            setLoading(false);
+        }
+
+        initAuth();
+        // purposefully omit router from dependency array as we only need the replace fn
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchUser]);
+
     const store = {
-        accessToken,
         user,
         isLoading,
         logout: () => {
-            setUser(null);
-            setAccessToken(null);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+
+            // Force axios, apollo client, and everything else to be reset
+            window.location = '/';
         },
     };
 

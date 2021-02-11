@@ -90,7 +90,7 @@ class WebPlayer extends React.Component {
             name: 'Music Player App',
             volume: 0.75,
             getOAuthToken: (cb) => {
-                const token = localStorage.getItem('spotifyToken');
+                const token = localStorage.getItem('accessToken');
                 cb(token);
             },
         });

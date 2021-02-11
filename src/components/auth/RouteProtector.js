@@ -9,14 +9,13 @@ const RouteProtector = ({ children }) => {
 
     // TODO: Need this to prevent server side rendering issues.
     // Clean up!
-    /* if (isLoading) {
+    if (isLoading) {
         return <Loader />;
     }
 
-    // TODO: Switch back
     if (!user) {
         return <LoginPrompt />;
-    } */
+    }
 
     return children;
 };

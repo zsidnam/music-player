@@ -2,10 +2,9 @@ import { stringify } from 'querystring';
 
 import {
     SPOTIFY_STATE_KEY,
-    SPOTIFY_REFRESH_TOKEN_KEY,
     getTokens,
 } from '../../../services/spotify-connect';
-import { setCookie, clearCookie } from '../../../utils/http';
+import { clearCookie } from '../../../utils/http';
 
 export default async (req, res) => {
     if (req.method !== 'GET') {
@@ -29,17 +28,12 @@ export default async (req, res) => {
 
     try {
         const { body } = await getTokens(code);
-
-        // TODO: Revisit this and figure out how to persist login state across page refresh
-        // Store refresh token in cookie, expose access
-        // token to client so it can be saved in app state.
-        setCookie(res, SPOTIFY_REFRESH_TOKEN_KEY, body.refresh_token);
-
         return res.redirect(
             '/#' +
                 stringify({
                     access_token: body.access_token,
                     expires_in: body.expires_in,
+                    refresh_token: body.refresh_token,
                 })
         );
     } catch (err) {

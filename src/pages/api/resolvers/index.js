@@ -8,7 +8,7 @@ export const resolvers = {
                     `https://api.spotify.com/v1/albums/${args.id}`,
                     {
                         headers: {
-                            Authorization: `Bearer ${context.spotifyToken}`,
+                            Authorization: `Bearer ${context.accessToken}`,
                         },
                     }
                 );

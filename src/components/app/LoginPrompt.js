@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box, Typography, Grid, useTheme } from '@material-ui/core';
+import { Button, Box, Typography, useTheme } from '@material-ui/core';
 
 import SpotifyIcon from '../../assets/spotify-logo-white.svg';
 
@@ -7,62 +7,45 @@ const LoginPrompt = () => {
     const theme = useTheme();
 
     return (
-        <Box mt={12}>
-            <Box mb={10}>
-                <Grid
-                    container
-                    justify={'center'}
-                    alignItems={'center'}
-                    spacing={2}
-                >
-                    <Grid item>
-                        <SpotifyIcon
-                            width={60}
-                            height={60}
-                            fill={theme.palette.common.white}
-                        />
-                    </Grid>
+        <Box mt={20} overflow={'hidden'}>
+            <Box
+                mb={10}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+            >
+                <SpotifyIcon
+                    width={60}
+                    height={60}
+                    fill={theme.palette.common.white}
+                />
 
-                    <Grid item>
-                        <Box
-                            border={`2px solid ${theme.palette.primary.main}`}
-                            px={2}
-                        >
-                            <Typography variant={'h1'}>MUSIC PLAYER</Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
+                <Box
+                    ml={2}
+                    px={2}
+                    border={`2px solid ${theme.palette.primary.main}`}
+                >
+                    <Typography variant={'h1'}>MUSIC PLAYER</Typography>
+                </Box>
             </Box>
 
-            <Grid container justify={'center'}>
-                <Grid
-                    item
-                    container
-                    spacing={2}
-                    direction={'column'}
-                    alignItems={'center'}
-                >
-                    <Grid item>
-                        <Typography variant={'h4'}>
-                            Login to Spotify to use the music player.
-                        </Typography>
-                    </Grid>
+            <Box textAlign={'center'}>
+                <Typography variant={'h4'}>
+                    Login to Spotify to use the music player.
+                </Typography>
 
-                    <Grid item>
-                        <Button
-                            color={'primary'}
-                            variant={'contained'}
-                            href={'/api/auth/login'}
-                        >
-                            Log In
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Grid>
+                <Box mt={3}>
+                    <Button
+                        color={'primary'}
+                        variant={'contained'}
+                        href={'/api/auth/login'}
+                    >
+                        Log In
+                    </Button>
+                </Box>
+            </Box>
         </Box>
     );
 };
-
-LoginPrompt.propTypes = {};
 
 export default LoginPrompt;

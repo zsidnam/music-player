@@ -6,7 +6,7 @@ const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req }) => ({
-        spotifyToken: req.headers.authorization,
+        accessToken: req.headers.authorization,
     }),
 });
 

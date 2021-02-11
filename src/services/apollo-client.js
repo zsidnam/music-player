@@ -22,7 +22,7 @@ function createApolloClient() {
             headers: {
                 authorization:
                     (typeof window !== 'undefined' &&
-                        localStorage.getItem('spotifyToken')) ||
+                        localStorage.getItem('accessToken')) ||
                     null,
             },
         });
