@@ -7,14 +7,15 @@ import moment from 'moment';
 const useStyles = makeStyles((theme) => ({
     iconButton: {
         color: theme.palette.common.black,
-        width: '4rem',
-        height: '4rem',
+        width: '3.5rem',
+        height: '3.5rem',
     },
     icon: {
         fontSize: '2rem',
     },
     titleText: {
-        fontSize: '3.5rem',
+        fontSize: '2.5rem',
+        lineHeight: '2.5rem',
         fontWeight: 500,
     },
 }));
@@ -34,15 +35,20 @@ const AlbumSummary = ({ album, primaryColor }) => {
     const albumArtImgSrc = images.length && images[0].url;
 
     return (
-        <Box display={'flex'}>
-            <img src={albumArtImgSrc} style={{ maxWidth: 300 }} />
+        <Box display={'flex'} alignItems={'center'}>
+            <img
+                src={albumArtImgSrc}
+                style={{ maxWidth: 300, maxHeight: 300 }}
+            />
 
-            <Box ml={4} mt={5}>
+            <Box ml={4}>
                 <Typography variant={'h2'} className={classes.titleText}>
                     {name}
                 </Typography>
 
-                <Typography variant={'h4'}>{artists[0].name}</Typography>
+                <Box mt={1}>
+                    <Typography variant={'h4'}>{artists[0].name}</Typography>
+                </Box>
 
                 <Box mt={1}>
                     <Typography variant={'caption'}>

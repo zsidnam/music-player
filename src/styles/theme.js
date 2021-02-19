@@ -10,9 +10,6 @@ const DARK_GREY = '#2e2e2e';
 const NEAR_BLACK = '#131313';
 const MIDNIGHT = '#0f0f0f';
 
-// Special exports
-export const PLAYER_COLOR = NEAR_BLACK;
-
 // Constants
 let theme = createMuiTheme({
     palette: {

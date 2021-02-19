@@ -2,14 +2,20 @@ import PropTypes from 'prop-types';
 import { Grid, Box, Typography, makeStyles } from '@material-ui/core';
 import _get from 'lodash.get';
 
-// TODO: Get rid of this import and use class
-import { PLAYER_COLOR } from '../../../styles/theme';
 import PlayingInfo from './PlayingInfo';
 import PrimaryControls from './PrimaryControls';
 import ProgressBar from './ProgressBar';
 import SecondaryControls from './SecondaryControls';
 
 const useStyles = makeStyles((theme) => ({
+    playerContainer: {
+        height: 100,
+        backgroundColor: theme.palette.common.nearBlack,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: `0 ${theme.spacing(4)}`,
+    },
     connectBar: {
         backgroundColor: theme.palette.primary.main,
         display: 'flex',
@@ -39,14 +45,7 @@ const PlayerInterface = ({
 
     return (
         <>
-            <Box
-                height={100}
-                bgcolor={PLAYER_COLOR}
-                display={'flex'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                px={4}
-            >
+            <Box className={classes.playerContainer}>
                 <Grid container justify={'space-between'} alignItems={'center'}>
                     <Grid item xs={4} lg={3} xl={2}>
                         <PlayingInfo currentTrack={currentTrack} />

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Grid, Box, makeStyles } from '@material-ui/core';
-import _get from 'lodash.get';
 
 import TextLink from '../../common/TextLink';
 
@@ -10,13 +9,24 @@ import TextLink from '../../common/TextLink';
 // container to have a width set. In order to simulate responsive
 // behavior of Grid, we can use a calculation for the width based on
 // the viewport size.
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+    albumArtLink: {
+        '&:hover': {
+            cursor: 'pointer',
+            outline: `1px solid ${theme.palette.common.lightGrey}`,
+        },
+    },
     noWrapTextContainer: {
         width: 'calc(1px + 15vw)',
         minWidth: 150,
         maxWidth: 225,
     },
 }));
+
+const _getAlbumId = (albumUri) => {
+    const uriParts = albumUri.split(':');
+    return uriParts[uriParts.length - 1];
+};
 
 // TODO: memoize
 
@@ -28,7 +38,7 @@ const PlayingInfo = ({ currentTrack }) => {
     }
 
     const { name, artists, album } = currentTrack;
-
+    const albumId = _getAlbumId(album.uri);
     const smallestImgUrl = album.images.length
         ? [...album.images].sort((a, b) => a.width - b.width)[0].url
         : null;
@@ -36,12 +46,12 @@ const PlayingInfo = ({ currentTrack }) => {
     return (
         <Grid container alignItems={'center'} spacing={2} wrap={'nowrap'}>
             <Grid item>
-                <Link href={'/search'}>
+                <Link href={`/albums/${albumId}`}>
                     <img
                         width={50}
                         height={50}
                         src={smallestImgUrl}
-                        style={{ cursor: 'pointer' }}
+                        className={classes.albumArtLink}
                     />
                 </Link>
             </Grid>

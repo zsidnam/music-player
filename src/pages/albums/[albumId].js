@@ -8,6 +8,7 @@ const ALBUM_QUERY = gql`
     query GetAlbum($id: ID!) {
         album(id: $id) {
             id
+            uri
             name
             release_date
             total_tracks
@@ -30,6 +31,12 @@ const ALBUM_QUERY = gql`
                     name
                     duration_ms
                     track_number
+                    uri
+                    album
+                    artists {
+                        id
+                        name
+                    }
                 }
             }
         }

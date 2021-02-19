@@ -7,16 +7,18 @@ import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
 import { getMultipleTrackSelection } from './helpers';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { playContext } from '../../services/spotify-api';
 
-const TrackTable = ({ tracks, allowSorting, primaryColor }) => {
+const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
     const [selectedTracks, setSelectedTracks] = useState([]);
-
-    const unSelectTracks = () => {
-        setSelectedTracks([]);
-    };
+    const unSelectTracks = () => setSelectedTracks([]);
 
     // Unselect tracks if user clicks outside of table
     const tableRef = useOutsideClick(unSelectTracks);
+
+    const handleTrackPlay = async (trackNumber) => {
+        playContext(contextUri, trackNumber);
+    };
 
     const handleTrackSelect = (e, trackId, trackIndex) => {
         e.preventDefault();
@@ -55,6 +57,7 @@ const TrackTable = ({ tracks, allowSorting, primaryColor }) => {
                             track={track}
                             index={idx}
                             onSelect={handleTrackSelect}
+                            onPlay={handleTrackPlay}
                             // TODO: Remove this hard coding
                             isPlaying={idx === 4}
                             isSelected={selectedTracks.includes(track.id)}
@@ -70,12 +73,15 @@ const TrackTable = ({ tracks, allowSorting, primaryColor }) => {
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
     primaryColor: PropTypes.string,
+    contextUri: PropTypes.string.isRequired,
     tracks: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             name: PropTypes.string.isRequired,
             duration_ms: PropTypes.number.isRequired,
             track_number: PropTypes.number.isRequired,
+            uri: PropTypes.string.isRequired,
+            album: PropTypes.string.isRequired,
             artists: PropTypes.arrayOf(
                 PropTypes.shape({
                     id: PropTypes.string.isRequired,
@@ -83,7 +89,7 @@ TrackTable.propTypes = {
                 })
             ),
         })
-    ),
+    ).isRequired,
 };
 
 export default TrackTable;

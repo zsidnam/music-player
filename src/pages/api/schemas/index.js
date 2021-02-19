@@ -4,6 +4,7 @@ export const typeDefs = gql`
     type Artist {
         id: ID
         name: String
+        uri: String
     }
 
     type Copyright {
@@ -24,6 +25,8 @@ export const typeDefs = gql`
         duration_ms: Int
         explicit: Boolean
         track_number: Int
+        uri: String
+        album: String
     }
 
     type TrackPage {
@@ -47,6 +50,7 @@ export const typeDefs = gql`
         total_tracks: Int
         tracks: TrackPage
         copyrights: [Copyright]
+        uri: String
     }
 
     type Query {

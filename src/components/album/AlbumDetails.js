@@ -25,7 +25,7 @@ const AlbumDetails = ({ album }) => {
     return (
         <Box mb={10}>
             <ColorizedContainer primaryColor={primaryDarkColor}>
-                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={12}>
+                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={13}>
                     <AlbumSummary
                         album={omit(album, ['tracks'])}
                         primaryColor={primaryLightColor}
@@ -37,6 +37,7 @@ const AlbumDetails = ({ album }) => {
                 <TrackTable
                     tracks={album.tracks.items}
                     primaryColor={primaryLightColor}
+                    contextUri={album.uri}
                 />
             </Box>
 
