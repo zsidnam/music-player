@@ -35,14 +35,21 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         async function initAuth() {
-            // Check if token already exists in local storage,
-            const existingToken = localStorage.getItem('accessToken');
-            if (existingToken) {
-                spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
-                await fetchUser(existingToken);
+            // Determine whether user just completed login flow, or just
+            // navigated to the home page normally.
+            const hash = getURLHash();
+            const loggingIn = !!hash.access_token;
+
+            if (!loggingIn) {
+                // If user is not logging in, check if token exists and attempt
+                // to restore user session from local storage.
+                const existingToken = localStorage.getItem('accessToken');
+                if (existingToken) {
+                    spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
+                    await fetchUser(existingToken);
+                    // TODO: if this fails with unauthrorized request, unset auth
+                }
             } else {
-                // Get tokens from url hash as part of login flow
-                const hash = getURLHash();
                 window.location.hash = '';
                 const { access_token, refresh_token } = hash;
 

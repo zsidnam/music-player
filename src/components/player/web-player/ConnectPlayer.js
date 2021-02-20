@@ -1,20 +1,25 @@
 import { Component } from 'react';
 import isEmpty from 'lodash.isempty';
+import _get from 'lodash.get';
 
 import PlayerInterface from '../player-elements/PlayerInterface';
 import spotifyApi from '../../../services/spotify-api';
+import { PlayStateContext } from '../../../context/playStateContext';
 import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
 // This needs to be set to 1000ms for normal use. During development,
 // raise as needed to avoid hitting Spotify API too frequently.
 //const POLL_INTERVAL = 1000;
-const POLL_INTERVAL = 1000 * 10;
+const POLL_INTERVAL = 1000;
 
 // TODO: Clean up console errors; move api calls to helper library?
 
 // TODO: Add optimistic updates for player controls
 
 class ConnectPlayer extends Component {
+    // TODO: Fix this eslint issue
+    static contextType = PlayStateContext;
+
     constructor(props) {
         super(props);
 
@@ -36,6 +41,12 @@ class ConnectPlayer extends Component {
 
     componentDidMount() {
         this._setActiveDevicePolling();
+    }
+
+    componentDidUpdate(_, prevState) {
+        if (prevState.playerState !== this.state.playerState) {
+            this.props.onPlayerStateUpdate(this.state.playerState);
+        }
     }
 
     componentWillUnmount() {

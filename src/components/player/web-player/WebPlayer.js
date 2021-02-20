@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 import isEmpty from 'lodash.isempty';
+import _get from 'lodash.get';
 
 import spotifyApi from '../../../services/spotify-api';
 import loadWebPlayer from './load-web-player';
 import PlaybackTransferModal from './PlaybackTransferModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
+import { PlayStateContext } from '../../../context/playStateContext';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
@@ -14,6 +16,9 @@ import ConnectPlayer from './ConnectPlayer';
 // it made more sense to write WebPlayer as a class component.
 
 class WebPlayer extends React.Component {
+    // TODO: Fix this eslint issue
+    static contextType = PlayStateContext;
+
     constructor(props) {
         super(props);
 
@@ -39,6 +44,9 @@ class WebPlayer extends React.Component {
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
         this.pollPlayerVolume = this.pollPlayerVolume.bind(this);
+        this._syncPlayerStateWithContext = this._syncPlayerStateWithContext.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -56,6 +64,8 @@ class WebPlayer extends React.Component {
 
         // No updated needed if WebPlayer remains inactive
         if (isEmpty(this.state.playerState)) return;
+
+        this._syncPlayerStateWithContext(this.state.playerState);
 
         // WebPlayer is now active device
         if (
@@ -170,6 +180,32 @@ class WebPlayer extends React.Component {
         }
     }
 
+    _syncPlayerStateWithContext(currentPlayerState) {
+        // Update play state context to include min set of
+        // play info needed by components throughout app.
+        // To avoid triggering needless re-renders in context
+        // subscribers, only update if change occurred.
+        const { setPlayState, playState: oldPlayState } = this.context;
+        const contextUri = _get(currentPlayerState, 'context.uri');
+        const paused = !!_get(currentPlayerState, 'paused');
+        const playingUri = _get(
+            currentPlayerState,
+            'track_window.current_track.uri'
+        );
+
+        if (
+            contextUri !== oldPlayState.contextUri ||
+            playingUri !== oldPlayState.playingUri ||
+            paused !== oldPlayState.paused
+        ) {
+            setPlayState({
+                contextUri,
+                playingUri,
+                paused,
+            });
+        }
+    }
+
     async pollPlayerState() {
         const newState = await this.player.getCurrentState();
         if (!newState) {
@@ -228,12 +264,13 @@ class WebPlayer extends React.Component {
         }
     }
 
+    // TODO: Add shuffle and repeat functions
+
     render() {
         if (!this.state.loaded) {
+            // TODO: Update loading state
             return <Box>Loading...</Box>;
         }
-
-        // TODO: Add shuffle and repeat functions
 
         return (
             <>
@@ -248,7 +285,9 @@ class WebPlayer extends React.Component {
                         onVolumeChange={this.handleVolumeChange}
                     />
                 ) : (
-                    <ConnectPlayer />
+                    <ConnectPlayer
+                        onPlayerStateUpdate={this._syncPlayerStateWithContext}
+                    />
                 )}
 
                 <PlaybackTransferModal

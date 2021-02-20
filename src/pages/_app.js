@@ -6,6 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../services/apollo-client';
 import { AuthContextProvider } from '../context/authContext';
 import { MenuContextProvider } from '../context/menuContext';
+import { PlayStateContextProvider } from '../context/playStateContext';
 import RouteProtector from '../components/auth/RouteProtector';
 import theme from '../styles/theme';
 
@@ -29,11 +30,13 @@ function MyApp({ Component, pageProps }) {
                 <CssBaseline />
                 <AuthContextProvider>
                     <MenuContextProvider>
-                        <Layout>
-                            <RouteProtector>
-                                <Component {...pageProps} />
-                            </RouteProtector>
-                        </Layout>
+                        <PlayStateContextProvider>
+                            <Layout>
+                                <RouteProtector>
+                                    <Component {...pageProps} />
+                                </RouteProtector>
+                            </Layout>
+                        </PlayStateContextProvider>
                     </MenuContextProvider>
                 </AuthContextProvider>
             </ThemeProvider>
