@@ -3,7 +3,15 @@ import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
 
 import PlayerInterface from '../player-elements/PlayerInterface';
-import spotifyApi from '../../../services/spotify-api';
+import spotifyApi, {
+    resumePlayback,
+    pausePlayback,
+    nextTrack,
+    prevTrack,
+    seek,
+    changeVolume,
+    setShuffleMode,
+} from '../../../services/spotify-api';
 import { PlayStateContext } from '../../../context/playStateContext';
 import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
@@ -11,8 +19,6 @@ import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 // raise as needed to avoid hitting Spotify API too frequently.
 //const POLL_INTERVAL = 1000;
 const POLL_INTERVAL = 1000;
-
-// TODO: Clean up console errors; move api calls to helper library?
 
 // TODO: Add optimistic updates for player controls
 
@@ -36,6 +42,7 @@ class ConnectPlayer extends Component {
         this.handlePrev = this.handlePrev.bind(this);
         this.handleSeek = this.handleSeek.bind(this);
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
+        this.handleShuffleToggle = this.handleShuffleToggle.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
     }
 
@@ -54,10 +61,7 @@ class ConnectPlayer extends Component {
     }
 
     _setActiveDevicePolling() {
-        this.playerStateInterval = setInterval(
-            this.pollPlayerState,
-            POLL_INTERVAL
-        );
+        this.playerStateInterval = setInterval(this.pollPlayerState, POLL_INTERVAL);
     }
 
     _removeAllPolling() {
@@ -79,65 +83,37 @@ class ConnectPlayer extends Component {
         this.setState({ playerState: getPlayerStateFromAPI(newState) });
     }
 
-    async handlePlayToggle() {
-        try {
-            this.state.playerState.paused ? this._play() : this._pause();
-        } catch (err) {
-            console.error('Unable to toggle play state');
-        }
+    handlePlayToggle() {
+        this.state.playerState.paused ? resumePlayback() : pausePlayback();
     }
 
-    _pause() {
-        return spotifyApi.put('/v1/me/player/pause');
+    handleNext() {
+        nextTrack();
     }
 
-    _play() {
-        return spotifyApi.put('/v1/me/player/play');
+    handlePrev() {
+        // Reset track position if requested after 3 sec of playback
+        this.state.playerState.position > 3 * 1000 ? this.handleSeek(0) : prevTrack();
     }
 
-    async handleNext() {
-        try {
-            await spotifyApi.post('/v1/me/player/next');
-        } catch (err) {
-            console.error('Unable to go to next track');
-        }
+    handleSeek(ms) {
+        seek(ms);
     }
 
-    async handlePrev() {
-        try {
-            await spotifyApi.post('/v1/me/player/previous');
-        } catch (err) {
-            console.error('Unable to go to prev track');
-        }
-    }
-
-    async handleSeek(ms) {
-        try {
-            await spotifyApi.put('/v1/me/player/seek', {
-                position_ms: ms,
-            });
-        } catch (err) {
-            console.error('Unable to seek position on current track');
-        }
-    }
-
-    async handleVolumeChange(vol) {
+    handleVolumeChange(vol) {
         // volume must be integer between 0 - 100, not 0 - 1 like web player
         const adjustedVol = parseInt(vol * 100, 10);
+        changeVolume(adjustedVol);
+    }
 
-        try {
-            await spotifyApi.put(
-                `/v1/me/player/volume?volume_percent=${adjustedVol}`
-            );
-        } catch (err) {
-            console.error('Unable to change volume');
-        }
+    handleShuffleToggle() {
+        setShuffleMode(!this.state.playerState.shuffle);
     }
 
     render() {
         // TODO: Turn connectMode off if not playing anything
 
-        // TODO: Add shuffle and repeat functions
+        // TODO: Add repeat function
 
         // TODO: Fix volume and seek operations
         return (
@@ -150,6 +126,7 @@ class ConnectPlayer extends Component {
                 onPrev={this.handlePrev}
                 onSeek={this.handleSeek}
                 onVolumeChange={this.handleVolumeChange}
+                onShuffleToggle={this.handleShuffleToggle}
             />
         );
     }

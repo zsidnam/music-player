@@ -14,13 +14,9 @@ const AlbumDetails = ({ album }) => {
     const albumArtImgSrc = album.images.length && album.images[0].url;
 
     // Extract colors from artwork to use in album display
-    const { data: cData, loading: cLoading, error: cError } = usePalette(
-        albumArtImgSrc
-    );
-    const primaryDarkColor =
-        cData && !cLoading && !cError ? cData.darkVibrant : 'inherit';
-    const primaryLightColor =
-        cData && !cLoading && !cError ? cData.lightVibrant : 'inherit';
+    const { data: cData, loading: cLoading, error: cError } = usePalette(albumArtImgSrc);
+    const primaryDarkColor = cData && !cLoading && !cError ? cData.darkVibrant : 'inherit';
+    const primaryLightColor = cData && !cLoading && !cError ? cData.lightVibrant : 'inherit';
 
     return (
         <Box mb={10}>

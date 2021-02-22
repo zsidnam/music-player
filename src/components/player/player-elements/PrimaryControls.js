@@ -21,13 +21,14 @@ const PrimaryControls = ({
     shuffle,
     repeat_mode,
     onPlayToggle,
+    onShuffleToggle,
     onNext,
     onPrev,
 }) => {
     return (
         <Grid container justify={'center'} alignItems={'center'} spacing={1}>
             <Grid item>
-                <IconButton color={shuffle ? 'primary' : 'secondary'}>
+                <IconButton color={shuffle ? 'primary' : 'secondary'} onClick={onShuffleToggle}>
                     <ShuffleIcon fontSize={'small'} />
                 </IconButton>
             </Grid>
@@ -40,11 +41,7 @@ const PrimaryControls = ({
 
             <Grid item>
                 <IconButton color={'secondary'} onClick={onPlayToggle}>
-                    {paused ? (
-                        <PlayIcon fontSize={'large'} />
-                    ) : (
-                        <PauseIcon fontSize={'large'} />
-                    )}
+                    {paused ? <PlayIcon fontSize={'large'} /> : <PauseIcon fontSize={'large'} />}
                 </IconButton>
             </Grid>
 
@@ -56,11 +53,7 @@ const PrimaryControls = ({
 
             <Grid item>
                 <IconButton
-                    color={
-                        repeat_mode === RepeatSetting.NO_REPEAT
-                            ? 'secondary'
-                            : 'primary'
-                    }
+                    color={repeat_mode === RepeatSetting.NO_REPEAT ? 'secondary' : 'primary'}
                 >
                     {repeat_mode === RepeatSetting.ONCE_REPEAT ? (
                         <RepeatOneIcon fontSize={'small'} />
@@ -77,6 +70,7 @@ PrimaryControls.propTypes = {
     onPlayToggle: PropTypes.func.isRequired,
     onNext: PropTypes.func.isRequired,
     onPrev: PropTypes.func.isRequired,
+    onShuffleToggle: PropTypes.func.isRequired,
     paused: PropTypes.bool,
     shuffle: PropTypes.bool,
     repeat_mode: PropTypes.number,

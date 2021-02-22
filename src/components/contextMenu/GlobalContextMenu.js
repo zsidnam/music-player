@@ -25,8 +25,7 @@ const ContextMenu = () => {
     // that wants to provide a context menu.
     useEffect(() => {
         document.addEventListener('contextmenu', handleContextMenuClick);
-        return () =>
-            document.removeEventListener('contextmenu', handleContextMenuClick);
+        return () => document.removeEventListener('contextmenu', handleContextMenuClick);
     }, [handleContextMenuClick]);
 
     return (

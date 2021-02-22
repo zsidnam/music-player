@@ -9,6 +9,7 @@ import PlaybackTransferModal from './PlaybackTransferModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
 import { PlayStateContext } from '../../../context/playStateContext';
+import { setShuffleMode } from '../../../services/spotify-api';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
@@ -42,11 +43,10 @@ class WebPlayer extends React.Component {
         this.handlePrev = this.handlePrev.bind(this);
         this.handleSeek = this.handleSeek.bind(this);
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
+        this.handleShuffleToggle = this.handleShuffleToggle.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
         this.pollPlayerVolume = this.pollPlayerVolume.bind(this);
-        this._syncPlayerStateWithContext = this._syncPlayerStateWithContext.bind(
-            this
-        );
+        this._syncPlayerStateWithContext = this._syncPlayerStateWithContext.bind(this);
     }
 
     componentDidMount() {
@@ -55,10 +55,7 @@ class WebPlayer extends React.Component {
 
     componentDidUpdate(_, prevState) {
         // WebPlayer is no longer active device
-        if (
-            !isEmpty(prevState.playerState) &&
-            isEmpty(this.state.playerState)
-        ) {
+        if (!isEmpty(prevState.playerState) && isEmpty(this.state.playerState)) {
             this._removeAllPolling();
         }
 
@@ -68,10 +65,7 @@ class WebPlayer extends React.Component {
         this._syncPlayerStateWithContext(this.state.playerState);
 
         // WebPlayer is now active device
-        if (
-            isEmpty(prevState.playerState) &&
-            !isEmpty(this.state.playerState)
-        ) {
+        if (isEmpty(prevState.playerState) && !isEmpty(this.state.playerState)) {
             this._setActiveDevicePolling();
         }
 
@@ -98,7 +92,7 @@ class WebPlayer extends React.Component {
 
         this.player = new Player({
             name: 'Music Player App',
-            volume: 0.75,
+            volume: 0.5,
             getOAuthToken: (cb) => {
                 const token = localStorage.getItem('accessToken');
                 cb(token);
@@ -188,10 +182,7 @@ class WebPlayer extends React.Component {
         const { setPlayState, playState: oldPlayState } = this.context;
         const contextUri = _get(currentPlayerState, 'context.uri');
         const paused = !!_get(currentPlayerState, 'paused');
-        const playingUri = _get(
-            currentPlayerState,
-            'track_window.current_track.uri'
-        );
+        const playingUri = _get(currentPlayerState, 'track_window.current_track.uri');
 
         if (
             contextUri !== oldPlayState.contextUri ||
@@ -209,9 +200,7 @@ class WebPlayer extends React.Component {
     async pollPlayerState() {
         const newState = await this.player.getCurrentState();
         if (!newState) {
-            console.error(
-                'Cannot query player state when Web Playback SDK is not in use.'
-            );
+            console.error('Cannot query player state when Web Playback SDK is not in use.');
             return;
         }
 
@@ -250,7 +239,8 @@ class WebPlayer extends React.Component {
     }
 
     handlePrev() {
-        this.player.previousTrack();
+        // Reset track position if requested after 3 sec of playback
+        this.state.playerState.position > 3 * 1000 ? this.handleSeek(0) : this.player.nextTrack();
     }
 
     handleSeek(ms) {
@@ -264,7 +254,13 @@ class WebPlayer extends React.Component {
         }
     }
 
-    // TODO: Add shuffle and repeat functions
+    handleShuffleToggle() {
+        // Spotify Web Playback SDK does not expose method to update shuffle mode.
+        // Update via connect API.
+        setShuffleMode(!this.state.playerState.shuffle);
+    }
+
+    // TODO: Add repeat function
 
     render() {
         if (!this.state.loaded) {
@@ -283,11 +279,10 @@ class WebPlayer extends React.Component {
                         onPrev={this.handlePrev}
                         onSeek={this.handleSeek}
                         onVolumeChange={this.handleVolumeChange}
+                        onShuffleToggle={this.handleShuffleToggle}
                     />
                 ) : (
-                    <ConnectPlayer
-                        onPlayerStateUpdate={this._syncPlayerStateWithContext}
-                    />
+                    <ConnectPlayer onPlayerStateUpdate={this._syncPlayerStateWithContext} />
                 )}
 
                 <PlaybackTransferModal

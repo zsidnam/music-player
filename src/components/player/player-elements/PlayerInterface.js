@@ -37,6 +37,7 @@ const PlayerInterface = ({
     onPrev,
     onSeek,
     onVolumeChange,
+    onShuffleToggle,
     connectMode,
 }) => {
     const classes = useStyles();
@@ -59,12 +60,9 @@ const PlayerInterface = ({
                                 onPlayToggle={onPlayToggle}
                                 onNext={onNext}
                                 onPrev={onPrev}
+                                onShuffleToggle={onShuffleToggle}
                             />
-                            <ProgressBar
-                                position={position}
-                                duration={duration}
-                                onSeek={onSeek}
-                            />
+                            <ProgressBar position={position} duration={duration} onSeek={onSeek} />
                         </Box>
                     </Grid>
                     <Grid item xs={4} lg={3} xl={2}>
@@ -79,10 +77,7 @@ const PlayerInterface = ({
 
             {connectMode && (
                 <Box className={classes.connectBar}>
-                    <Typography
-                        variant={'caption'}
-                        className={classes.connectText}
-                    >
+                    <Typography variant={'caption'} className={classes.connectText}>
                         Listening through Spotify Connect
                     </Typography>
                 </Box>
@@ -108,6 +103,7 @@ PlayerInterface.propTypes = {
     onPrev: PropTypes.func.isRequired,
     onSeek: PropTypes.func.isRequired,
     onVolumeChange: PropTypes.func.isRequired,
+    onShuffleToggle: PropTypes.func.isRequired,
     connectMode: PropTypes.bool,
 };
 

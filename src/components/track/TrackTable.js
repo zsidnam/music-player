@@ -5,20 +5,24 @@ import { Table, TableBody, TableContainer } from '@material-ui/core';
 
 import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
+import TrackContextMenu from '../contextMenu/TrackContextMenu';
 import { getMultipleTrackSelection } from './helpers';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { usePlayStateContext } from '../../context/playStateContext';
+import { useMenuContext } from '../../context/menuContext';
 import { playContext } from '../../services/spotify-api';
 
 const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
     const [selectedTracks, setSelectedTracks] = useState([]);
+    const { open, isOpen } = useMenuContext();
+    const {
+        playState: { playingUri, paused },
+    } = usePlayStateContext();
+
+    // Unselect tracks if user clicks outside of table (as long as context
+    // menu is not open).
     const unSelectTracks = () => setSelectedTracks([]);
-
-    // Unselect tracks if user clicks outside of table
-    const tableRef = useOutsideClick(unSelectTracks);
-
-    const handleTrackPlay = async (trackNumber) => {
-        playContext(contextUri, trackNumber);
-    };
+    const tableRef = useOutsideClick(unSelectTracks, isOpen);
 
     const handleTrackSelect = (e, trackId, trackIndex) => {
         e.preventDefault();
@@ -27,11 +31,7 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
         let newSelectionList;
         if (modifierKeys.shiftKey) {
             // select multiple tracks
-            newSelectionList = getMultipleTrackSelection(
-                tracks,
-                selectedTracks,
-                trackIndex
-            );
+            newSelectionList = getMultipleTrackSelection(tracks, selectedTracks, trackIndex);
         } else if (modifierKeys.metaKey) {
             // toggle selection of single track
             const alreadySelected = selectedTracks.indexOf(trackId) >= 0;
@@ -46,6 +46,14 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
         setSelectedTracks([...new Set(newSelectionList)]);
     };
 
+    const handleContextMenuClick = (mouseX, mouseY) => {
+        open(mouseX, mouseY, TrackContextMenu, {});
+    };
+
+    const handleTrackPlay = async (trackNumber) => {
+        playContext(contextUri, trackNumber);
+    };
+
     return (
         <TableContainer ref={tableRef}>
             <Table>
@@ -58,10 +66,11 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
                             index={idx}
                             onSelect={handleTrackSelect}
                             onPlay={handleTrackPlay}
-                            // TODO: Remove this hard coding
-                            isPlaying={idx === 4}
+                            isPlaying={track.uri === playingUri}
                             isSelected={selectedTracks.includes(track.id)}
                             primaryColor={primaryColor}
+                            paused={paused}
+                            onContextClick={handleContextMenuClick}
                         />
                     ))}
                 </TableBody>

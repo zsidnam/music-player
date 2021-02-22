@@ -7,6 +7,7 @@ import { useApollo } from '../services/apollo-client';
 import { AuthContextProvider } from '../context/authContext';
 import { MenuContextProvider } from '../context/menuContext';
 import { PlayStateContextProvider } from '../context/playStateContext';
+import { SearchContextProvider } from '../context/searchContext';
 import RouteProtector from '../components/auth/RouteProtector';
 import theme from '../styles/theme';
 
@@ -31,11 +32,13 @@ function MyApp({ Component, pageProps }) {
                 <AuthContextProvider>
                     <MenuContextProvider>
                         <PlayStateContextProvider>
-                            <Layout>
-                                <RouteProtector>
-                                    <Component {...pageProps} />
-                                </RouteProtector>
-                            </Layout>
+                            <SearchContextProvider>
+                                <Layout>
+                                    <RouteProtector>
+                                        <Component {...pageProps} />
+                                    </RouteProtector>
+                                </Layout>
+                            </SearchContextProvider>
                         </PlayStateContextProvider>
                     </MenuContextProvider>
                 </AuthContextProvider>

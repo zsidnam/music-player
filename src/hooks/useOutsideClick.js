@@ -8,13 +8,14 @@ import { useEffect, useRef } from 'react';
  * Note: Provided function should not be dynamic. (Changes after first hook run will be ignored)
  *
  * @param {Function} onOutsideClick Function to execute if click is performed outside defining container
+ * @param {Boolean} isLocked Flag to prevent outsideClick behavior if certain condition is met
  */
-export const useOutsideClick = (onOutsideClick) => {
+export const useOutsideClick = (onOutsideClick, isLocked) => {
     const containerRef = useRef();
 
     useEffect(() => {
         function handleClick(e) {
-            if (!containerRef.current.contains(e.target)) {
+            if (!containerRef.current.contains(e.target) && !isLocked) {
                 onOutsideClick();
             }
         }
@@ -26,7 +27,7 @@ export const useOutsideClick = (onOutsideClick) => {
         };
         // onOutsideClick function should not ever be changed.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isLocked]);
 
     return containerRef;
 };

@@ -1,10 +1,4 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    useCallback,
-} from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 
@@ -30,6 +24,8 @@ export const AuthContextProvider = ({ children }) => {
         } catch (err) {
             console.error(err);
             setUser(null);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
         }
     }, []);
 
@@ -47,7 +43,6 @@ export const AuthContextProvider = ({ children }) => {
                 if (existingToken) {
                     spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
                     await fetchUser(existingToken);
-                    // TODO: if this fails with unauthrorized request, unset auth
                 }
             } else {
                 window.location.hash = '';
@@ -82,9 +77,7 @@ export const AuthContextProvider = ({ children }) => {
         },
     };
 
-    return (
-        <AuthContext.Provider value={store}>{children}</AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={store}>{children}</AuthContext.Provider>;
 };
 
 AuthContextProvider.propTypes = {
