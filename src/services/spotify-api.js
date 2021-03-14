@@ -94,4 +94,13 @@ export const setShuffleMode = async (shuffleEnabled) => {
     }
 };
 
+export const getDevices = async () => {
+    try {
+        const { data } = await api.get('/v1/me/player/devices');
+        return data.devices;
+    } catch (err) {
+        console.log(`Unable to get available devices for user; err=${err.message}`);
+    }
+};
+
 export default api;

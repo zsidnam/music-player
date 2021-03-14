@@ -25,10 +25,7 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
     }, [volume]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedHandleVolumeChange = useCallback(
-        debounce(onVolumeChange, 350),
-        []
-    );
+    const debouncedHandleVolumeChange = useCallback(debounce(onVolumeChange, 350), []);
 
     const handleChangeStart = (_, value) => {
         setLocalVolume(value);
@@ -47,12 +44,7 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
                 {_getVolumeIcon(localVolume)}
             </IconButton>
             <Box width={100}>
-                <Slider
-                    max={1}
-                    step={0.01}
-                    value={localVolume}
-                    onChange={handleChangeStart}
-                />
+                <Slider max={1} step={0.01} value={localVolume} onChange={handleChangeStart} />
             </Box>
         </Box>
     );

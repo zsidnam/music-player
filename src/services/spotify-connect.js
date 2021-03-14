@@ -10,17 +10,17 @@ const REDIRECT_URI = 'http://localhost:3001/api/auth/callback';
 const RESPONSE_TYPE = 'code';
 const SHOW_DIALOG = true;
 const SCOPES = [
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'user-read-currently-playing',
-    'streaming',
     'app-remote-control',
-    'user-read-email',
-    'user-read-private',
     'playlist-read-private',
+    'streaming',
+    'user-modify-playback-state',
     'user-library-read',
     'user-top-read',
+    'user-read-currently-playing',
+    'user-read-email',
     'user-read-playback-position',
+    'user-read-playback-state',
+    'user-read-private',
     'user-read-recently-played',
 ];
 
@@ -34,11 +34,7 @@ const _spotifyApi = new SpotifyWebApi({
 });
 
 export const getAuthURL = (stateString = null) => {
-    const authURL = _spotifyApi.createAuthorizeURL(
-        SCOPES,
-        stateString,
-        SHOW_DIALOG
-    );
+    const authURL = _spotifyApi.createAuthorizeURL(SCOPES, stateString, SHOW_DIALOG);
 
     return authURL;
 };

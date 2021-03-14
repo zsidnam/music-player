@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 import { Grid, Box, makeStyles } from '@material-ui/core';
 
 import TextLink from '../../common/TextLink';
+import SafeLink from '../../common/SafeLink';
 
 // Note: In order to get text to not wrap, we need the parent
 // container to have a width set. In order to simulate responsive
@@ -24,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const _getAlbumId = (albumUri) => {
+    if (!albumUri) return null;
     const uriParts = albumUri.split(':');
     return uriParts[uriParts.length - 1];
 };
-
-// TODO: memoize
 
 const PlayingInfo = ({ currentTrack }) => {
     const classes = useStyles();
@@ -46,14 +45,14 @@ const PlayingInfo = ({ currentTrack }) => {
     return (
         <Grid container alignItems={'center'} spacing={2} wrap={'nowrap'}>
             <Grid item>
-                <Link href={`/albums/${albumId}`}>
+                <SafeLink href={`/albums/${albumId}`}>
                     <img
                         width={50}
                         height={50}
                         src={smallestImgUrl}
                         className={classes.albumArtLink}
                     />
-                </Link>
+                </SafeLink>
             </Grid>
             <Grid item>
                 <Grid container direction={'column'}>
@@ -70,10 +69,7 @@ const PlayingInfo = ({ currentTrack }) => {
                         </Box>
                     </Grid>
                     <Grid item xs zeroMinWidth>
-                        <Box
-                            className={classes.noWrapTextContainer}
-                            style={{ display: 'flex' }}
-                        >
+                        <Box className={classes.noWrapTextContainer} style={{ display: 'flex' }}>
                             {
                                 // TODO: Fix spacing issue
                                 artists.map((artist) => (

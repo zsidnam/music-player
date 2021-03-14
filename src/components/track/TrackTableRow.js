@@ -86,7 +86,7 @@ const TrackTableRow = ({
             </TableCell>
 
             <TableCell>
-                <Typography className={classes.dynamicColor}>{album}</Typography>
+                <Typography className={classes.dynamicColor}>{album.name}</Typography>
             </TableCell>
 
             <TableCell>
@@ -119,7 +119,9 @@ TrackTableRow.propTypes = {
         duration_ms: PropTypes.number.isRequired,
         track_number: PropTypes.number,
         uri: PropTypes.string.isRequired,
-        album: PropTypes.string.isRequired,
+        album: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        }).isRequired,
         artists: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.string.isRequired,

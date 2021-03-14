@@ -11,7 +11,7 @@ import {
     MenuList,
 } from '@material-ui/core';
 
-import spotifyApi from '../../../services/spotify-api';
+import { getDevices } from '../../../services/spotify-api';
 import DeviceMenuItem from './DeviceMenuItem';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +41,8 @@ const DeviceMenu = ({ connectMode }) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const { data } = await spotifyApi.get('/v1/me/player/devices');
-                setDevices(data.devices);
+                const devices = await getDevices();
+                setDevices(devices);
                 setError(false);
             } catch (err) {
                 // TODO: Set up snackbar notification
@@ -71,10 +71,7 @@ const DeviceMenu = ({ connectMode }) => {
 
     return (
         <>
-            <IconButton
-                color={connectMode ? 'primary' : 'secondary'}
-                onClick={handleClick}
-            >
+            <IconButton color={connectMode ? 'primary' : 'secondary'} onClick={handleClick}>
                 <DevicesIcon fontSize={'small'} />
             </IconButton>
 
@@ -87,11 +84,7 @@ const DeviceMenu = ({ connectMode }) => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
-                <Typography
-                    align={'center'}
-                    variant={'h6'}
-                    style={{ textTransform: 'uppercase' }}
-                >
+                <Typography align={'center'} variant={'h6'} style={{ textTransform: 'uppercase' }}>
                     Connect a Device
                 </Typography>
 
@@ -117,9 +110,7 @@ const DeviceMenu = ({ connectMode }) => {
                             variant={'body2'}
                             className={classes.emptyText}
                         >
-                            {error
-                                ? 'Unable to retrieve devices'
-                                : 'No Players Available'}
+                            {error ? 'Unable to retrieve devices' : 'No Players Available'}
                         </Typography>
                     </Box>
                 )}

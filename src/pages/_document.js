@@ -11,7 +11,6 @@ class MyDocument extends Document {
         return (
             <Html>
                 <Head>
-                    <title>Music Player App</title>
                     <link
                         href='https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap'
                         rel='stylesheet'
@@ -41,10 +40,7 @@ MyDocument.getInitialProps = async (ctx) => {
     return {
         ...initialProps,
         // Styles fragment is rendered after the app and page rendering finish.
-        styles: [
-            ...React.Children.toArray(initialProps.styles),
-            sheets.getStyleElement(),
-        ],
+        styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
     };
 };
 

@@ -19,20 +19,15 @@ export const getPlayerStateFromAPI = (webApiPlayerState) => {
     const paused = !_get(webApiPlayerState, 'is_playing');
     const duration = _get(webApiPlayerState, 'item.duration_ms');
     const context = _get(webApiPlayerState, 'context');
-    const volume =
-        (_get(webApiPlayerState, 'device.volume_percent') || 0) / 100;
-    const repeat_mode = _getRepeatSettingFromAPI(
-        _get(webApiPlayerState, 'repeat_state')
-    );
+    const volume = (_get(webApiPlayerState, 'device.volume_percent') || 0) / 100;
+    const repeat_mode = _getRepeatSettingFromAPI(_get(webApiPlayerState, 'repeat_state'));
     const track_window = {
         current_track: {
             name: _get(webApiPlayerState, 'item.name'),
-            artists: _get(webApiPlayerState, 'item.artists', []).map(
-                (artist) => ({
-                    name: artist.name,
-                    uri: artist.uri,
-                })
-            ),
+            artists: _get(webApiPlayerState, 'item.artists', []).map((artist) => ({
+                name: artist.name,
+                uri: artist.uri,
+            })),
             album: _get(webApiPlayerState, 'item.album', {}),
             uri: _get(webApiPlayerState, 'item.uri'),
         },

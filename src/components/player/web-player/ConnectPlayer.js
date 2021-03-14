@@ -17,8 +17,8 @@ import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
 // This needs to be set to 1000ms for normal use. During development,
 // raise as needed to avoid hitting Spotify API too frequently.
-//const POLL_INTERVAL = 1000;
 const POLL_INTERVAL = 1000;
+//const POLL_INTERVAL = 1000 * 20;
 
 // TODO: Add optimistic updates for player controls
 
@@ -30,9 +30,7 @@ class ConnectPlayer extends Component {
         super(props);
 
         this.state = {
-            playerState: {
-                volume: 0,
-            },
+            playerState: {},
         };
 
         this.playerStateInterval = null;
@@ -115,12 +113,12 @@ class ConnectPlayer extends Component {
 
         // TODO: Add repeat function
 
-        // TODO: Fix volume and seek operations
+        // TODO: Implement optimistic updates for volume and seek operations
         return (
             <PlayerInterface
                 connectMode
                 playerState={this.state.playerState}
-                volume={this.state.playerState.volume}
+                volume={this.state.playerState.volume || 0}
                 onPlayToggle={this.handlePlayToggle}
                 onNext={this.handleNext}
                 onPrev={this.handlePrev}

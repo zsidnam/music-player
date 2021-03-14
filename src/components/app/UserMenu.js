@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import {
-    Button,
-    Typography,
-    Menu,
-    MenuItem,
-    makeStyles,
-} from '@material-ui/core';
+import { Button, Typography, Menu, MenuItem, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        backgroundColor: theme.palette.common.grey,
+        backgroundColor: theme.palette.common.nearBlack,
         borderRadius: 100,
         padding: 3,
         '&:hover': {
@@ -74,11 +68,7 @@ const UserMenu = ({ user, logout }) => {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 classes={{ paper: classes.menu, list: classes.menuItemList }}
             >
-                <MenuItem
-                    className={classes.menuItem}
-                    onClick={() => logout()}
-                    dense
-                >
+                <MenuItem className={classes.menuItem} onClick={() => logout()} dense>
                     Log Out
                 </MenuItem>
             </Menu>

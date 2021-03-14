@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import debounce from 'lodash.debounce';
 
 import SearchIcon from '@material-ui/icons/Search';
+import { useSearchContext } from '../../context/searchContext';
 
 const useStyles = makeStyles(() => ({
     searchIcon: {
@@ -16,9 +17,10 @@ const SearchBar = ({ loggedIn }) => {
     const router = useRouter();
     const classes = useStyles();
     const [searchText, setSearchText] = useState('');
+    const { setSearchText: updateSearchContext } = useSearchContext();
 
     const search = (text) => {
-        console.log(`Searching with ${text}`);
+        updateSearchContext(text);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,12 +38,6 @@ const SearchBar = ({ loggedIn }) => {
         debouncedSearch(newSearchText);
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && searchText) {
-            search(searchText);
-        }
-    };
-
     return (
         <Box>
             <TextField
@@ -49,13 +45,10 @@ const SearchBar = ({ loggedIn }) => {
                 value={searchText}
                 onClick={handleClick}
                 onChange={handleChange}
-                onKeyUp={handleKeyPress}
                 placeholder={'Search Music'}
                 disabled={!loggedIn}
                 InputProps={{
-                    startAdornment: (
-                        <SearchIcon className={classes.searchIcon} />
-                    ),
+                    startAdornment: <SearchIcon className={classes.searchIcon} />,
                 }}
             />
         </Box>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { ApolloProvider } from '@apollo/client';
+import Head from 'next/head';
 
 import { useApollo } from '../services/apollo-client';
 import { AuthContextProvider } from '../context/authContext';
@@ -26,24 +27,30 @@ function MyApp({ Component, pageProps }) {
     }, []);
 
     return (
-        <ApolloProvider client={apolloClient}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <AuthContextProvider>
-                    <MenuContextProvider>
-                        <PlayStateContextProvider>
-                            <SearchContextProvider>
-                                <Layout>
-                                    <RouteProtector>
-                                        <Component {...pageProps} />
-                                    </RouteProtector>
-                                </Layout>
-                            </SearchContextProvider>
-                        </PlayStateContextProvider>
-                    </MenuContextProvider>
-                </AuthContextProvider>
-            </ThemeProvider>
-        </ApolloProvider>
+        <>
+            <Head>
+                <title>Music Player</title>
+            </Head>
+
+            <ApolloProvider client={apolloClient}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <AuthContextProvider>
+                        <MenuContextProvider>
+                            <PlayStateContextProvider>
+                                <SearchContextProvider>
+                                    <Layout>
+                                        <RouteProtector>
+                                            <Component {...pageProps} />
+                                        </RouteProtector>
+                                    </Layout>
+                                </SearchContextProvider>
+                            </PlayStateContextProvider>
+                        </MenuContextProvider>
+                    </AuthContextProvider>
+                </ThemeProvider>
+            </ApolloProvider>
+        </>
     );
 }
 

@@ -90,7 +90,9 @@ TrackTable.propTypes = {
             duration_ms: PropTypes.number.isRequired,
             track_number: PropTypes.number.isRequired,
             uri: PropTypes.string.isRequired,
-            album: PropTypes.string.isRequired,
+            album: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+            }).isRequired,
             artists: PropTypes.arrayOf(
                 PropTypes.shape({
                     id: PropTypes.string.isRequired,
