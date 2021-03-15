@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Box, makeStyles } from '@material-ui/core';
 
@@ -23,24 +23,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const _getAlbumId = (albumUri) => {
-    if (!albumUri) return null;
-    const uriParts = albumUri.split(':');
+const _getAlbumId = (album) => {
+    if (!album.uri) return null;
+    const uriParts = album.uri.split(':');
     return uriParts[uriParts.length - 1];
+};
+
+const _getSmallestImageUrl = (album) => {
+    if (!(album.images || []).length) return null;
+    return [...album.images].sort((a, b) => a.width - b.width)[0].url;
 };
 
 const PlayingInfo = ({ currentTrack }) => {
     const classes = useStyles();
 
-    if (!currentTrack) {
-        return null;
-    }
+    if (!currentTrack) return null;
 
-    const { name, artists, album } = currentTrack;
-    const albumId = _getAlbumId(album.uri);
-    const smallestImgUrl = album.images.length
-        ? [...album.images].sort((a, b) => a.width - b.width)[0].url
-        : null;
+    const { name, album, artists } = currentTrack;
+    const albumId = _getAlbumId(album);
+    const smallestImgUrl = _getSmallestImageUrl(album);
 
     return (
         <Grid container alignItems={'center'} spacing={2} wrap={'nowrap'}>
@@ -96,6 +97,8 @@ const PlayingInfo = ({ currentTrack }) => {
 };
 
 PlayingInfo.propTypes = {
+    // Uri is used in memoization check
+    uri: PropTypes.string,
     currentTrack: PropTypes.shape({
         name: PropTypes.string,
         artists: PropTypes.arrayOf(
@@ -118,4 +121,10 @@ PlayingInfo.propTypes = {
     }),
 };
 
-export default PlayingInfo;
+// Not a huge deal, but decided to cut down a bunch of unnecessary renders
+// since current track does not update frequently (relative to playback)
+function areEqual(prevProps, nextProps) {
+    return prevProps.uri === nextProps.uri;
+}
+
+export default memo(PlayingInfo, areEqual);

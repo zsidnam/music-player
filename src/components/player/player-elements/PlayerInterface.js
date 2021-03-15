@@ -49,7 +49,7 @@ const PlayerInterface = ({
             <Box className={classes.playerContainer}>
                 <Grid container justify={'space-between'} alignItems={'center'}>
                     <Grid item xs={4} lg={3} xl={2}>
-                        <PlayingInfo currentTrack={currentTrack} />
+                        <PlayingInfo currentTrack={currentTrack} uri={_get(currentTrack, 'uri')} />
                     </Grid>
                     <Grid item xs={4} lg={6} xl={8}>
                         <Box display={'flex'} flexDirection={'column'}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@material-ui/core';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
@@ -7,7 +7,6 @@ import VolumeSlider from './VolumeSlider';
 import DeviceMenu from './DeviceMenu';
 
 const SecondaryControls = ({ volume, onVolumeChange, connectMode }) => {
-    // TODO: Consider memoizing this component
     return (
         <Grid container justify={'flex-end'} alignItems={'center'} spacing={1}>
             <Grid item>
@@ -31,4 +30,4 @@ SecondaryControls.propTypes = {
     connectMode: PropTypes.bool,
 };
 
-export default SecondaryControls;
+export default memo(SecondaryControls);

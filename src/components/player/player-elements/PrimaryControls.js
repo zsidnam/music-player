@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@material-ui/core';
 import PlayIcon from '@material-ui/icons/PlayArrow';
@@ -13,8 +14,6 @@ const RepeatSetting = {
     ONCE_REPEAT: 1,
     FULL_REPEAT: 2,
 };
-
-// TODO: memoize
 
 const PrimaryControls = ({
     paused,
@@ -76,4 +75,4 @@ PrimaryControls.propTypes = {
     repeat_mode: PropTypes.number,
 };
 
-export default PrimaryControls;
+export default memo(PrimaryControls);

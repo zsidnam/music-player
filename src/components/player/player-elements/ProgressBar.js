@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Slider, Typography } from '@material-ui/core';
 
@@ -30,14 +30,8 @@ const ProgressBar = ({ position, duration, onSeek }) => {
     };
 
     return (
-        <Box
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'space-between'}
-        >
-            <Typography variant={'caption'}>
-                {formatTime(localPosition)}
-            </Typography>
+        <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+            <Typography variant={'caption'}>{formatTime(localPosition)}</Typography>
 
             <Box flex={1} mx={2}>
                 <Slider
@@ -48,9 +42,7 @@ const ProgressBar = ({ position, duration, onSeek }) => {
                 />
             </Box>
 
-            <Typography variant={'caption'}>
-                {formatTime(duration / 1000)}
-            </Typography>
+            <Typography variant={'caption'}>{formatTime(duration / 1000)}</Typography>
         </Box>
     );
 };
@@ -61,4 +53,4 @@ ProgressBar.propTypes = {
     position: PropTypes.number,
 };
 
-export default ProgressBar;
+export default memo(ProgressBar);
