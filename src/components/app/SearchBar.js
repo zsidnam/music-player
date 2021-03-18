@@ -3,8 +3,8 @@ import { Box, TextField, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import debounce from 'lodash.debounce';
-
 import SearchIcon from '@material-ui/icons/Search';
+
 import { useSearchContext } from '../../context/searchContext';
 
 const useStyles = makeStyles(() => ({

@@ -9,10 +9,12 @@ import {
     Typography,
     Divider,
     MenuList,
+    CircularProgress,
 } from '@material-ui/core';
 
 import { getDevices } from '../../../services/spotify-api';
 import DeviceMenuItem from './DeviceMenuItem';
+import DeviceConnector from './DeviceConnector';
 
 const useStyles = makeStyles((theme) => ({
     menu: {
@@ -28,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 // Device Menu implementation is the same regardless of whether Web Player
 // or Connect Player is active. Component will fetch it's own data instead of
 // relying on player for implementation.
-const DeviceMenu = ({ connectMode }) => {
+const DeviceMenu = ({ connectMode, syncActiveDevice, pollingPlayerState }) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [devices, setDevices] = useState([]);
-    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Track active device ID updated from user click
     // to allow for optimistic update
@@ -41,13 +43,14 @@ const DeviceMenu = ({ connectMode }) => {
     useEffect(() => {
         async function fetchData() {
             try {
+                setLoading(true);
                 const devices = await getDevices();
                 setDevices(devices);
-                setError(false);
+                setLoading(false);
             } catch (err) {
                 // TODO: Set up snackbar notification
-                setError(true);
                 setDevices([]);
+                setLoading(false);
             }
         }
 
@@ -85,16 +88,25 @@ const DeviceMenu = ({ connectMode }) => {
                 transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
                 <Typography align={'center'} variant={'h6'} style={{ textTransform: 'uppercase' }}>
-                    Connect a Device
+                    Connect to Device
                 </Typography>
 
                 <Box mb={1}>
                     <Divider />
                 </Box>
 
-                {devices.length ? (
+                {loading ? (
+                    <Box
+                        height={'6rem'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                    >
+                        <CircularProgress size={30} />
+                    </Box>
+                ) : (
                     <MenuList variant={'menu'} autoFocusItem>
-                        {devices.map((device) => (
+                        {(devices || []).map((device) => (
                             <DeviceMenuItem
                                 key={device.id || device.name}
                                 device={device}
@@ -102,17 +114,18 @@ const DeviceMenu = ({ connectMode }) => {
                                 onDeviceSelect={updateActiveDevice}
                             />
                         ))}
+
+                        {/* // If no devices are active, provide additional option to check
+                        // for active device (start polling player state again) */}
+                        {syncActiveDevice &&
+                            devices.every((d) => !d.is_active && !forcedActiveDeviceId) && (
+                                <DeviceConnector
+                                    key={'device-connector'}
+                                    syncActiveDevice={syncActiveDevice}
+                                    pollingPlayerState={!!pollingPlayerState}
+                                />
+                            )}
                     </MenuList>
-                ) : (
-                    <Box py={2}>
-                        <Typography
-                            align={'center'}
-                            variant={'body2'}
-                            className={classes.emptyText}
-                        >
-                            {error ? 'Unable to retrieve devices' : 'No Players Available'}
-                        </Typography>
-                    </Box>
                 )}
             </Popover>
         </>
@@ -121,6 +134,10 @@ const DeviceMenu = ({ connectMode }) => {
 
 DeviceMenu.propTypes = {
     connectMode: PropTypes.bool,
+    // The following props are optional and used
+    // by the Connect Player only
+    pollingPlayerState: PropTypes.bool,
+    syncActiveDevice: PropTypes.func,
 };
 
 export default DeviceMenu;

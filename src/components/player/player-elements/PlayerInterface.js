@@ -39,6 +39,9 @@ const PlayerInterface = ({
     onVolumeChange,
     onShuffleToggle,
     connectMode,
+    disabled,
+    pollingPlayerState,
+    syncActiveDevice,
 }) => {
     const classes = useStyles();
     const currentTrack = _get(playerState, 'track_window.current_track');
@@ -61,8 +64,14 @@ const PlayerInterface = ({
                                 onNext={onNext}
                                 onPrev={onPrev}
                                 onShuffleToggle={onShuffleToggle}
+                                disabled={disabled}
                             />
-                            <ProgressBar position={position} duration={duration} onSeek={onSeek} />
+                            <ProgressBar
+                                position={position}
+                                duration={duration}
+                                onSeek={onSeek}
+                                disabled={disabled}
+                            />
                         </Box>
                     </Grid>
                     <Grid item xs={4} lg={3} xl={2}>
@@ -70,6 +79,9 @@ const PlayerInterface = ({
                             volume={volume}
                             onVolumeChange={onVolumeChange}
                             connectMode={connectMode}
+                            disabled={disabled}
+                            pollingPlayerState={pollingPlayerState}
+                            syncActiveDevice={syncActiveDevice}
                         />
                     </Grid>
                 </Grid>
@@ -105,6 +117,11 @@ PlayerInterface.propTypes = {
     onVolumeChange: PropTypes.func.isRequired,
     onShuffleToggle: PropTypes.func.isRequired,
     connectMode: PropTypes.bool,
+    disabled: PropTypes.bool,
+    // The following props are optional and used
+    // by the Connect Player only
+    pollingPlayerState: PropTypes.bool,
+    syncActiveDevice: PropTypes.func,
 };
 
 export default PlayerInterface;

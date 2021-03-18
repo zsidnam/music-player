@@ -23,29 +23,34 @@ const PrimaryControls = ({
     onShuffleToggle,
     onNext,
     onPrev,
+    disabled,
 }) => {
     return (
         <Grid container justify={'center'} alignItems={'center'} spacing={1}>
             <Grid item>
-                <IconButton color={shuffle ? 'primary' : 'secondary'} onClick={onShuffleToggle}>
+                <IconButton
+                    color={shuffle ? 'primary' : 'secondary'}
+                    onClick={onShuffleToggle}
+                    disabled={disabled}
+                >
                     <ShuffleIcon fontSize={'small'} />
                 </IconButton>
             </Grid>
 
             <Grid item>
-                <IconButton color={'secondary'} onClick={onPrev}>
+                <IconButton color={'secondary'} onClick={onPrev} disabled={disabled}>
                     <PrevIcon fontSize={'large'} />
                 </IconButton>
             </Grid>
 
             <Grid item>
-                <IconButton color={'secondary'} onClick={onPlayToggle}>
+                <IconButton color={'secondary'} onClick={onPlayToggle} disabled={disabled}>
                     {paused ? <PlayIcon fontSize={'large'} /> : <PauseIcon fontSize={'large'} />}
                 </IconButton>
             </Grid>
 
             <Grid item>
-                <IconButton color={'secondary'} onClick={onNext}>
+                <IconButton color={'secondary'} onClick={onNext} disabled={disabled}>
                     <NextIcon fontSize={'large'} />
                 </IconButton>
             </Grid>
@@ -53,6 +58,7 @@ const PrimaryControls = ({
             <Grid item>
                 <IconButton
                     color={repeat_mode === RepeatSetting.NO_REPEAT ? 'secondary' : 'primary'}
+                    disabled={disabled}
                 >
                     {repeat_mode === RepeatSetting.ONCE_REPEAT ? (
                         <RepeatOneIcon fontSize={'small'} />
@@ -73,6 +79,7 @@ PrimaryControls.propTypes = {
     paused: PropTypes.bool,
     shuffle: PropTypes.bool,
     repeat_mode: PropTypes.number,
+    disabled: PropTypes.bool,
 };
 
 export default memo(PrimaryControls);

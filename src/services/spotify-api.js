@@ -99,7 +99,18 @@ export const getDevices = async () => {
         const { data } = await api.get('/v1/me/player/devices');
         return data.devices;
     } catch (err) {
-        console.log(`Unable to get available devices for user; err=${err.message}`);
+        console.error(`Unable to get available devices for user; err=${err.message}`);
+    }
+};
+
+export const transferPlayback = async (deviceId, play = true) => {
+    try {
+        await api.put('/v1/me/player', {
+            device_ids: [deviceId],
+            play,
+        });
+    } catch (err) {
+        console.error(`Unable to transfer playback to deviceId: ${deviceId}; err=${err.message}`);
     }
 };
 

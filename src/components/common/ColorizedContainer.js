@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
+import { Container, Box } from '@material-ui/core';
 
-const ColorizedContainer = ({ children, primaryColor }) => {
+const ColorizedContainer = ({ children, primaryColor, maxWidth }) => {
     return (
         <Box
             style={{
@@ -10,13 +10,18 @@ const ColorizedContainer = ({ children, primaryColor }) => {
                 background: `linear-gradient(175deg, var(--color-1), var(--color-2) 80%)`,
             }}
         >
-            {children}
+            <Container maxWidth={maxWidth}>{children}</Container>
         </Box>
     );
 };
 
+ColorizedContainer.defaultProps = {
+    maxWidth: 'false',
+};
+
 ColorizedContainer.propTypes = {
     children: PropTypes.node,
+    maxWidth: PropTypes.string,
     primaryColor: PropTypes.string.isRequired,
 };
 

@@ -17,7 +17,7 @@ const _getVolumeIcon = (volume) => {
     return <VolumeUpIcon fontSize={'small'} />;
 };
 
-const VolumeSlider = ({ volume, onVolumeChange }) => {
+const VolumeSlider = ({ volume, onVolumeChange, disabled }) => {
     const [localVolume, setLocalVolume] = useState(0);
 
     useEffect(() => {
@@ -40,11 +40,17 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
 
     return (
         <Box display={'flex'} alignItems={'flex-start'}>
-            <IconButton color={'secondary'} onClick={handleIconClick}>
+            <IconButton color={'secondary'} onClick={handleIconClick} disabled={disabled}>
                 {_getVolumeIcon(localVolume)}
             </IconButton>
             <Box width={100}>
-                <Slider max={1} step={0.01} value={localVolume} onChange={handleChangeStart} />
+                <Slider
+                    max={1}
+                    step={0.01}
+                    value={localVolume}
+                    onChange={handleChangeStart}
+                    disabled={disabled}
+                />
             </Box>
         </Box>
     );
@@ -53,6 +59,7 @@ const VolumeSlider = ({ volume, onVolumeChange }) => {
 VolumeSlider.propTypes = {
     volume: PropTypes.number,
     onVolumeChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
 };
 
 export default VolumeSlider;

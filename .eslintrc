@@ -21,6 +21,7 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/no-find-dom-node": 0,
-        "react/no-children-prop": 0
+        "react/no-children-prop": 0,
+        "react/static-property-placement": "static public field"
     }
 }

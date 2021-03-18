@@ -1,29 +1,30 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
 import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
 
-import spotifyApi from '../../../services/spotify-api';
 import loadWebPlayer from './load-web-player';
 import PlaybackTransferModal from './PlaybackTransferModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
 import { PlayStateContext } from '../../../context/playStateContext';
-import { setShuffleMode } from '../../../services/spotify-api';
+import { setShuffleMode, transferPlayback } from '../../../services/spotify-api';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
 // from this component and the player functions need to be called here. Due to that,
 // it made more sense to write WebPlayer as a class component.
 
+const PLAYER_NAME = 'Music Player App';
+const DEFAULT_VOLUME_LEVEL = 0.5;
+
 class WebPlayer extends React.Component {
-    // TODO: Fix this eslint issue
     static contextType = PlayStateContext;
 
     constructor(props) {
         super(props);
 
         this.state = {
+            deviceId: null,
             loaded: false,
             showPlaybackModal: false,
             playerState: {},
@@ -54,24 +55,27 @@ class WebPlayer extends React.Component {
     }
 
     componentDidUpdate(_, prevState) {
-        // WebPlayer is no longer active device
-        if (!isEmpty(prevState.playerState) && isEmpty(this.state.playerState)) {
+        const playToggled = prevState.playerState.paused !== this.state.playerState.paused;
+        const playerNowActive = isEmpty(prevState.playerState) && !isEmpty(this.state.playerState);
+        const playerRemainsInactive = isEmpty(this.state.playerState);
+        const playerNowInactive =
+            !isEmpty(prevState.playerState) && isEmpty(this.state.playerState);
+
+        if (playerNowInactive) {
             this._removeAllPolling();
         }
 
-        // No updated needed if WebPlayer remains inactive
-        if (isEmpty(this.state.playerState)) return;
+        if (playerRemainsInactive) return;
 
         this._syncPlayerStateWithContext(this.state.playerState);
 
-        // WebPlayer is now active device
-        if (isEmpty(prevState.playerState) && !isEmpty(this.state.playerState)) {
+        if (playerNowActive) {
             this._setActiveDevicePolling();
         }
 
         // While a song is playing, continue to update player state so playback position
         // is shown correctly. If paused, stop unnecessary polling.
-        if (prevState.playerState.paused !== this.state.playerState.paused) {
+        if (playToggled) {
             this._setPlayerQueryInterval();
         }
     }
@@ -91,8 +95,8 @@ class WebPlayer extends React.Component {
         }
 
         this.player = new Player({
-            name: 'Music Player App',
-            volume: 0.5,
+            name: PLAYER_NAME,
+            volume: DEFAULT_VOLUME_LEVEL,
             getOAuthToken: (cb) => {
                 const token = localStorage.getItem('accessToken');
                 cb(token);
@@ -129,8 +133,7 @@ class WebPlayer extends React.Component {
         });
 
         this.player.addListener('ready', ({ device_id }) => {
-            console.log('Ready with Device ID', device_id);
-            this.setState({ showPlaybackModal: true });
+            this.setState({ showPlaybackModal: true, deviceId: device_id });
         });
 
         this.player.addListener('not_ready', ({ device_id }) => {
@@ -215,15 +218,11 @@ class WebPlayer extends React.Component {
     }
 
     handleStateUpdate(newPlayerState) {
-        // Return empty object instead of null if player becomes inactive
         this.setState({ playerState: newPlayerState || {} });
     }
 
     transferPlayback() {
-        spotifyApi.put('/v1/me/player', {
-            device_ids: [this.player._options.id],
-            play: true,
-        });
+        transferPlayback(this.state.deviceId);
     }
 
     closeModal() {
@@ -239,8 +238,8 @@ class WebPlayer extends React.Component {
     }
 
     handlePrev() {
-        // Reset track position if requested after 3 sec of playback
-        this.state.playerState.position > 3 * 1000 ? this.handleSeek(0) : this.player.nextTrack();
+        const restartRequested = this.state.playerState.position > 3 * 1000;
+        restartRequested ? this.handleSeek(0) : this.player.nextTrack();
     }
 
     handleSeek(ms) {
@@ -263,15 +262,11 @@ class WebPlayer extends React.Component {
     // TODO: Add repeat function
 
     render() {
-        if (!this.state.loaded) {
-            // TODO: Update loading state
-            return <Box>Loading...</Box>;
-        }
-
         return (
             <>
                 {!isEmpty(this.state.playerState) ? (
                     <PlayerInterface
+                        disabled={!this.state.loaded}
                         playerState={this.state.playerState}
                         volume={this.state.playerVolume}
                         onPlayToggle={this.handlePlayToggle}

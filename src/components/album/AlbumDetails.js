@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 import { usePalette } from 'react-palette';
 import omit from 'lodash.omit';
 
@@ -9,6 +9,7 @@ import TrackTable from '../track/TrackTable';
 import ColorizedContainer from '../common/ColorizedContainer';
 
 const HORIZ_PADDING_SPACES = 5;
+const MAX_WIDTH = 'lg';
 
 const AlbumDetails = ({ album }) => {
     const albumArtImgSrc = album.images.length && album.images[0].url;
@@ -20,7 +21,7 @@ const AlbumDetails = ({ album }) => {
 
     return (
         <Box mb={10}>
-            <ColorizedContainer primaryColor={primaryDarkColor}>
+            <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={MAX_WIDTH}>
                 <Box px={HORIZ_PADDING_SPACES} pb={5} pt={13}>
                     <AlbumSummary
                         album={omit(album, ['tracks'])}
@@ -29,17 +30,17 @@ const AlbumDetails = ({ album }) => {
                 </Box>
             </ColorizedContainer>
 
-            <Box px={HORIZ_PADDING_SPACES}>
-                <TrackTable
-                    tracks={album.tracks.items}
-                    primaryColor={primaryLightColor}
-                    contextUri={album.uri}
-                />
-            </Box>
+            <Container maxWidth={MAX_WIDTH}>
+                <Box px={HORIZ_PADDING_SPACES} mb={6}>
+                    <TrackTable
+                        tracks={album.tracks.items}
+                        primaryColor={primaryLightColor}
+                        contextUri={album.uri}
+                    />
+                </Box>
 
-            <Box px={HORIZ_PADDING_SPACES} mt={6}>
                 <AlbumInfoFooter copyrights={album.copyrights} />
-            </Box>
+            </Container>
         </Box>
     );
 };

@@ -98,6 +98,15 @@ let theme = createMuiTheme({
         borderRadius: 8,
     },
     spacing: (x) => `${0.5 * x}rem`,
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 960,
+            lg: 1300,
+            xl: 1920,
+        },
+    },
 });
 
 // Overrides
@@ -161,6 +170,9 @@ theme = {
         MuiIconButton: {
             root: {
                 padding: 5,
+                '&:disabled': {
+                    color: theme.palette.common.darkGrey,
+                },
             },
             colorSecondary: {
                 color: theme.palette.common.lightGrey,
@@ -183,6 +195,9 @@ theme = {
                     boxShadow: 'none',
                     backgroundColor: theme.palette.primary.main,
                 },
+            },
+            disabled: {
+                backgroundColor: 'transparent',
             },
         },
         MuiPopover: {

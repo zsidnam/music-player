@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
@@ -15,15 +16,17 @@ import spotifyApi, {
 import { PlayStateContext } from '../../../context/playStateContext';
 import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
+// Amount of time player can be idle (player is paused or no device
+// is connected) before device polling stops.
+const IDLE_THRESHOLD = 30; // sec
+
 // This needs to be set to 1000ms for normal use. During development,
 // raise as needed to avoid hitting Spotify API too frequently.
-const POLL_INTERVAL = 1000;
-//const POLL_INTERVAL = 1000 * 20;
+const POLL_INTERVAL = 1000; // ms
 
 // TODO: Add optimistic updates for player controls
 
 class ConnectPlayer extends Component {
-    // TODO: Fix this eslint issue
     static contextType = PlayStateContext;
 
     constructor(props) {
@@ -31,9 +34,11 @@ class ConnectPlayer extends Component {
 
         this.state = {
             playerState: {},
+            idleTime: 0,
         };
 
         this.playerStateInterval = null;
+        this.idleInterval = null;
 
         this.handlePlayToggle = this.handlePlayToggle.bind(this);
         this.handleNext = this.handleNext.bind(this);
@@ -42,15 +47,42 @@ class ConnectPlayer extends Component {
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
         this.handleShuffleToggle = this.handleShuffleToggle.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
+        this.trackIdleTime = this.trackIdleTime.bind(this);
+        this.syncActiveDevice = this.syncActiveDevice.bind(this);
     }
 
     componentDidMount() {
+        this._setIdleTimeTracking();
         this._setActiveDevicePolling();
     }
 
     componentDidUpdate(_, prevState) {
-        if (prevState.playerState !== this.state.playerState) {
+        const playStateChanged = prevState.playerState !== this.state.playerState;
+        const playerWasUnpaused = !this.state.playerState.paused && prevState.playerState.paused;
+        const playerWasPaused = this.state.playerState.paused && !prevState.playerState.paused;
+        const playerBackOnline = !isEmpty(this.state.playerState) && isEmpty(prevState.playerState);
+        const playerWentOffline =
+            isEmpty(this.state.playerState) && !isEmpty(prevState.playerState);
+
+        if (playStateChanged) {
             this.props.onPlayerStateUpdate(this.state.playerState);
+        }
+
+        // The following blocks are in place to avoid racking up unnecessary
+        // api calls if player is not in use.
+        if (playerWentOffline || playerWasPaused) {
+            console.log('Player is not active, starting idle timer');
+            this._setIdleTimeTracking();
+        } else if (playerBackOnline || playerWasUnpaused) {
+            console.log('Player is active again, stopping idle timer');
+            this._removeIdleTimeTracking();
+        }
+
+        if (this.state.idleTime >= IDLE_THRESHOLD && this.playerStateInterval) {
+            console.log(
+                'Device polling stopped due to player inactivity. Use web player or reconnect to an active device'
+            );
+            this._removeActiveDevicePolling();
         }
     }
 
@@ -58,17 +90,44 @@ class ConnectPlayer extends Component {
         this._removeAllPolling();
     }
 
+    _setIdleTimeTracking() {
+        this.idleInterval = setInterval(this.trackIdleTime, 1000);
+    }
+
+    _removeIdleTimeTracking() {
+        this.idleInterval && clearInterval(this.idleInterval);
+        this.idleInterval = null;
+        this.setState({ idleTime: 0 });
+    }
+
     _setActiveDevicePolling() {
         this.playerStateInterval = setInterval(this.pollPlayerState, POLL_INTERVAL);
     }
 
+    _removeActiveDevicePolling() {
+        this.playerStateInterval && clearInterval(this.playerStateInterval);
+        this.playerStateInterval = null;
+    }
+
     _removeAllPolling() {
-        if (this.playerStateInterval) {
-            clearInterval(this.playerStateInterval);
-        }
+        this._removeActiveDevicePolling();
+        this._removeIdleTimeTracking();
+    }
+
+    trackIdleTime() {
+        this.setState({ idleTime: this.state.idleTime + 1 });
+    }
+
+    syncActiveDevice() {
+        if (!!this.playerStateInterval) return;
+
+        this.setState({ idleTime: 0 }, () => {
+            this._setActiveDevicePolling();
+        });
     }
 
     async pollPlayerState() {
+        // TODO: move to graphQL
         const { data: newState } = await spotifyApi.get('/v1/me/player');
 
         // If player has just gone offline, set playerState to empty object.
@@ -90,8 +149,8 @@ class ConnectPlayer extends Component {
     }
 
     handlePrev() {
-        // Reset track position if requested after 3 sec of playback
-        this.state.playerState.position > 3 * 1000 ? this.handleSeek(0) : prevTrack();
+        const restartRequested = this.state.playerState.position > 3 * 1000;
+        restartRequested ? this.handleSeek(0) : prevTrack();
     }
 
     handleSeek(ms) {
@@ -109,14 +168,12 @@ class ConnectPlayer extends Component {
     }
 
     render() {
-        // TODO: Turn connectMode off if not playing anything
-
         // TODO: Add repeat function
 
-        // TODO: Implement optimistic updates for volume and seek operations
         return (
             <PlayerInterface
-                connectMode
+                disabled={isEmpty(this.state.playerState)}
+                connectMode={!isEmpty(this.state.playerState)}
                 playerState={this.state.playerState}
                 volume={this.state.playerState.volume || 0}
                 onPlayToggle={this.handlePlayToggle}
@@ -125,9 +182,15 @@ class ConnectPlayer extends Component {
                 onSeek={this.handleSeek}
                 onVolumeChange={this.handleVolumeChange}
                 onShuffleToggle={this.handleShuffleToggle}
+                pollingPlayerState={!!this.playerStateInterval}
+                syncActiveDevice={this.syncActiveDevice}
             />
         );
     }
 }
+
+ConnectPlayer.propTypes = {
+    onPlayerStateUpdate: PropTypes.func.isRequired,
+};
 
 export default ConnectPlayer;

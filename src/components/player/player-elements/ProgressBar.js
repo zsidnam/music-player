@@ -4,7 +4,7 @@ import { Box, Slider, Typography } from '@material-ui/core';
 
 import { formatTime } from '../../../utils/format';
 
-const ProgressBar = ({ position, duration, onSeek }) => {
+const ProgressBar = ({ position, duration, onSeek, disabled }) => {
     const [localPosition, setLocalPosition] = useState(0);
     const [locked, setLocked] = useState(false);
 
@@ -39,6 +39,7 @@ const ProgressBar = ({ position, duration, onSeek }) => {
                     value={localPosition} // sec
                     onChange={handleChangeStart}
                     onChangeCommitted={handleChangeCommit}
+                    disabled={disabled}
                 />
             </Box>
 
@@ -51,6 +52,7 @@ ProgressBar.propTypes = {
     onSeek: PropTypes.func.isRequired,
     duration: PropTypes.number,
     position: PropTypes.number,
+    disabled: PropTypes.bool,
 };
 
 export default memo(ProgressBar);
