@@ -6,6 +6,7 @@ import moment from 'moment';
 
 import { usePlayStateContext } from '../../context/playStateContext';
 import { playContext, pausePlayback, resumePlayback } from '../../services/spotify-api';
+import TextLink from '../common/TextLink';
 
 const useStyles = makeStyles((theme) => ({
     iconButton: {
@@ -52,7 +53,13 @@ const AlbumSummary = ({ album, primaryColor }) => {
                 </Typography>
 
                 <Box mt={1}>
-                    <Typography variant={'h4'}>{artists[0].name}</Typography>
+                    <TextLink
+                        text={artists[0].name}
+                        href={`/artists/${artists[0].id}`}
+                        TypographyProps={{
+                            variant: 'h4',
+                        }}
+                    />
                 </Box>
 
                 <Box mt={1}>

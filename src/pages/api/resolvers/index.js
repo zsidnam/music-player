@@ -35,6 +35,18 @@ export const resolvers = {
                 throw err;
             }
         },
+        artist: async (_, args, context) => {
+            const { data: artist } = await axios.get(
+                `https://api.spotify.com/v1/artists/${args.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${context.accessToken}`,
+                    },
+                }
+            );
+
+            return artist;
+        },
         search: async (_, args, context) => {
             // TODO: Escape spaces and any other chars
             console.log(args.searchText);

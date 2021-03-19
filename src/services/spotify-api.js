@@ -14,6 +14,35 @@ const api = axios.create({
     },
 });
 
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (err) => {
+        if (err.status !== 401 && err.status !== 403) {
+            return Promise.reject(err);
+        }
+
+        // Attempt to use refresh token to update access token
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) {
+            console.log('Attempted to refresh token but no refreshToken was found.');
+            return Promise.reject(err);
+        }
+
+        const {} = await api.post(
+            '/api/token',
+            {
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+            },
+            {
+                baseURL: '/',
+            }
+        );
+    }
+);
+
 export const resumePlayback = async () => {
     try {
         await api.put('/v1/me/player/play');

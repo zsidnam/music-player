@@ -11,6 +11,7 @@ export const typeDefs = gql`
         width: Int
         url: String
     }
+
     type Artist {
         id: ID!
         name: String!
@@ -97,6 +98,7 @@ export const typeDefs = gql`
 
     type Query {
         album(id: ID!): Album!
+        artist(id: ID!): Artist!
         search(searchText: String!, limit: Int, offset: Int): SearchResults!
     }
 `;

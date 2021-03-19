@@ -2,6 +2,7 @@
 
 // TODO: Get rid of web-api-node and use axios directly
 
+import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../keys';
@@ -41,4 +42,33 @@ export const getAuthURL = (stateString = null) => {
 
 export const getTokens = (authCode) => {
     return _spotifyApi.authorizationCodeGrant(authCode);
+};
+
+export const refreshAccessToken = async (refreshToken) => {
+    try {
+        // Get Base64 encoded auth string
+        const rawString = `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`;
+        const encodedString = Buffer.from(rawString).toString('base64');
+
+        const { data } = await axios.post(
+            'https://accounts.spotify.com/api/token',
+            {
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+            },
+            {
+                headers: {
+                    Authorization: `Basic ${encodedString}`,
+                },
+            }
+        );
+
+        console.log('Here is the refresh token data');
+        console.log(data);
+
+        return data.access_token;
+    } catch (err) {
+        console.error(`Unable to refresh access token. err=${err.message}`);
+        throw err;
+    }
 };
