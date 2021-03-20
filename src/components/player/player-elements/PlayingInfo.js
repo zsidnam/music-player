@@ -4,6 +4,7 @@ import { Grid, Box, makeStyles } from '@material-ui/core';
 
 import TextLink from '../../common/TextLink';
 import SafeLink from '../../common/SafeLink';
+import { getUrlFromSpotifyUri } from '../../../utils/spotify-data';
 
 // Note: In order to get text to not wrap, we need the parent
 // container to have a width set. In order to simulate responsive
@@ -23,30 +24,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const _getAlbumId = (album) => {
-    if (!album.uri) return null;
-    const uriParts = album.uri.split(':');
-    return uriParts[uriParts.length - 1];
-};
-
 const _getSmallestImageUrl = (album) => {
     if (!(album.images || []).length) return null;
     return [...album.images].sort((a, b) => a.width - b.width)[0].url;
 };
 
-const PlayingInfo = ({ currentTrack }) => {
+const PlayingInfo = ({ currentTrack, contextUri }) => {
     const classes = useStyles();
 
     if (!currentTrack) return null;
 
     const { name, album, artists } = currentTrack;
-    const albumId = _getAlbumId(album);
     const smallestImgUrl = _getSmallestImageUrl(album);
 
     return (
         <Grid container alignItems={'center'} spacing={2} wrap={'nowrap'}>
             <Grid item>
-                <SafeLink href={`/albums/${albumId}`}>
+                <SafeLink href={getUrlFromSpotifyUri(contextUri)}>
                     <img
                         width={50}
                         height={50}
@@ -99,6 +93,7 @@ const PlayingInfo = ({ currentTrack }) => {
 PlayingInfo.propTypes = {
     // Uri is used in memoization check
     uri: PropTypes.string,
+    contextUri: PropTypes.string,
     currentTrack: PropTypes.shape({
         name: PropTypes.string,
         artists: PropTypes.arrayOf(

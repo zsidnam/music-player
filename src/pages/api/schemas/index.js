@@ -2,14 +2,14 @@ import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
     type Copyright {
-        text: String
-        type: String
+        text: String!
+        type: String!
     }
 
     type Image {
-        height: Int
-        width: Int
-        url: String
+        height: Int!
+        width: Int!
+        url: String!
     }
 
     type Artist {
@@ -32,11 +32,11 @@ export const typeDefs = gql`
         id: ID!
         uri: String!
         name: String!
-        artists: [Artist]
-        duration_ms: Int
+        artists: [Artist]!
+        duration_ms: Int!
         explicit: Boolean
         track_number: Int
-        album: SimplifiedAlbum
+        album: SimplifiedAlbum!
     }
 
     type TrackPage {
@@ -53,13 +53,13 @@ export const typeDefs = gql`
         uri: String!
         name: String!
         artists: [Artist]!
-        images: [Image]
+        images: [Image]!
         release_date: String
         release_date_precision: String
         label: String
         popularity: Int
         total_tracks: Int
-        tracks: TrackPage
+        tracks: TrackPage!
         copyrights: [Copyright]
     }
 
@@ -70,11 +70,11 @@ export const typeDefs = gql`
     }
 
     type SimplifiedAlbum {
-        id: String
-        uri: String
-        name: String
-        artists: [SimplifiedArtist]
-        images: [Image]
+        id: String!
+        uri: String!
+        name: String!
+        artists: [SimplifiedArtist]!
+        images: [Image]!
         release_date: String
         release_date_precision: String
         album_group: String
@@ -96,9 +96,14 @@ export const typeDefs = gql`
         tracks: TrackPage!
     }
 
+    type TopTracksSummary {
+        tracks: [Track]!
+    }
+
     type Query {
         album(id: ID!): Album!
         artist(id: ID!): Artist!
         search(searchText: String!, limit: Int, offset: Int): SearchResults!
+        topTracks(artistId: ID!): TopTracksSummary!
     }
 `;

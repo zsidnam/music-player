@@ -3,7 +3,7 @@ import { Box, Container } from '@material-ui/core';
 
 const ImageBleedContainer = ({ children, backgroundImgSrc, maxWidth }) => {
     return (
-        <Box style={{ backgroundImage: `url(${backgroundImgSrc})` }}>
+        <Box style={{ backgroundImage: `url(${backgroundImgSrc})`, backgroundSize: 'cover' }}>
             <Container maxWidth={maxWidth}>{children}</Container>
         </Box>
     );

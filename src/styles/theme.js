@@ -47,7 +47,10 @@ let theme = createMuiTheme({
         },
         h3: {
             fontSize: '1.953rem',
-            letterSpacing: '-0.2px',
+            letterSpacing: '-2px',
+            fontFamily: 'Poppins, sans-serif',
+            lineHeight: '1',
+            fontWeight: 500,
         },
         h4: {
             fontSize: '1.563rem',

@@ -45,6 +45,26 @@ export const getPlayerStateFromAPI = (webApiPlayerState) => {
     };
 };
 
-export const getPlayerStateFromWebPlayer = (webPlayerState) => {
-    //
+export const getUrlFromSpotifyUri = (uri) => {
+    if (!uri) return null;
+
+    const uriParts = uri.split(':');
+    if (uriParts.length !== 3) {
+        throw new Error(`Cannot get URL for invalid URI. uri=${uri}`);
+    }
+
+    const [_, type, id] = uriParts;
+    switch (type) {
+        case 'album': {
+            return `/albums/${id}`;
+        }
+
+        case 'artist': {
+            return `/artists/${id}`;
+        }
+
+        default: {
+            throw new Error(`Cannot get URL for unsupported URI. uri=${uri}`);
+        }
+    }
 };

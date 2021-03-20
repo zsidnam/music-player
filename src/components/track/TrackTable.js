@@ -12,7 +12,24 @@ import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
 import { playContext } from '../../services/spotify-api';
 
-const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
+export const COLUMNS = Object.freeze({
+    ALBUM_ART: 'albumArt',
+    TRACK_NUMBER: 'trackNumber',
+    TITLE: 'title',
+    ALBUM: 'album',
+    ARTISTS: 'artists',
+    TIME: 'time',
+});
+
+const TrackTable = ({
+    tracks,
+    allowSorting,
+    primaryColor,
+    contextUri,
+    columns,
+    indexAsTrackNumber,
+    disableTableHead,
+}) => {
     const [selectedTracks, setSelectedTracks] = useState([]);
     const { open, isOpen } = useMenuContext();
     const {
@@ -57,13 +74,17 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
     return (
         <TableContainer ref={tableRef}>
             <Table>
-                <TrackTableHead allowSorting={allowSorting} />
+                {!disableTableHead && (
+                    <TrackTableHead allowSorting={allowSorting} columns={columns} />
+                )}
+
                 <TableBody>
                     {tracks.map((track, idx) => (
                         <TrackTableRow
                             key={track.id}
                             track={track}
                             index={idx}
+                            columns={columns}
                             onSelect={handleTrackSelect}
                             onPlay={handleTrackPlay}
                             isPlaying={track.uri === playingUri}
@@ -71,6 +92,7 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
                             primaryColor={primaryColor}
                             paused={paused}
                             onContextClick={handleContextMenuClick}
+                            indexAsTrackNumber={indexAsTrackNumber}
                         />
                     ))}
                 </TableBody>
@@ -79,24 +101,31 @@ const TrackTable = ({ tracks, allowSorting, primaryColor, contextUri }) => {
     );
 };
 
+TrackTable.defaultProps = {
+    columns: [COLUMNS.TRACK_NUMBER, COLUMNS.TITLE],
+};
+
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
     primaryColor: PropTypes.string,
     contextUri: PropTypes.string.isRequired,
+    columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    indexAsTrackNumber: PropTypes.bool,
+    disableTableHead: PropTypes.bool,
     tracks: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            duration_ms: PropTypes.number.isRequired,
-            track_number: PropTypes.number.isRequired,
             uri: PropTypes.string.isRequired,
+            name: PropTypes.string,
+            duration_ms: PropTypes.number,
+            track_number: PropTypes.number,
             album: PropTypes.shape({
-                name: PropTypes.string.isRequired,
-            }).isRequired,
+                name: PropTypes.string,
+            }),
             artists: PropTypes.arrayOf(
                 PropTypes.shape({
-                    id: PropTypes.string.isRequired,
-                    name: PropTypes.string.isRequired,
+                    id: PropTypes.string,
+                    name: PropTypes.string,
                 })
             ),
         })

@@ -23,6 +23,8 @@ api.interceptors.response.use(
             return Promise.reject(err);
         }
 
+        console.log('YOOOOOOOOOOO WE HIT THISSSSSSSS');
+
         // Attempt to use refresh token to update access token
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) {

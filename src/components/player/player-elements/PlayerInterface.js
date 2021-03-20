@@ -52,7 +52,11 @@ const PlayerInterface = ({
             <Box className={classes.playerContainer}>
                 <Grid container justify={'space-between'} alignItems={'center'}>
                     <Grid item xs={4} lg={3} xl={2}>
-                        <PlayingInfo currentTrack={currentTrack} uri={_get(currentTrack, 'uri')} />
+                        <PlayingInfo
+                            currentTrack={currentTrack}
+                            uri={_get(currentTrack, 'uri')}
+                            contextUri={_get(playerState, 'context.uri')}
+                        />
                     </Grid>
                     <Grid item xs={4} lg={6} xl={8}>
                         <Box display={'flex'} flexDirection={'column'}>
@@ -107,6 +111,9 @@ PlayerInterface.propTypes = {
         position: PropTypes.number,
         track_window: PropTypes.shape({
             current_track: PropTypes.object,
+        }),
+        context: PropTypes.shape({
+            uri: PropTypes.string,
         }),
     }),
     volume: PropTypes.number,

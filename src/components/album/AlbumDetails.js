@@ -5,7 +5,7 @@ import omit from 'lodash.omit';
 
 import AlbumSummary from './AlbumSummary';
 import AlbumInfoFooter from './AlbumInfoFooter';
-import TrackTable from '../track/TrackTable';
+import TrackTable, { COLUMNS } from '../track/TrackTable';
 import ColorizedContainer from '../common/ColorizedContainer';
 
 const HORIZ_PADDING_SPACES = 5;
@@ -36,6 +36,7 @@ const AlbumDetails = ({ album }) => {
                         tracks={album.tracks.items}
                         primaryColor={primaryLightColor}
                         contextUri={album.uri}
+                        columns={[COLUMNS.TRACK_NUMBER, COLUMNS.TITLE, COLUMNS.TIME]}
                     />
                 </Box>
 

@@ -43,7 +43,7 @@ const SearchBar = ({ loggedIn }) => {
             <TextField
                 fullWidth
                 value={searchText}
-                onClick={handleClick}
+                onFocus={handleClick}
                 onChange={handleChange}
                 placeholder={'Search Music'}
                 disabled={!loggedIn}

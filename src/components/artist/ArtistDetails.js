@@ -29,11 +29,15 @@ const ArtistDetails = ({ artist }) => {
 
             <Container maxWidth={MAX_WIDTH}>
                 <Box px={HORIZ_PADDING_SPACES} mb={6}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <TopTracks />
+                    <Grid container spacing={4}>
+                        <Grid item xs={7} md={8}>
+                            <TopTracks
+                                artistId={artist.id}
+                                artistUri={artist.uri}
+                                primaryColor={primaryLightColor}
+                            />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={5} md={4}>
                             <RelatedArtists />
                         </Grid>
                     </Grid>

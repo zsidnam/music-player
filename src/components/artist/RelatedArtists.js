@@ -1,8 +1,14 @@
 import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 const RelatedArtists = () => {
-    return <Box>Related Artists</Box>;
+    return (
+        <Box>
+            <Box mb={2}>
+                <Typography variant={'overline'}>Related Artists</Typography>
+            </Box>
+        </Box>
+    );
 };
 
 RelatedArtists.propTypes = {};

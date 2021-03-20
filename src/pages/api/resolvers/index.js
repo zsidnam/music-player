@@ -36,20 +36,25 @@ export const resolvers = {
             }
         },
         artist: async (_, args, context) => {
-            const { data: artist } = await axios.get(
-                `https://api.spotify.com/v1/artists/${args.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${context.accessToken}`,
-                    },
-                }
-            );
+            try {
+                const { data: artist } = await axios.get(
+                    `https://api.spotify.com/v1/artists/${args.id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
 
-            return artist;
+                return artist;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
         },
         search: async (_, args, context) => {
             // TODO: Escape spaces and any other chars
-            console.log(args.searchText);
             try {
                 const { data: searchResults } = await axios.get(
                     `https://api.spotify.com/v1/search/?q=${args.searchText}&type=${
@@ -63,6 +68,24 @@ export const resolvers = {
                 );
 
                 return searchResults;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        topTracks: async (_, args, context) => {
+            try {
+                const { data: topTracks } = await axios.get(
+                    `https://api.spotify.com/v1/artists/${args.artistId}/top-tracks?market=from_token`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return topTracks;
             } catch (err) {
                 // TODO: Come up with error handling strategy
                 console.log(err);
