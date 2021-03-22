@@ -64,13 +64,13 @@ export const typeDefs = gql`
     }
 
     type SimplifiedArtist {
-        id: String!
+        id: ID!
         name: String!
         uri: String!
     }
 
     type SimplifiedAlbum {
-        id: String!
+        id: ID!
         uri: String!
         name: String!
         artists: [SimplifiedArtist]!
@@ -100,10 +100,15 @@ export const typeDefs = gql`
         tracks: [Track]!
     }
 
+    type RelatedArtistsSummary {
+        artists: [Artist]!
+    }
+
     type Query {
         album(id: ID!): Album!
         artist(id: ID!): Artist!
         search(searchText: String!, limit: Int, offset: Int): SearchResults!
         topTracks(artistId: ID!): TopTracksSummary!
+        relatedArtists(artistId: ID!): RelatedArtistsSummary!
     }
 `;

@@ -29,7 +29,7 @@ const _getSmallestImageUrl = (album) => {
     return [...album.images].sort((a, b) => a.width - b.width)[0].url;
 };
 
-const PlayingInfo = ({ currentTrack, contextUri }) => {
+const PlayingInfo = ({ currentTrack, contextUri, uri }) => {
     const classes = useStyles();
 
     if (!currentTrack) return null;
@@ -40,6 +40,7 @@ const PlayingInfo = ({ currentTrack, contextUri }) => {
     return (
         <Grid container alignItems={'center'} spacing={2} wrap={'nowrap'}>
             <Grid item>
+                {/* Take user to current play context */}
                 <SafeLink href={getUrlFromSpotifyUri(contextUri)}>
                     <img
                         width={50}
@@ -55,7 +56,8 @@ const PlayingInfo = ({ currentTrack, contextUri }) => {
                         <Box className={classes.noWrapTextContainer}>
                             <TextLink
                                 text={name}
-                                href={'/search'}
+                                // Take user to album associated with track
+                                href={getUrlFromSpotifyUri(album.uri)}
                                 TypographyProps={{
                                     noWrap: true,
                                     variant: 'h6',
@@ -71,7 +73,8 @@ const PlayingInfo = ({ currentTrack, contextUri }) => {
                                     <TextLink
                                         key={artist.uri}
                                         text={artist.name}
-                                        href={'/search'}
+                                        // Take user to artist page
+                                        href={getUrlFromSpotifyUri(artist.uri)}
                                         TypographyProps={{
                                             noWrap: true,
                                             variant: 'caption',

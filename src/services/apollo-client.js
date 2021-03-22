@@ -1,13 +1,7 @@
 // See NextJS ex for more info:
 // https://github.com/vercel/next.js/blob/canary/examples/with-apollo/lib/apolloClient.js
 import { useMemo } from 'react';
-import {
-    ApolloClient,
-    InMemoryCache,
-    HttpLink,
-    ApolloLink,
-    concat,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, concat } from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 
@@ -21,9 +15,7 @@ function createApolloClient() {
         operation.setContext({
             headers: {
                 authorization:
-                    (typeof window !== 'undefined' &&
-                        localStorage.getItem('accessToken')) ||
-                    null,
+                    (typeof window !== 'undefined' && localStorage.getItem('accessToken')) || null,
             },
         });
 
@@ -51,9 +43,7 @@ export function initializeApollo(initialState = null) {
             // combine arrays using object equality (like in sets)
             arrayMerge: (destinationArray, sourceArray) => [
                 ...sourceArray,
-                ...destinationArray.filter((d) =>
-                    sourceArray.every((s) => !isEqual(d, s))
-                ),
+                ...destinationArray.filter((d) => sourceArray.every((s) => !isEqual(d, s))),
             ],
         });
 

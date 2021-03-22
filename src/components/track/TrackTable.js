@@ -10,7 +10,7 @@ import { getMultipleTrackSelection } from './helpers';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
-import { playContext } from '../../services/spotify-api';
+import { playContext, playTracks } from '../../services/spotify-api';
 
 export const COLUMNS = Object.freeze({
     ALBUM_ART: 'albumArt',
@@ -67,8 +67,9 @@ const TrackTable = ({
         open(mouseX, mouseY, TrackContextMenu, {});
     };
 
-    const handleTrackPlay = async (trackNumber) => {
-        playContext(contextUri, trackNumber);
+    const handleTrackPlay = async (trackNumber, uri) => {
+        // TODO: Figure out how to play top tracks correctly
+        trackNumber ? playContext(contextUri, trackNumber) : playTracks([uri], contextUri);
     };
 
     return (

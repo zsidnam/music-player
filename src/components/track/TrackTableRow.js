@@ -30,7 +30,7 @@ const TrackTableRow = ({
 }) => {
     const classes = useStyles({ isPlaying, primaryColor });
     const [showControls, setControlsDisplay] = useState(false);
-    const { id, track_number, name, duration_ms, artists, album } = track;
+    const { uri, id, track_number, name, duration_ms, artists, album } = track;
 
     const _hasColumn = (colName) => columns.includes(colName);
 
@@ -38,7 +38,7 @@ const TrackTableRow = ({
         // If switching playback to a new track (vs toggling playback
         // of current track), make request through TrackTable so that
         // we play track as part of correct context
-        onPlay(track_number);
+        onPlay(track_number, uri);
     };
 
     const handleContextClick = (e) => {

@@ -20,11 +20,11 @@ export const resolvers = {
                     }
                 );
 
-                // Add album name onto tracks
+                // Add album name, id onto tracks
                 if (Array.isArray(_get(album, 'tracks.items'))) {
                     album.tracks.items = album.tracks.items.map((track) => ({
                         ...track,
-                        album: { name: album.name },
+                        album: { name: album.name, id: album.id },
                     }));
                 }
 
@@ -86,6 +86,24 @@ export const resolvers = {
                 );
 
                 return topTracks;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        relatedArtists: async (_, args, context) => {
+            try {
+                const { data: artists } = await axios.get(
+                    `https://api.spotify.com/v1/artists/${args.artistId}/related-artists`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return artists;
             } catch (err) {
                 // TODO: Come up with error handling strategy
                 console.log(err);

@@ -14,6 +14,7 @@ const TOP_TRACKS_QUERY = gql`
                 explicit
                 album {
                     id
+                    uri
                     images {
                         width
                         height

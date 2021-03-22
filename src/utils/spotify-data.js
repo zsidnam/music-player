@@ -55,12 +55,22 @@ export const getUrlFromSpotifyUri = (uri) => {
 
     const [_, type, id] = uriParts;
     switch (type) {
+        case 'track': {
+            // Not implemented yet
+            return null;
+        }
+
         case 'album': {
             return `/albums/${id}`;
         }
 
         case 'artist': {
             return `/artists/${id}`;
+        }
+
+        case 'playlist': {
+            // Not implemented yet
+            return null;
         }
 
         default: {

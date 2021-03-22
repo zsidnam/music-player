@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
-import Link from 'next/link';
+
+import SafeLink from './SafeLink';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -16,16 +17,15 @@ const TextLink = ({ href, text, TypographyProps }) => {
     const classes = useStyles();
 
     return (
-        <Link href={href}>
+        <SafeLink href={href}>
             <Typography {...TypographyProps} className={classes.link}>
                 {text}
             </Typography>
-        </Link>
+        </SafeLink>
     );
 };
 
 TextLink.propTypes = {
-    href: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     TypographyProps: PropTypes.object,
 };

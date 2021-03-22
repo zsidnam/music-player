@@ -33,6 +33,7 @@ const ALBUM_QUERY = gql`
                     track_number
                     uri
                     album {
+                        id
                         name
                     }
                     artists {
