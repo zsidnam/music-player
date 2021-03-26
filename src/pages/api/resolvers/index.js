@@ -1,10 +1,14 @@
 import axios from 'axios';
 import _get from 'lodash.get';
 
-const SEARCH_SETTINGS = Object.freeze({
+const SEARCH_DEFAULTS = Object.freeze({
     type: 'album,artist,track',
-    market: 'from_token',
     limit: 5,
+});
+
+const ARTIST_ALBUMS_DEFAULTS = Object.freeze({
+    limit: 20,
+    groups: 'album,single',
 });
 
 export const resolvers = {
@@ -58,8 +62,8 @@ export const resolvers = {
             try {
                 const { data: searchResults } = await axios.get(
                     `https://api.spotify.com/v1/search/?q=${args.searchText}&type=${
-                        SEARCH_SETTINGS.type
-                    }&limit=${args.limit || SEARCH_SETTINGS.limit}&offset=${args.offset || 0}`,
+                        SEARCH_DEFAULTS.type
+                    }&limit=${args.limit || SEARCH_DEFAULTS.limit}&offset=${args.offset || 0}`,
                     {
                         headers: {
                             Authorization: `Bearer ${context.accessToken}`,
@@ -94,7 +98,7 @@ export const resolvers = {
         },
         relatedArtists: async (_, args, context) => {
             try {
-                const { data: artists } = await axios.get(
+                const { data: relatedArtists } = await axios.get(
                     `https://api.spotify.com/v1/artists/${args.artistId}/related-artists`,
                     {
                         headers: {
@@ -103,7 +107,27 @@ export const resolvers = {
                     }
                 );
 
-                return artists;
+                return relatedArtists;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        artistAlbums: async (_, args, context) => {
+            try {
+                const { data: artistAlbums } = await axios.get(
+                    `https://api.spotify.com/v1/artists/${args.artistId}/albums?market=US&limit=${
+                        args.limit || ARTIST_ALBUMS_DEFAULTS.limit
+                    }&offset=${args.offset || 0}&include_groups=${ARTIST_ALBUMS_DEFAULTS.groups}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return artistAlbums;
             } catch (err) {
                 // TODO: Come up with error handling strategy
                 console.log(err);

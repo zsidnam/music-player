@@ -115,6 +115,9 @@ class ConnectPlayer extends Component {
     }
 
     trackIdleTime() {
+        // Prevent state update if component has unmounted by time this gets called
+        if (!this.idleInterval) return;
+
         this.setState({ idleTime: this.state.idleTime + 1 });
     }
 
@@ -127,6 +130,9 @@ class ConnectPlayer extends Component {
     }
 
     async pollPlayerState() {
+        // Prevent state update if component has unmounted by time this gets called
+        if (!this.playerStateInterval) return;
+
         // TODO: move to graphQL
         const { data: newState } = await spotifyApi.get('/v1/me/player');
 

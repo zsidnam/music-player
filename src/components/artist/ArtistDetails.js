@@ -22,27 +22,29 @@ const ArtistDetails = ({ artist }) => {
     return (
         <Box mb={10}>
             <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={MAX_WIDTH}>
-                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={13}>
+                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={12}>
                     <ArtistSummary artist={artist} primaryColor={primaryLightColor} />
                 </Box>
             </ColorizedContainer>
 
             <Container maxWidth={MAX_WIDTH}>
                 <Box px={HORIZ_PADDING_SPACES} mb={6}>
-                    <Grid container spacing={4}>
-                        <Grid item xs={7} md={8}>
-                            <TopTracks
-                                artistId={artist.id}
-                                artistUri={artist.uri}
-                                primaryColor={primaryLightColor}
-                            />
+                    <Box mb={4}>
+                        <Grid container spacing={5}>
+                            <Grid item xs={7} md={8}>
+                                <TopTracks
+                                    artistId={artist.id}
+                                    artistUri={artist.uri}
+                                    primaryColor={primaryLightColor}
+                                />
+                            </Grid>
+                            <Grid item xs={5} md={4}>
+                                <RelatedArtists artistId={artist.id} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={5} md={4}>
-                            <RelatedArtists />
-                        </Grid>
-                    </Grid>
+                    </Box>
 
-                    <Discography />
+                    <Discography artistId={artist.id} />
                 </Box>
             </Container>
         </Box>

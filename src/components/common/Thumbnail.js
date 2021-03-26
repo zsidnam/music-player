@@ -9,15 +9,15 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.common.darkGrey,
         },
     },
-    image: (props) => ({
-        width: 60,
-        height: 60,
-        borderRadius: props.circularFrame ? 50 : 0,
+    image: ({ circularFrame, imageSize }) => ({
+        width: imageSize,
+        height: imageSize,
+        borderRadius: circularFrame ? 50 : 0,
     }),
 }));
 
-const Thumbnail = ({ href, imageSrc, primaryText, secondaryText, circularFrame }) => {
-    const classes = useStyles({ circularFrame });
+const Thumbnail = ({ href, imageSrc, primaryText, secondaryText, circularFrame, imageSize }) => {
+    const classes = useStyles({ circularFrame, imageSize });
 
     // TODO: Get fallback image
 
@@ -43,6 +43,7 @@ const Thumbnail = ({ href, imageSrc, primaryText, secondaryText, circularFrame }
 
 Thumbnail.defaultProps = {
     circularFrame: false,
+    imageSize: 60,
 };
 
 Thumbnail.propTypes = {
@@ -51,6 +52,7 @@ Thumbnail.propTypes = {
     primaryText: PropTypes.string.isRequired,
     secondaryText: PropTypes.string,
     circularFrame: PropTypes.bool,
+    imageSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default Thumbnail;

@@ -33,7 +33,7 @@ const TrackTable = ({
     const [selectedTracks, setSelectedTracks] = useState([]);
     const { open, isOpen } = useMenuContext();
     const {
-        playState: { playingUri, paused },
+        playState: { playingUri, paused, contextUri: playingContextUri },
     } = usePlayStateContext();
 
     // Unselect tracks if user clicks outside of table (as long as context
@@ -88,7 +88,7 @@ const TrackTable = ({
                             columns={columns}
                             onSelect={handleTrackSelect}
                             onPlay={handleTrackPlay}
-                            isPlaying={track.uri === playingUri}
+                            isPlaying={track.uri === playingUri && contextUri === playingContextUri}
                             isSelected={selectedTracks.includes(track.id)}
                             primaryColor={primaryColor}
                             paused={paused}

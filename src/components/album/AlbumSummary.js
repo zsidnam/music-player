@@ -10,13 +10,14 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '2.5rem',
         lineHeight: '2.5rem',
         fontWeight: 500,
+        maxWidth: '70%',
     },
 }));
 
 const AlbumSummary = ({ album, primaryColor }) => {
     const classes = useStyles();
     const { uri, artists, name, release_date, total_tracks, images } = album;
-    const albumArtImgSrc = images.length && images[0].url;
+    const albumArtImgSrc = images.length && images[1].url;
     const metaDataString = `${moment(release_date).format('MMM YYYY')}, ${total_tracks} songs`;
 
     return (
@@ -24,7 +25,7 @@ const AlbumSummary = ({ album, primaryColor }) => {
             <img src={albumArtImgSrc} style={{ maxWidth: 300, maxHeight: 300 }} />
 
             <Box ml={4}>
-                <Typography variant={'h2'} className={classes.titleText}>
+                <Typography variant={'h3'} className={classes.titleText}>
                     {name}
                 </Typography>
 

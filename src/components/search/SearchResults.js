@@ -4,8 +4,8 @@ import { Grid, Box } from '@material-ui/core';
 import SearchResultCategory from './SearchResultCategory';
 import Thumbnail from '../common/Thumbnail';
 
-const _getSmallestImgSrc = (images) =>
-    images.length ? [...images].sort((a, b) => a.width - b.width)[0].url : null;
+// Spotify returns images in order of widest -> smallest
+const _getSmallestImgSrc = (images) => (images.length ? images[images.length - 1].url : null);
 
 const SearchResults = ({ results }) => {
     return (

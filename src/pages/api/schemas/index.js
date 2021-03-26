@@ -104,11 +104,16 @@ export const typeDefs = gql`
         artists: [Artist]!
     }
 
+    type ArtistAlbums {
+        items: [SimplifiedAlbum]!
+    }
+
     type Query {
         album(id: ID!): Album!
         artist(id: ID!): Artist!
         search(searchText: String!, limit: Int, offset: Int): SearchResults!
         topTracks(artistId: ID!): TopTracksSummary!
         relatedArtists(artistId: ID!): RelatedArtistsSummary!
+        artistAlbums(artistId: ID!, limit: Int, offset: Int, groups: String): SimplifiedAlbumPage!
     }
 `;

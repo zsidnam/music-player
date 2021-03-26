@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '70%',
     },
     container: {
-        height: 350,
+        height: 300,
         padding: theme.spacing(3),
         display: 'flex',
         flexDirection: 'column',

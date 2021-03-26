@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, concat } from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
+import omit from 'lodash.omit';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -25,7 +26,51 @@ function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === 'undefined',
         link: concat(authMiddleware, httpLink),
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        artistAlbums: {
+                            keyArgs: ['artistId'],
+                            merge(existing, incoming, { readField, mergeObjects }) {
+                                const mergedAlbums = existing?.items ? existing.items.slice() : [];
+                                const newPageMetadata = omit(incoming, ['items']);
+                                const albumIdToIndex = {};
+
+                                if (existing) {
+                                    existing.items.forEach((album, index) => {
+                                        const id = readField('id', album);
+                                        albumIdToIndex[id] = index;
+                                    });
+                                }
+
+                                incoming.items.forEach((album, index) => {
+                                    const id = readField('id', album);
+                                    const existingIndex = albumIdToIndex[id];
+                                    if (typeof existingIndex === 'number') {
+                                        // We already have an album with the same name,
+                                        // so it is highly likely this is a duplicate.
+                                        mergedAlbums[existingIndex] = mergeObjects(
+                                            mergedAlbums[existingIndex],
+                                            album
+                                        );
+                                    } else {
+                                        // New album; add as normal
+                                        albumIdToIndex[id] = mergedAlbums.length;
+                                        mergedAlbums.push(album);
+                                    }
+                                });
+
+                                return {
+                                    ...newPageMetadata,
+                                    items: mergedAlbums,
+                                };
+                            },
+                        },
+                    },
+                },
+            },
+        }),
     });
 }
 

@@ -211,7 +211,7 @@ theme = {
         },
         MuiDivider: {
             root: {
-                backgroundColor: theme.palette.common.lightGrey,
+                backgroundColor: theme.palette.common.darkGrey,
             },
         },
         MuiPaper: {

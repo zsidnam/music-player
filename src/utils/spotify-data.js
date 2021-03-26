@@ -50,7 +50,8 @@ export const getUrlFromSpotifyUri = (uri) => {
 
     const uriParts = uri.split(':');
     if (uriParts.length !== 3) {
-        throw new Error(`Cannot get URL for invalid URI. uri=${uri}`);
+        console.warn(`Unrecognized uri encountered: ${uri}`);
+        return null;
     }
 
     const [_, type, id] = uriParts;
@@ -74,7 +75,8 @@ export const getUrlFromSpotifyUri = (uri) => {
         }
 
         default: {
-            throw new Error(`Cannot get URL for unsupported URI. uri=${uri}`);
+            console.warn(`Unrecognized uri encountered: ${uri}`);
+            return null;
         }
     }
 };
