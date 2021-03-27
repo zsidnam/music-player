@@ -1,4 +1,5 @@
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { SkeletonClassKey } from '@material-ui/lab';
 
 // Shared colors
 const WHITE = '#fff';
@@ -118,6 +119,9 @@ theme = {
     props: {
         MuiInput: {
             disableUnderline: true,
+        },
+        MuiSkeleton: {
+            animation: 'wave',
         },
     },
     overrides: {

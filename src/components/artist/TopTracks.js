@@ -3,6 +3,7 @@ import { Box, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import TrackTable, { COLUMNS } from '../track/TrackTable';
+import TopTracksSkeleton from './skeletons/TopTracksSkeleton';
 
 const TOP_TRACKS_QUERY = gql`
     query GetTopTracks($artistId: ID!) {
@@ -27,11 +28,9 @@ const TOP_TRACKS_QUERY = gql`
 `;
 
 const TopTracks = ({ artistId, artistUri, primaryColor }) => {
-    // TODO: Update error handling
     const { loading, error, data } = useQuery(TOP_TRACKS_QUERY, { variables: { artistId } });
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <TopTracksSkeleton />;
 
     // TODO: Redirect/Display error message
     if (error) return <p>There was an error</p>;

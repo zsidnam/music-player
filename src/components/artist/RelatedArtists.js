@@ -3,6 +3,7 @@ import { Box, Typography, Grid } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import Thumbnail from '../common/Thumbnail';
+import RelatedArtistsSkeleton from './skeletons/RelatedArtistsSkeleton';
 
 const ARTISTS_TO_SHOW = 8;
 
@@ -27,11 +28,9 @@ const RELATED_ARTISTS_QUERY = gql`
 const _getSmallestImgSrc = (images) => (images.length ? images[images.length - 1].url : null);
 
 const RelatedArtists = ({ artistId }) => {
-    // TODO: Update error handling
     const { loading, error, data } = useQuery(RELATED_ARTISTS_QUERY, { variables: { artistId } });
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <RelatedArtistsSkeleton />;
 
     // TODO: Redirect/Display error message
     if (error) return <p>There was an error</p>;

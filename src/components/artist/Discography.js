@@ -3,6 +3,7 @@ import { Box } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import AlbumGroup from '../album/AlbumGroup';
+import DiscographySkeleton from './skeletons/DiscographySkeleton';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../../utils/constants';
 
@@ -58,8 +59,7 @@ const Discography = ({ artistId }) => {
 
     useInfiniteScroll(handleLoadMore, !!data?.artistAlbums?.next, SCROLLABLE_CONTENT_CONTAINER_ID);
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <DiscographySkeleton />;
 
     // TODO: Redirect/Display error message
     if (error) return <p>There was an error</p>;
