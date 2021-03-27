@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import PlayerContainer from '../components/player/PlayerContainer';
 import Header from '../components/app/Header';
 import GlobalContextMenu from '../components/contextMenu/GlobalContextMenu';
+import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../utils/constants';
 
 const MainLayout = ({ children }) => {
     return (
@@ -17,13 +18,8 @@ const MainLayout = ({ children }) => {
                 height={'100vh'}
                 minWidth={'850px'}
             >
-                <Box
-                    id={'primary-container'}
-                    flex={1}
-                    display={'flex'}
-                    overflow={'hidden'}
-                >
-                    <Box overflow={'auto'} flex={1}>
+                <Box id={'primary-container'} flex={1} display={'flex'} overflow={'hidden'}>
+                    <Box overflow={'auto'} flex={1} id={SCROLLABLE_CONTENT_CONTAINER_ID}>
                         <Box
                             id={'header-container'}
                             position={'absolute'}

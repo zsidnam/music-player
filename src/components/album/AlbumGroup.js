@@ -1,33 +1,9 @@
 import PropTypes from 'prop-types';
-import { Box, Grid, Typography, IconButton, makeStyles } from '@material-ui/core';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import { Box, Grid, Typography } from '@material-ui/core';
 
 import AlbumCover from './AlbumCover';
-import LoadMoreButton from '../common/LoadMoreButton';
 
-const useStyles = makeStyles((theme) => ({
-    icon: {
-        color: theme.palette.common.lightGrey,
-        fontSize: '3rem',
-    },
-    button: {
-        '&:hover': {
-            backgroundColor: theme.palette.common.darkGrey,
-        },
-    },
-    loadContainer: {
-        padding: theme.spacing(2),
-        height: '70%',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-}));
-
-const AlbumGroup = ({ albums, title, onLoadMore, hasMoreAlbums }) => {
-    const classes = useStyles();
-
+const AlbumGroup = ({ albums, title }) => {
     return (
         <Box>
             <Box mb={2}>
@@ -40,14 +16,6 @@ const AlbumGroup = ({ albums, title, onLoadMore, hasMoreAlbums }) => {
                         <AlbumCover album={album} />
                     </Grid>
                 ))}
-
-                {hasMoreAlbums && (
-                    <Grid item>
-                        <Box className={classes.loadContainer}>
-                            <LoadMoreButton onLoadMore={onLoadMore} />
-                        </Box>
-                    </Grid>
-                )}
             </Grid>
         </Box>
     );
@@ -55,8 +23,6 @@ const AlbumGroup = ({ albums, title, onLoadMore, hasMoreAlbums }) => {
 
 AlbumGroup.propTypes = {
     title: PropTypes.string.isRequired,
-    onLoadMore: PropTypes.func.isRequired,
-    hasMoreAlbums: PropTypes.bool,
     albums: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

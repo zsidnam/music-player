@@ -3,6 +3,8 @@ import { Box } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import AlbumGroup from '../album/AlbumGroup';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../../utils/constants';
 
 const ALBUM_PAGE_SIZE = 20;
 
@@ -48,52 +50,40 @@ const Discography = ({ artistId }) => {
         variables: { artistId, limit: ALBUM_PAGE_SIZE, offset: 0 },
     });
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading...</p>;
-
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
-
-    const { items, next } = data.artistAlbums;
-
     const handleLoadMore = () => {
         return fetchMore({
             variables: { offset: items.length },
         });
     };
 
+    useInfiniteScroll(handleLoadMore, !!data?.artistAlbums?.next, SCROLLABLE_CONTENT_CONTAINER_ID);
+
+    // TODO: Add skeleton
+    if (loading) return <p>Loading...</p>;
+
+    // TODO: Redirect/Display error message
+    if (error) return <p>There was an error</p>;
+
     // Spotify has a pretty bad problem with duplicate albums for this query.
     // There are complications with dealing with the dupes in the cache since
     // the number of albums will no longer match up with offset/limit values
     // when dupes are removed. For now, deal with the dupes on render and revisit
     // if this becomes a performance issue.
+    const { items } = data.artistAlbums;
     const deDupedAlbums = _deDupeAlbums(items);
-
     const albums = deDupedAlbums.filter((album) => album.album_group === 'album');
     const singles = deDupedAlbums.filter((album) => album.album_group === 'single');
 
     return (
-        <Box>
+        <>
             {albums.length > 0 && (
                 <Box mb={5}>
-                    <AlbumGroup
-                        albums={albums}
-                        title={'Albums'}
-                        onLoadMore={handleLoadMore}
-                        hasMoreAlbums={!!next}
-                    />
+                    <AlbumGroup albums={albums} title={'Albums'} />
                 </Box>
             )}
 
-            {singles.length > 0 && (
-                <AlbumGroup
-                    albums={singles}
-                    title={'Singles & EPs'}
-                    onLoadMore={handleLoadMore}
-                    hasMoreAlbums={!!next}
-                />
-            )}
-        </Box>
+            {singles.length > 0 && <AlbumGroup albums={singles} title={'Singles & EPs'} />}
+        </>
     );
 };
 
