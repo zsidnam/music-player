@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import MainLayout from '../../layouts/MainLayout';
 import ArtistDetails from '../../components/artist/ArtistDetails';
+import ArtistDetailsSkeleton from '../../components/artist/skeletons/ArtistDetailsSkeleton';
 
 const ARTIST_QUERY = gql`
     query GetArtist($id: ID!) {
@@ -22,16 +23,13 @@ const ARTIST_QUERY = gql`
 const ArtistPage = () => {
     const router = useRouter();
     const { artistId } = router.query;
-
-    // TODO: Update error handling
     const { loading, error, data } = useQuery(ARTIST_QUERY, {
         variables: {
             id: artistId,
         },
     });
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading..</p>;
+    if (loading) return <ArtistDetailsSkeleton />;
 
     // TODO: Redirect/Display error message
     if (error) return <p>There was an error</p>;

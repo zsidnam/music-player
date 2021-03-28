@@ -44,7 +44,7 @@ function createApolloClient() {
                                     });
                                 }
 
-                                incoming.items.forEach((album, index) => {
+                                incoming.items.forEach((album) => {
                                     const id = readField('id', album);
                                     const existingIndex = albumIdToIndex[id];
                                     if (typeof existingIndex === 'number') {

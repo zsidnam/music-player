@@ -19,6 +19,10 @@ const ArtistDetails = ({ artist }) => {
     const primaryDarkColor = cData && !cLoading && !cError ? cData.darkVibrant : 'inherit';
     const primaryLightColor = cData && !cLoading && !cError ? cData.lightVibrant : 'inherit';
 
+    // TODO: The artist summary could probably be refactored to fetch
+    // its own data. Briefly tried this and ran into some weird caching issues,
+    // so decided to revisit later.
+
     return (
         <Box mb={10}>
             <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={MAX_WIDTH}>
