@@ -10,10 +10,29 @@ export const SearchContext = createContext({});
 
 export const SearchContextProvider = ({ children }) => {
     const [searchText, setSearchText] = useState('');
+    const [recentSearches, setRecentSearches] = useState([]);
 
     const store = {
         searchText,
         setSearchText,
+        recentSearches,
+        addRecentSearch: (searchData) => {
+            // Remove any previous searches for same result
+            const updatedSearchResults = recentSearches.filter(
+                (search) => search.href !== searchData.href
+            );
+            updatedSearchResults.unshift(searchData);
+            setRecentSearches(updatedSearchResults);
+        },
+        removeRecentSearch: (searchHref) => {
+            const updatedSearchResults = recentSearches.filter(
+                (search) => search.href !== searchHref
+            );
+            setRecentSearches(updatedSearchResults);
+        },
+        clearSearchHistory: () => {
+            setRecentSearches([]);
+        },
     };
 
     return <SearchContext.Provider value={store}>{children}</SearchContext.Provider>;

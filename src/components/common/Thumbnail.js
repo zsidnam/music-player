@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import Link from 'next/link';
+import _omit from 'lodash.omit';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     clickable: {
@@ -16,28 +17,50 @@ const useStyles = makeStyles((theme) => ({
     }),
 }));
 
-const Thumbnail = ({ href, imageSrc, primaryText, secondaryText, circularFrame, imageSize }) => {
+const Thumbnail = (props) => {
+    const {
+        href,
+        imageSrc,
+        primaryText,
+        secondaryText,
+        circularFrame,
+        imageSize,
+        onSelect,
+        displayOnly,
+    } = props;
+    const router = useRouter();
     const classes = useStyles({ circularFrame, imageSize });
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        if (displayOnly) return;
+
+        onSelect && onSelect(_omit(props, ['onSelect', 'displayOnly']));
+        router.push(href);
+    };
 
     // TODO: Get fallback image
 
     return (
-        <Link href={href}>
-            <Box display={'flex'} alignItems={'center'} className={classes.clickable}>
-                <img src={imageSrc} className={classes.image} />
+        <Box
+            display={'flex'}
+            alignItems={'center'}
+            className={displayOnly ? '' : classes.clickable}
+            onClick={handleClick}
+        >
+            <img src={imageSrc} className={classes.image} />
 
-                <Box ml={2} minWidth={0}>
-                    <Typography variant={'h6'} noWrap>
-                        {primaryText}
+            <Box ml={2} minWidth={0}>
+                <Typography variant={'h6'} noWrap>
+                    {primaryText}
+                </Typography>
+                {secondaryText && (
+                    <Typography variant={'caption'} component={'h6'} noWrap>
+                        {secondaryText}
                     </Typography>
-                    {secondaryText && (
-                        <Typography variant={'caption'} component={'h6'} noWrap>
-                            {secondaryText}
-                        </Typography>
-                    )}
-                </Box>
+                )}
             </Box>
-        </Link>
+        </Box>
     );
 };
 
@@ -53,6 +76,11 @@ Thumbnail.propTypes = {
     secondaryText: PropTypes.string,
     circularFrame: PropTypes.bool,
     imageSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    // Optional function to be run immediately before navigating to thumbnail href.
+    // Function should be called with thumbnail props
+    onSelect: PropTypes.func,
+    // If true, disable click functionality.
+    displayOnly: PropTypes.bool,
 };
 
 export default Thumbnail;

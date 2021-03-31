@@ -42,19 +42,27 @@ const RelatedArtists = ({ artistId }) => {
             <Box mb={2}>
                 <Typography variant={'overline'}>Related Artists</Typography>
             </Box>
-            <Grid container direction={'column'} spacing={2}>
-                {artists.slice(0, ARTISTS_TO_SHOW).map((artist) => (
-                    <Grid key={artist.id} item xs={12}>
-                        <Thumbnail
-                            href={`/artists/${artist.id}`}
-                            imageSrc={_getSmallestImgSrc(artist.images)}
-                            primaryText={artist.name}
-                            circularFrame
-                            imageSize={45}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+            {!artists.length ? (
+                <Box>
+                    <Typography color={'textSecondary'}>
+                        This artist does not have any related artists.
+                    </Typography>
+                </Box>
+            ) : (
+                <Grid container direction={'column'} spacing={2}>
+                    {artists.slice(0, ARTISTS_TO_SHOW).map((artist) => (
+                        <Grid key={artist.id} item xs={12}>
+                            <Thumbnail
+                                href={`/artists/${artist.id}`}
+                                imageSrc={_getSmallestImgSrc(artist.images)}
+                                primaryText={artist.name}
+                                circularFrame
+                                imageSize={45}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
         </Box>
     );
 };

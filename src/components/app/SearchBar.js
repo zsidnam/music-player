@@ -4,12 +4,18 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import debounce from 'lodash.debounce';
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
 
 import { useSearchContext } from '../../context/searchContext';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     searchIcon: {
         marginRight: 5,
+    },
+    clearIcon: {
+        cursor: 'pointer',
+        marginLeft: 5,
+        color: theme.palette.common.lightGrey,
     },
 }));
 
@@ -24,7 +30,7 @@ const SearchBar = ({ loggedIn }) => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedSearch = useCallback(debounce(search, 350), []);
+    const debouncedSearch = useCallback(debounce(search, 250), []);
 
     const handleClick = () => {
         if (router.pathname !== '/search') {
@@ -38,6 +44,12 @@ const SearchBar = ({ loggedIn }) => {
         debouncedSearch(newSearchText);
     };
 
+    const handleClear = () => {
+        setSearchText('');
+        debouncedSearch('');
+        // TODO: refocus input
+    };
+
     return (
         <Box>
             <TextField
@@ -49,6 +61,9 @@ const SearchBar = ({ loggedIn }) => {
                 disabled={!loggedIn}
                 InputProps={{
                     startAdornment: <SearchIcon className={classes.searchIcon} />,
+                    endAdornment: loggedIn ? (
+                        <ClearIcon onClick={handleClear} className={classes.clearIcon} />
+                    ) : null,
                 }}
             />
         </Box>

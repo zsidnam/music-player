@@ -4,7 +4,11 @@ import { Box, Typography } from '@material-ui/core';
 import SearchPrompt from '../../components/search/SearchPrompt';
 import SearchResults from '../../components/search/SearchResults';
 import MainLayout from '../../layouts/MainLayout';
+import ColorizedContainer from '../../components/common/ColorizedContainer';
 import { useSearchContext } from '../../context/searchContext';
+
+const HORIZ_PADDING_SPACES = 5;
+const MAX_WIDTH = 'lg';
 
 const SEARCH_QUERY = gql`
     query GetSearchResults($searchText: String!) {
@@ -73,19 +77,13 @@ const SearchPage = () => {
         skip: !searchText,
     });
 
-    if (loading) return <Box>Loading...</Box>;
+    // TODO: Add error handling
+    if (error) return <>Error</>;
 
-    if (error)
-        return (
-            <Box>
-                <Typography>Unable to get search results.</Typography>
-            </Box>
-        );
-
-    return (
-        <Box height={'100%'} mt={10}>
-            {!searchText ? <SearchPrompt /> : <SearchResults results={data.search} />}
-        </Box>
+    return !searchText ? (
+        <SearchPrompt />
+    ) : (
+        <SearchResults loading={loading} results={data?.search} />
     );
 };
 

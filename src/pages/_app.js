@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import Head from 'next/head';
 
 import { useApollo } from '../services/apollo-client';
+import { useScrollToTop } from '../hooks/useScrollToTop';
 import { AuthContextProvider } from '../context/authContext';
 import { MenuContextProvider } from '../context/menuContext';
 import { PlayStateContextProvider } from '../context/playStateContext';
@@ -17,6 +18,8 @@ const NoOp = ({ children }) => children;
 function MyApp({ Component, pageProps }) {
     const apolloClient = useApollo(pageProps);
     const Layout = Component.Layout || NoOp;
+
+    useScrollToTop();
 
     useEffect(() => {
         // Remove the server-side injected CSS.

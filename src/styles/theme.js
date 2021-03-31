@@ -138,6 +138,14 @@ theme = {
             textSecondary: {
                 color: theme.palette.common.black,
             },
+            outlinedSecondary: {
+                color: theme.palette.common.lightGrey,
+                borderColor: theme.palette.common.lightGrey,
+                '&:hover': {
+                    borderColor: theme.palette.common.white,
+                    color: theme.palette.common.white,
+                },
+            },
         },
         MuiInput: {
             root: {

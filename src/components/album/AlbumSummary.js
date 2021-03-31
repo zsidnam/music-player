@@ -40,7 +40,9 @@ const AlbumSummary = ({ album, primaryColor }) => {
                 </Box>
 
                 <Box mt={1}>
-                    <Typography variant={'caption'}>{metaDataString}</Typography>
+                    <Typography color={'textSecondary'} variant={'caption'}>
+                        {metaDataString}
+                    </Typography>
                 </Box>
 
                 <Box mt={2}>

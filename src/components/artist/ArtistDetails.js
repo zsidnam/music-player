@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid, useTheme } from '@material-ui/core';
 import { usePalette } from 'react-palette';
 
 import ColorizedContainer from '../common/ColorizedContainer';
@@ -12,12 +12,21 @@ const HORIZ_PADDING_SPACES = 5;
 const MAX_WIDTH = 'lg';
 
 const ArtistDetails = ({ artist }) => {
+    const theme = useTheme();
     const artistImgSrc = artist.images.length && artist.images[0].url;
 
     // Extract colors from artwork to use in artist display
     const { data: cData, loading: cLoading, error: cError } = usePalette(artistImgSrc);
-    const primaryDarkColor = cData && !cLoading && !cError ? cData.darkVibrant : 'inherit';
-    const primaryLightColor = cData && !cLoading && !cError ? cData.lightVibrant : 'inherit';
+    const primaryDarkColor = cLoading
+        ? 'inherit'
+        : cData && !cError
+        ? cData.darkVibrant
+        : theme.palette.common.darkGrey;
+    const primaryLightColor = cLoading
+        ? 'inherit'
+        : cData && !cError
+        ? cData.lightVibrant
+        : theme.palette.primary.main;
 
     // TODO: The artist summary could probably be refactored to fetch
     // its own data. Briefly tried this and ran into some weird caching issues,

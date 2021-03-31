@@ -6,9 +6,13 @@ import TextLink from '../common/TextLink';
 const SearchResultCategory = ({ title, seeAllHref, renderResult, items }) => {
     return (
         <Box>
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'baseline'}>
-                <Typography>{title}</Typography>
-                <TextLink text={'See All'} href={seeAllHref || '/cat'} />
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'baseline'} pr={1}>
+                <Typography variant={'overline'}>{title}</Typography>
+                <TextLink
+                    TypographyProps={{ color: 'textSecondary', variant: 'caption' }}
+                    text={'See All'}
+                    href={seeAllHref}
+                />
             </Box>
 
             <Box mb={2}>

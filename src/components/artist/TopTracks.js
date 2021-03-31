@@ -43,14 +43,22 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
                 <Typography variant={'overline'}>Top Tracks</Typography>
             </Box>
 
-            <TrackTable
-                contextUri={artistUri}
-                tracks={tracks}
-                primaryColor={primaryColor}
-                indexAsTrackNumber
-                disableTableHead
-                columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
-            />
+            {!tracks.length ? (
+                <Box>
+                    <Typography color={'textSecondary'}>
+                        This artist does not have any top tracks.
+                    </Typography>
+                </Box>
+            ) : (
+                <TrackTable
+                    contextUri={artistUri}
+                    tracks={tracks}
+                    primaryColor={primaryColor}
+                    indexAsTrackNumber
+                    disableTableHead
+                    columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
+                />
+            )}
         </Box>
     );
 };
