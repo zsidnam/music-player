@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # API Keys
-keys.js
+.env.local
 
 # IDE
 .vscode

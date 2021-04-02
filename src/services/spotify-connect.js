@@ -5,8 +5,6 @@
 import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 
-import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../keys';
-
 const REDIRECT_URI = 'http://localhost:3001/api/auth/callback';
 const RESPONSE_TYPE = 'code';
 const SHOW_DIALOG = true;
@@ -30,8 +28,8 @@ export const SPOTIFY_REFRESH_TOKEN_KEY = 'SPOTIFY_ACCESS_TOKEN_KEY';
 
 const _spotifyApi = new SpotifyWebApi({
     redirectUri: REDIRECT_URI,
-    clientId: SPOTIFY_CLIENT_ID,
-    clientSecret: SPOTIFY_CLIENT_SECRET,
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 });
 
 export const getAuthURL = (stateString = null) => {
@@ -47,7 +45,7 @@ export const getTokens = (authCode) => {
 export const refreshAccessToken = async (refreshToken) => {
     try {
         // Get Base64 encoded auth string
-        const rawString = `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`;
+        const rawString = `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`;
         const encodedString = Buffer.from(rawString).toString('base64');
 
         const { data } = await axios.post(
