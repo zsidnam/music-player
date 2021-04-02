@@ -5,8 +5,6 @@
 import axios from 'axios';
 import SpotifyWebApi from 'spotify-web-api-node';
 
-const REDIRECT_URI = 'http://localhost:3001/api/auth/callback';
-const RESPONSE_TYPE = 'code';
 const SHOW_DIALOG = true;
 const SCOPES = [
     'app-remote-control',
@@ -27,7 +25,7 @@ export const SPOTIFY_STATE_KEY = 'SPOTIFY_STATE_KEY';
 export const SPOTIFY_REFRESH_TOKEN_KEY = 'SPOTIFY_ACCESS_TOKEN_KEY';
 
 const _spotifyApi = new SpotifyWebApi({
-    redirectUri: REDIRECT_URI,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 });
