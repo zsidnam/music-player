@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Typography, Grid, Box, Container, useTheme, makeStyles } from '@material-ui/core';
+import { Typography, Grid, Box, Container, useTheme } from '@material-ui/core';
 
 import SearchResultCategory from './SearchResultCategory';
 import ColorizedContainer from '../common/ColorizedContainer';
@@ -10,15 +10,8 @@ import SearchResultCategorySkeleton from './skeletons/SearchResultCategorySkelet
 // Spotify returns images in order of widest -> smallest
 const _getSmallestImgSrc = (images) => (images.length ? images[images.length - 1].url : null);
 
-const useStyles = makeStyles(() => ({
-    titleText: {
-        fontSize: '4rem',
-    },
-}));
-
 const SearchResults = ({ results, loading }) => {
     const theme = useTheme();
-    const classes = useStyles();
     const { addRecentSearch } = useSearchContext();
 
     const handleThumbnailSelect = (thumbnailProps) => {
@@ -29,7 +22,7 @@ const SearchResults = ({ results, loading }) => {
         <Box mb={10}>
             <ColorizedContainer primaryColor={theme.palette.primary.main} maxWidth={'lg'}>
                 <Box px={5} pb={5} pt={16}>
-                    <Typography className={classes.titleText} variant={'h3'}>
+                    <Typography style={{ fontSize: '4rem' }} variant={'h3'}>
                         Search Results
                     </Typography>
                 </Box>

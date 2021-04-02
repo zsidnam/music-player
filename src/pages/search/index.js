@@ -1,14 +1,9 @@
 import { useQuery, gql } from '@apollo/client';
-import { Box, Typography } from '@material-ui/core';
 
 import SearchPrompt from '../../components/search/SearchPrompt';
 import SearchResults from '../../components/search/SearchResults';
 import MainLayout from '../../layouts/MainLayout';
-import ColorizedContainer from '../../components/common/ColorizedContainer';
 import { useSearchContext } from '../../context/searchContext';
-
-const HORIZ_PADDING_SPACES = 5;
-const MAX_WIDTH = 'lg';
 
 const SEARCH_QUERY = gql`
     query GetSearchResults($searchText: String!) {
@@ -80,10 +75,10 @@ const SearchPage = () => {
     // TODO: Add error handling
     if (error) return <>Error</>;
 
-    return !searchText ? (
-        <SearchPrompt />
-    ) : (
+    return searchText ? (
         <SearchResults loading={loading} results={data?.search} />
+    ) : (
+        <SearchPrompt />
     );
 };
 

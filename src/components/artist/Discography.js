@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import AlbumGroup from '../album/AlbumGroup';
@@ -61,8 +61,16 @@ const Discography = ({ artistId }) => {
 
     if (loading) return <DiscographySkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error) {
+        return (
+            <>
+                <Box mb={2}>
+                    <Typography variant={'overline'}>Albums</Typography>
+                </Box>
+                <Typography color={'textSecondary'}>Unable to get albums for artist.</Typography>
+            </>
+        );
+    }
 
     // Spotify has a pretty bad problem with duplicate albums for this query.
     // There are complications with dealing with the dupes in the cache since

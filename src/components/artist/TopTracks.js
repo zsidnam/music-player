@@ -32,8 +32,18 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
 
     if (loading) return <TopTracksSkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error) {
+        return (
+            <>
+                <Box mb={2}>
+                    <Typography variant={'overline'}>Top Tracks</Typography>
+                </Box>
+                <Typography color={'textSecondary'}>
+                    Unable to get top tracks for artist.
+                </Typography>
+            </>
+        );
+    }
 
     const { tracks } = data.topTracks;
 
@@ -44,11 +54,9 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
             </Box>
 
             {!tracks.length ? (
-                <Box>
-                    <Typography color={'textSecondary'}>
-                        This artist does not have any top tracks.
-                    </Typography>
-                </Box>
+                <Typography color={'textSecondary'}>
+                    This artist does not have any top tracks.
+                </Typography>
             ) : (
                 <TrackTable
                     contextUri={artistUri}

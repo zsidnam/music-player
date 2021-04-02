@@ -32,8 +32,16 @@ const RelatedArtists = ({ artistId }) => {
 
     if (loading) return <RelatedArtistsSkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error) {
+        return (
+            <>
+                <Box mb={2}>
+                    <Typography variant={'overline'}>Related Artists</Typography>
+                </Box>
+                <Typography color={'textSecondary'}>Unable to get related artists.</Typography>
+            </>
+        );
+    }
 
     const { artists } = data.relatedArtists;
 
@@ -42,12 +50,11 @@ const RelatedArtists = ({ artistId }) => {
             <Box mb={2}>
                 <Typography variant={'overline'}>Related Artists</Typography>
             </Box>
+
             {!artists.length ? (
-                <Box>
-                    <Typography color={'textSecondary'}>
-                        This artist does not have any related artists.
-                    </Typography>
-                </Box>
+                <Typography color={'textSecondary'}>
+                    This artist does not have any related artists.
+                </Typography>
             ) : (
                 <Grid container direction={'column'} spacing={2}>
                     {artists.slice(0, ARTISTS_TO_SHOW).map((artist) => (
@@ -67,6 +74,8 @@ const RelatedArtists = ({ artistId }) => {
     );
 };
 
-RelatedArtists.propTypes = {};
+RelatedArtists.propTypes = {
+    artistId: PropTypes.string.isRequired,
+};
 
 export default RelatedArtists;

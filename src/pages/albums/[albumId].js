@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import AlbumDetails from '../../components/album/AlbumDetails';
 import MainLayout from '../../layouts/MainLayout';
+import AlbumDetailsSkeleton from '../../components/album/skeletons/AlbumDetailsSkeleton';
 
 const ALBUM_QUERY = gql`
     query GetAlbum($id: ID!) {
@@ -57,8 +58,7 @@ const AlbumPage = () => {
         },
     });
 
-    // TODO: Add skeleton
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <AlbumDetailsSkeleton />;
 
     // TODO: Redirect/Display error message
     if (error) return <p>There was an error</p>;
