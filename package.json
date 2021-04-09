@@ -23,13 +23,11 @@
         "lodash.isequal": "^4.5.0",
         "lodash.omit": "^4.5.0",
         "lodash.pick": "^4.4.0",
-        "lodash.uniqby": "^4.7.0",
         "moment": "^2.29.1",
         "next": "^10.0.7",
-        "react": "16.13.1",
-        "react-dom": "16.13.1",
-        "react-palette": "^1.0.2",
-        "spotify-web-api-node": "^5.0.0"
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0",
+        "react-palette": "^1.0.2"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",

@@ -11,6 +11,10 @@ const ARTIST_ALBUMS_DEFAULTS = Object.freeze({
     groups: 'album,single',
 });
 
+const ALBUM_TRACKS_DEFAULTS = Object.freeze({
+    limit: 25,
+});
+
 export const resolvers = {
     Query: {
         album: async (_, args, context) => {
@@ -117,7 +121,9 @@ export const resolvers = {
         artistAlbums: async (_, args, context) => {
             try {
                 const { data: artistAlbums } = await axios.get(
-                    `https://api.spotify.com/v1/artists/${args.artistId}/albums?market=US&limit=${
+                    `https://api.spotify.com/v1/artists/${
+                        args.artistId
+                    }/albums?market=from_token&limit=${
                         args.limit || ARTIST_ALBUMS_DEFAULTS.limit
                     }&offset=${args.offset || 0}&include_groups=${ARTIST_ALBUMS_DEFAULTS.groups}`,
                     {
@@ -128,6 +134,28 @@ export const resolvers = {
                 );
 
                 return artistAlbums;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        albumTracks: async (_, args, context) => {
+            try {
+                const { data: albumTracks } = await axios.get(
+                    `https://api.spotify.com/v1/albums/${
+                        args.albumId
+                    }/tracks?market=from_token&limit=${
+                        args.limit || ALBUM_TRACKS_DEFAULTS.limit
+                    }&offset=${args.offset || 0}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return albumTracks;
             } catch (err) {
                 // TODO: Come up with error handling strategy
                 console.log(err);

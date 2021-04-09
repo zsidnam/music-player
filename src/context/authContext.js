@@ -26,6 +26,7 @@ export const AuthContextProvider = ({ children }) => {
             setUser(null);
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
+            localStorage.removeItem('expiresIn');
         }
     }, []);
 
@@ -46,11 +47,12 @@ export const AuthContextProvider = ({ children }) => {
                 }
             } else {
                 window.location.hash = '';
-                const { access_token, refresh_token } = hash;
+                const { access_token, refresh_token, expires_in } = hash;
 
                 if (access_token && refresh_token) {
                     localStorage.setItem('accessToken', access_token);
                     localStorage.setItem('refreshToken', refresh_token);
+                    localStorage.setItem('expiresIn', expires_in);
                     spotifyApi.defaults.headers.Authorization = `Bearer ${access_token}`;
                     await fetchUser(access_token);
                     router.replace('/');

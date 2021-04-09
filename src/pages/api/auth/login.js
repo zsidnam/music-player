@@ -1,7 +1,4 @@
-import {
-    getAuthURL,
-    SPOTIFY_STATE_KEY,
-} from '../../../services/spotify-connect';
+import { getAuthURL, SPOTIFY_STATE_KEY } from '../../../services/spotify-connect';
 import { getRandomString } from '../../../utils/strings';
 import { setCookie } from '../../../utils/http';
 

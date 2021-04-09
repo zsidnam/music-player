@@ -1,11 +1,13 @@
 'use strict';
 
-// TODO: Get rid of web-api-node and use axios directly
+/*  
+    This module contains code to connect to Spotify.
+    This can be run on the server only.
+*/
 
 import axios from 'axios';
-import SpotifyWebApi from 'spotify-web-api-node';
+import querystring from 'querystring';
 
-const SHOW_DIALOG = true;
 const SCOPES = [
     'app-remote-control',
     'playlist-read-private',
@@ -24,39 +26,39 @@ const SCOPES = [
 export const SPOTIFY_STATE_KEY = 'SPOTIFY_STATE_KEY';
 export const SPOTIFY_REFRESH_TOKEN_KEY = 'SPOTIFY_ACCESS_TOKEN_KEY';
 
-const _spotifyApi = new SpotifyWebApi({
-    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-});
-
 export const getAuthURL = (stateString = null) => {
-    const authURL = _spotifyApi.createAuthorizeURL(SCOPES, stateString, SHOW_DIALOG);
-
-    return authURL;
+    return `https://accounts.spotify.com/authorize?response_type=code&client_id=${
+        process.env.SPOTIFY_CLIENT_ID
+    }&redirect_uri=${process.env.SPOTIFY_REDIRECT_URI}&state=${stateString}&scope=${SCOPES.join(
+        ' '
+    )}`;
 };
 
-export const getTokens = (authCode) => {
-    return _spotifyApi.authorizationCodeGrant(authCode);
+export const getTokens = async (authCode) => {
+    const { data: tokens } = await axios.post(
+        'https://accounts.spotify.com/api/token',
+        querystring.stringify({
+            grant_type: 'authorization_code',
+            code: authCode,
+            redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+            client_id: process.env.SPOTIFY_CLIENT_ID,
+            client_secret: process.env.SPOTIFY_CLIENT_SECRET,
+        })
+    );
+
+    return tokens;
 };
 
 export const refreshAccessToken = async (refreshToken) => {
     try {
-        // Get Base64 encoded auth string
-        const rawString = `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`;
-        const encodedString = Buffer.from(rawString).toString('base64');
-
         const { data } = await axios.post(
             'https://accounts.spotify.com/api/token',
-            {
+            querystring.stringify({
                 grant_type: 'refresh_token',
                 refresh_token: refreshToken,
-            },
-            {
-                headers: {
-                    Authorization: `Basic ${encodedString}`,
-                },
-            }
+                client_id: process.env.SPOTIFY_CLIENT_ID,
+                client_secret: process.env.SPOTIFY_CLIENT_SECRET,
+            })
         );
 
         console.log('Here is the refresh token data');

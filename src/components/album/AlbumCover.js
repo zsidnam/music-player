@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
@@ -55,4 +56,4 @@ AlbumCover.propTypes = {
     }).isRequired,
 };
 
-export default AlbumCover;
+export default memo(AlbumCover);

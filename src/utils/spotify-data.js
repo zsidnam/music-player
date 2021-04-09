@@ -50,7 +50,6 @@ export const getUrlFromSpotifyUri = (uri) => {
 
     const uriParts = uri.split(':');
     if (uriParts.length !== 3) {
-        console.warn(`Unrecognized uri encountered: ${uri}`);
         return null;
     }
 
@@ -75,7 +74,6 @@ export const getUrlFromSpotifyUri = (uri) => {
         }
 
         default: {
-            console.warn(`Unrecognized uri encountered: ${uri}`);
             return null;
         }
     }

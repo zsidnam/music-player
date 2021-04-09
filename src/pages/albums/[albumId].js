@@ -51,7 +51,6 @@ const AlbumPage = () => {
     const router = useRouter();
     const { albumId } = router.query;
 
-    // TODO: Update error handling
     const { loading, error, data } = useQuery(ALBUM_QUERY, {
         variables: {
             id: albumId,

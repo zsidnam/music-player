@@ -1,9 +1,6 @@
 import { stringify } from 'querystring';
 
-import {
-    SPOTIFY_STATE_KEY,
-    getTokens,
-} from '../../../services/spotify-connect';
+import { SPOTIFY_STATE_KEY, getTokens } from '../../../services/spotify-connect';
 import { clearCookie } from '../../../utils/http';
 
 export default async (req, res) => {
@@ -27,19 +24,17 @@ export default async (req, res) => {
     clearCookie(res, SPOTIFY_STATE_KEY);
 
     try {
-        const { body } = await getTokens(code);
+        const { access_token, expires_in, refresh_token } = await getTokens(code);
         return res.redirect(
             '/#' +
                 stringify({
-                    access_token: body.access_token,
-                    expires_in: body.expires_in,
-                    refresh_token: body.refresh_token,
+                    access_token: access_token,
+                    expires_in: expires_in,
+                    refresh_token: refresh_token,
                 })
         );
     } catch (err) {
-        console.log(
-            `Error retrieving access and refresh tokens: ${err.message}`
-        );
+        console.log(`Error retrieving access and refresh tokens: ${err.message}`);
         return res.redirect('/error');
     }
 };
