@@ -27,7 +27,7 @@ const TOP_TRACKS_QUERY = gql`
     }
 `;
 
-const TopTracks = ({ artistId, artistUri, primaryColor }) => {
+const ArtistTopTracks = ({ artistId, artistUri, primaryColor }) => {
     const { loading, error, data } = useQuery(TOP_TRACKS_QUERY, { variables: { artistId } });
 
     if (loading) return <TopTracksSkeleton />;
@@ -71,10 +71,10 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
     );
 };
 
-TopTracks.propTypes = {
+ArtistTopTracks.propTypes = {
     artistId: PropTypes.string.isRequired,
     artistUri: PropTypes.string.isRequired,
     primaryColor: PropTypes.string,
 };
 
-export default TopTracks;
+export default ArtistTopTracks;

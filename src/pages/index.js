@@ -1,21 +1,41 @@
 import React from 'react';
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, Container, Grid } from '@material-ui/core';
 
 import MainLayout from '../layouts/MainLayout';
+import UserTopTracks from '../components/home/UserTopTracks';
+import UserTopArtists from '../components/home/UserTopArtists';
+import ColorizedContainer from '../components/common/ColorizedContainer';
+import { useAuthContext } from '../context/authContext';
+import { useImageColors } from '../hooks/useImageColors';
+import UserSummary from '../components/home/UserSummary';
 
 const LandingPage = () => {
+    const { user } = useAuthContext();
+    const { name, profilePic } = user || {};
+
+    const { primaryDarkColor } = useImageColors(profilePic?.url);
+
     return (
         <Box mb={10}>
-            <Container maxWidth={'lg'}>
+            <ColorizedContainer maxWidth={'lg'} primaryColor={primaryDarkColor}>
                 <Box px={5} pb={5} pt={12}>
-                    <Typography align={'center'} style={{ fontSize: '2.5rem' }} variant={'h3'}>
-                        Welcome to Music Player
-                    </Typography>
+                    <UserSummary name={name} profilePic={profilePic} />
                 </Box>
-            </Container>
+            </ColorizedContainer>
 
             <Container maxWidth={'lg'}>
-                <Box mx={5} pt={5}></Box>
+                <Box px={5} mb={6}>
+                    <Box mb={4}>
+                        <Grid container spacing={5}>
+                            <Grid item xs={7} md={8}>
+                                <UserTopTracks />
+                            </Grid>
+                            <Grid item xs={5} md={4}>
+                                <UserTopArtists />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
             </Container>
         </Box>
     );

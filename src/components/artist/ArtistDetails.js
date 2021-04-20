@@ -5,7 +5,7 @@ import ColorizedContainer from '../common/ColorizedContainer';
 import ArtistSummary from './ArtistSummary';
 import Discography from './Discography';
 import RelatedArtists from './RelatedArtists';
-import TopTracks from './TopTracks';
+import ArtistTopTracks from './ArtistTopTracks';
 import { useImageColors } from '../../hooks/useImageColors';
 
 const ArtistDetails = ({ artist }) => {
@@ -29,7 +29,7 @@ const ArtistDetails = ({ artist }) => {
                     <Box mb={4}>
                         <Grid container spacing={5}>
                             <Grid item xs={7} md={8}>
-                                <TopTracks
+                                <ArtistTopTracks
                                     artistId={artist.id}
                                     artistUri={artist.uri}
                                     primaryColor={primaryLightColor}

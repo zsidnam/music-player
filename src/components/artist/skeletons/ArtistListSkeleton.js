@@ -3,7 +3,7 @@ import { Skeleton } from '@material-ui/lab';
 
 const NUM_ROWS = 7;
 
-const RelatedArtistsSkeleton = () => {
+const ArtistListSkeleton = () => {
     return (
         <Box>
             <Box mb={2}>
@@ -32,4 +32,4 @@ const RelatedArtistsSkeleton = () => {
     );
 };
 
-export default RelatedArtistsSkeleton;
+export default ArtistListSkeleton;

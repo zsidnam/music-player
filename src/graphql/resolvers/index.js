@@ -15,6 +15,14 @@ const ALBUM_TRACKS_DEFAULTS = Object.freeze({
     limit: 25,
 });
 
+const USER_TOP_TRACKS_DEFAULTS = Object.freeze({
+    limit: 10,
+});
+
+const USER_TOP_ARTISTS_DEFAULTS = Object.freeze({
+    limit: 10,
+});
+
 export const resolvers = {
     Query: {
         album: async (_, args, context) => {
@@ -156,6 +164,46 @@ export const resolvers = {
                 );
 
                 return albumTracks;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        userTopTracks: async (_, args, context) => {
+            try {
+                const { data: topTracks } = await axios.get(
+                    `https://api.spotify.com/v1/me/top/tracks?limit=${
+                        args.limit || USER_TOP_TRACKS_DEFAULTS.limit
+                    }&offset=${args.offset || 0}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return topTracks;
+            } catch (err) {
+                // TODO: Come up with error handling strategy
+                console.log(err);
+                throw err;
+            }
+        },
+        userTopArtists: async (_, args, context) => {
+            try {
+                const { data: topArtists } = await axios.get(
+                    `https://api.spotify.com/v1/me/top/artists?limit=${
+                        args.limit || USER_TOP_ARTISTS_DEFAULTS.limit
+                    }&offset=${args.offset || 0}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.accessToken}`,
+                        },
+                    }
+                );
+
+                return topArtists;
             } catch (err) {
                 // TODO: Come up with error handling strategy
                 console.log(err);

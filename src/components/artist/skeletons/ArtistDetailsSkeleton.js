@@ -2,7 +2,7 @@ import { Box, Container, Grid } from '@material-ui/core';
 
 import ArtistSummarySkeleton from './ArtistSummarySkeleton';
 import TopTracksSkeleton from './TopTracksSkeleton';
-import RelatedArtistsSkeleton from './RelatedArtistsSkeleton';
+import ArtistListSkeleton from './ArtistListSkeleton';
 import DiscographySkeleton from './DiscographySkeleton';
 
 const ArtistDetailsSkeleton = () => {
@@ -18,7 +18,7 @@ const ArtistDetailsSkeleton = () => {
                                 <TopTracksSkeleton />
                             </Grid>
                             <Grid item xs={5} md={4}>
-                                <RelatedArtistsSkeleton />
+                                <ArtistListSkeleton />
                             </Grid>
                         </Grid>
                     </Box>
