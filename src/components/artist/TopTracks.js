@@ -48,7 +48,7 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
     const { tracks } = data.topTracks;
 
     return (
-        <Box>
+        <>
             <Box mb={2}>
                 <Typography variant={'overline'}>Top Tracks</Typography>
             </Box>
@@ -67,7 +67,7 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
                     columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
                 />
             )}
-        </Box>
+        </>
     );
 };
 

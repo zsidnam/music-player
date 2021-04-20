@@ -69,7 +69,7 @@ const TrackTable = ({
 
     const handleTrackPlay = async (trackNumber, uri) => {
         // TODO: Figure out how to play top tracks correctly
-        trackNumber ? playContext(contextUri, trackNumber) : playTracks([uri], contextUri);
+        trackNumber ? playContext(contextUri, trackNumber) : playTracks([uri]);
     };
 
     return (

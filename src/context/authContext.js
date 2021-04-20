@@ -20,6 +20,7 @@ export const AuthContextProvider = ({ children }) => {
                 name: data.display_name,
                 email: data.email,
                 profilePic: data.images[0],
+                uri: data.uri,
             });
         } catch (err) {
             console.error(err);

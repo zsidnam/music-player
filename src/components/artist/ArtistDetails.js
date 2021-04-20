@@ -8,9 +8,6 @@ import RelatedArtists from './RelatedArtists';
 import TopTracks from './TopTracks';
 import { useImageColors } from '../../hooks/useImageColors';
 
-const HORIZ_PADDING_SPACES = 5;
-const MAX_WIDTH = 'lg';
-
 const ArtistDetails = ({ artist }) => {
     const artistImgSrc = artist.images.length && artist.images[0].url;
     const { primaryDarkColor, primaryLightColor } = useImageColors(artistImgSrc);
@@ -21,14 +18,14 @@ const ArtistDetails = ({ artist }) => {
 
     return (
         <Box mb={10}>
-            <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={MAX_WIDTH}>
-                <Box px={HORIZ_PADDING_SPACES} pb={5} pt={12}>
+            <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={'lg'}>
+                <Box px={5} pb={5} pt={12}>
                     <ArtistSummary artist={artist} primaryColor={primaryLightColor} />
                 </Box>
             </ColorizedContainer>
 
-            <Container maxWidth={MAX_WIDTH}>
-                <Box px={HORIZ_PADDING_SPACES} mb={6}>
+            <Container maxWidth={'lg'}>
+                <Box px={5} mb={6}>
                     <Box mb={4}>
                         <Grid container spacing={5}>
                             <Grid item xs={7} md={8}>

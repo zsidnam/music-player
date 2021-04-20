@@ -46,7 +46,7 @@ const RelatedArtists = ({ artistId }) => {
     const { artists } = data.relatedArtists;
 
     return (
-        <Box>
+        <>
             <Box mb={2}>
                 <Typography variant={'overline'}>Related Artists</Typography>
             </Box>
@@ -70,7 +70,7 @@ const RelatedArtists = ({ artistId }) => {
                     ))}
                 </Grid>
             )}
-        </Box>
+        </>
     );
 };
 

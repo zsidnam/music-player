@@ -24,7 +24,7 @@ const AlbumSummary = ({ album, primaryColor }) => {
         <Box display={'flex'} alignItems={'center'}>
             <img src={albumArtImgSrc} style={{ maxWidth: 300, maxHeight: 300 }} />
 
-            <Box ml={4}>
+            <Box ml={4} flex={1}>
                 <Typography variant={'h3'} className={classes.titleText}>
                     {name}
                 </Typography>
