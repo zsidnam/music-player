@@ -1,13 +1,11 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import pick from 'lodash.pick';
-import { useState } from 'react';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
 
 import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
 import TrackContextMenu from '../contextMenu/TrackContextMenu';
-import { getMultipleTrackSelection } from './helpers';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { useRecordSelect } from '../../hooks/useRecordSelect';
 import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
 import { playContext, playTracks } from '../../services/spotify-api';
@@ -30,38 +28,11 @@ const TrackTable = ({
     indexAsTrackNumber,
     disableTableHead,
 }) => {
-    const [selectedTracks, setSelectedTracks] = useState([]);
-    const { open, isOpen } = useMenuContext();
-    const {
-        playState: { playingUri, paused, contextUri: playingContextUri },
-    } = usePlayStateContext();
-
-    // Unselect tracks if user clicks outside of table (as long as context
-    // menu is not open).
-    const unSelectTracks = () => setSelectedTracks([]);
-    const tableRef = useOutsideClick(unSelectTracks, isOpen);
-
-    const handleTrackSelect = (e, trackId, trackIndex) => {
-        e.preventDefault();
-        const modifierKeys = pick(e, ['shiftKey', 'metaKey']);
-
-        let newSelectionList;
-        if (modifierKeys.shiftKey) {
-            // select multiple tracks
-            newSelectionList = getMultipleTrackSelection(tracks, selectedTracks, trackIndex);
-        } else if (modifierKeys.metaKey) {
-            // toggle selection of single track
-            const alreadySelected = selectedTracks.indexOf(trackId) >= 0;
-            newSelectionList = alreadySelected
-                ? selectedTracks.filter((id) => id !== trackId)
-                : [...selectedTracks, trackId];
-        } else {
-            // select single track
-            newSelectionList = [trackId];
-        }
-
-        setSelectedTracks([...new Set(newSelectionList)]);
-    };
+    const tableRef = useRef();
+    const { selectedRecords, handleRecordSelect } = useRecordSelect(tracks, tableRef);
+    const { open } = useMenuContext();
+    const { playState } = usePlayStateContext();
+    const { playingUri, paused, contextUri: playingContextUri } = playState;
 
     const handleContextMenuClick = (mouseX, mouseY) => {
         open(mouseX, mouseY, TrackContextMenu, {});
@@ -86,10 +57,10 @@ const TrackTable = ({
                             track={track}
                             index={idx}
                             columns={columns}
-                            onSelect={handleTrackSelect}
+                            onSelect={handleRecordSelect}
                             onPlay={handleTrackPlay}
                             isPlaying={track.uri === playingUri && contextUri === playingContextUri}
-                            isSelected={selectedTracks.includes(track.id)}
+                            isSelected={selectedRecords.includes(track.id)}
                             primaryColor={primaryColor}
                             paused={paused}
                             onContextClick={handleContextMenuClick}
