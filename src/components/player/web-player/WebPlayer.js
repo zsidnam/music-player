@@ -3,7 +3,7 @@ import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
 
 import loadWebPlayer from './load-web-player';
-import PlaybackTransferModal from './PlaybackTransferModal';
+import LoadingModal from './LoadingModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
 import { PlayStateContext } from '../../../context/playStateContext';
@@ -26,7 +26,7 @@ class WebPlayer extends React.Component {
         this.state = {
             deviceId: null,
             loaded: false,
-            showPlaybackModal: false,
+            showPlaybackModal: true,
             playerState: {},
             playerVolume: 0,
         };
@@ -136,7 +136,9 @@ class WebPlayer extends React.Component {
         });
 
         this.player.addListener('ready', ({ device_id }) => {
-            this.setState({ showPlaybackModal: true, deviceId: device_id });
+            this.setState({ showPlaybackModal: false, deviceId: device_id }, () => {
+                this.transferPlayback();
+            });
         });
 
         this.player.addListener('not_ready', ({ device_id }) => {
@@ -265,6 +267,7 @@ class WebPlayer extends React.Component {
     }
 
     // TODO: Add repeat function
+    // TODO: Move controls
 
     render() {
         return (
@@ -285,7 +288,7 @@ class WebPlayer extends React.Component {
                     <ConnectPlayer onPlayerStateUpdate={this._syncPlayerStateWithContext} />
                 )}
 
-                <PlaybackTransferModal
+                <LoadingModal
                     open={this.state.showPlaybackModal}
                     onClose={this.closeModal}
                     transferPlayback={this.transferPlayback}
