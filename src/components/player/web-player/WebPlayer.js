@@ -7,7 +7,7 @@ import LoadingModal from './LoadingModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
 import { PlayStateContext } from '../../../context/playStateContext';
-import { setShuffleMode, transferPlayback } from '../../../services/spotify-api';
+import { setShuffleMode, transferPlayback, setRepeatMode } from '../../../services/spotify-api';
 
 // Note: Because of how the spotify player is implemented, the player functions
 // cannot be passed directly by ref to children. A callback needs to be passed
@@ -26,7 +26,7 @@ class WebPlayer extends React.Component {
         this.state = {
             deviceId: null,
             loaded: false,
-            showPlaybackModal: true,
+            showLoadingModal: true,
             playerState: {},
             playerVolume: 0,
         };
@@ -45,6 +45,7 @@ class WebPlayer extends React.Component {
         this.handleSeek = this.handleSeek.bind(this);
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
         this.handleShuffleToggle = this.handleShuffleToggle.bind(this);
+        this.handleRepeatToggle = this.handleRepeatToggle.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
         this.pollPlayerVolume = this.pollPlayerVolume.bind(this);
         this._syncPlayerStateWithContext = this._syncPlayerStateWithContext.bind(this);
@@ -91,6 +92,7 @@ class WebPlayer extends React.Component {
     async initPlayer(Player) {
         if (!Player) {
             console.error('Failed to load Spotify Web Player');
+            this.setState({ showLoadingModal: false });
             return;
         }
 
@@ -136,7 +138,7 @@ class WebPlayer extends React.Component {
         });
 
         this.player.addListener('ready', ({ device_id }) => {
-            this.setState({ showPlaybackModal: false, deviceId: device_id }, () => {
+            this.setState({ showLoadingModal: false, deviceId: device_id }, () => {
                 this.transferPlayback();
             });
         });
@@ -208,7 +210,6 @@ class WebPlayer extends React.Component {
     async pollPlayerState() {
         const newState = await this.player.getCurrentState();
         if (!newState) {
-            console.error('Cannot query player state when Web Playback SDK is not in use.');
             return;
         }
 
@@ -231,7 +232,7 @@ class WebPlayer extends React.Component {
     }
 
     closeModal() {
-        this.setState({ showPlaybackModal: false });
+        this.setState({ showLoadingModal: false });
     }
 
     handlePlayToggle() {
@@ -266,8 +267,12 @@ class WebPlayer extends React.Component {
         setShuffleMode(!this.state.playerState.shuffle);
     }
 
-    // TODO: Add repeat function
-    // TODO: Move controls
+    handleRepeatToggle() {
+        // Spotify Web Playback SDK does not expose method to update repeat mode.
+        // Update via connect API.
+        const nextRepeatMode = ((this.state.playerState.repeat_mode || 0) + 1) % 3;
+        setRepeatMode(nextRepeatMode);
+    }
 
     render() {
         return (
@@ -283,13 +288,14 @@ class WebPlayer extends React.Component {
                         onSeek={this.handleSeek}
                         onVolumeChange={this.handleVolumeChange}
                         onShuffleToggle={this.handleShuffleToggle}
+                        onRepeatToggle={this.handleRepeatToggle}
                     />
                 ) : (
                     <ConnectPlayer onPlayerStateUpdate={this._syncPlayerStateWithContext} />
                 )}
 
                 <LoadingModal
-                    open={this.state.showPlaybackModal}
+                    open={this.state.showLoadingModal}
                     onClose={this.closeModal}
                     transferPlayback={this.transferPlayback}
                 />

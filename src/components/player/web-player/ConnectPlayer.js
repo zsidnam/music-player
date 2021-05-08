@@ -12,6 +12,7 @@ import spotifyApi, {
     seek,
     changeVolume,
     setShuffleMode,
+    setRepeatMode,
 } from '../../../services/spotify-api';
 import { PlayStateContext } from '../../../context/playStateContext';
 import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
@@ -46,6 +47,7 @@ class ConnectPlayer extends Component {
         this.handleSeek = this.handleSeek.bind(this);
         this.handleVolumeChange = this.handleVolumeChange.bind(this);
         this.handleShuffleToggle = this.handleShuffleToggle.bind(this);
+        this.handleRepeatToggle = this.handleRepeatToggle.bind(this);
         this.pollPlayerState = this.pollPlayerState.bind(this);
         this.trackIdleTime = this.trackIdleTime.bind(this);
         this.syncActiveDevice = this.syncActiveDevice.bind(this);
@@ -71,14 +73,13 @@ class ConnectPlayer extends Component {
         // The following blocks are in place to avoid racking up unnecessary
         // api calls if player is not in use.
         if (playerWentOffline || playerWasPaused) {
-            console.log('Player is not active, starting idle timer');
             this._setIdleTimeTracking();
         } else if (playerBackOnline || playerWasUnpaused) {
-            console.log('Player is active again, stopping idle timer');
             this._removeIdleTimeTracking();
         }
 
         if (this.state.idleTime >= IDLE_THRESHOLD && this.playerStateInterval) {
+            // TODO: Make message
             console.log(
                 'Device polling stopped due to player inactivity. Use web player or reconnect to an active device'
             );
@@ -173,9 +174,14 @@ class ConnectPlayer extends Component {
         setShuffleMode(!this.state.playerState.shuffle);
     }
 
-    render() {
-        // TODO: Add repeat function
+    handleRepeatToggle() {
+        // Spotify Web Playback SDK does not expose method to update repeat mode.
+        // Update via connect API.
+        const nextRepeatMode = ((this.state.playerState.repeat_mode || 0) + 1) % 3;
+        setRepeatMode(nextRepeatMode);
+    }
 
+    render() {
         return (
             <PlayerInterface
                 disabled={isEmpty(this.state.playerState)}
@@ -188,6 +194,7 @@ class ConnectPlayer extends Component {
                 onSeek={this.handleSeek}
                 onVolumeChange={this.handleVolumeChange}
                 onShuffleToggle={this.handleShuffleToggle}
+                onRepeatToggle={this.handleRepeatToggle}
                 pollingPlayerState={!!this.playerStateInterval}
                 syncActiveDevice={this.syncActiveDevice}
             />

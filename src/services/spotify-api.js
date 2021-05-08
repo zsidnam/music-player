@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+import { RepeatMode } from '../utils/spotify-data';
+
 /*
     This Spotify API is mainly used to abstract POST & PUT requests. (No
     need for graphQL wrapper around axios calls when we don't care about
-    the response data).
+    the response data). This is for the client only.
 */
 
 const api = axios.create({
@@ -13,37 +15,6 @@ const api = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
-api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (err) => {
-        if (err.status !== 401 && err.status !== 403) {
-            return Promise.reject(err);
-        }
-
-        console.log('YOOOOOOOOOOO WE HIT THISSSSSSSS');
-
-        // Attempt to use refresh token to update access token
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-            console.log('Attempted to refresh token but no refreshToken was found.');
-            return Promise.reject(err);
-        }
-
-        const {} = await api.post(
-            '/api/token',
-            {
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-            },
-            {
-                baseURL: '/',
-            }
-        );
-    }
-);
 
 export const resumePlayback = async () => {
     try {
@@ -122,6 +93,17 @@ export const setShuffleMode = async (shuffleEnabled) => {
         await api.put(`/v1/me/player/shuffle?state=${shuffleEnabled}`);
     } catch (err) {
         console.error(`Unable to set shuffle mode for current player; err=${err.message}`);
+    }
+};
+
+export const setRepeatMode = async (repeatMode) => {
+    try {
+        const repeatSetting =
+            Object.entries(RepeatMode).find(([key, val]) => val === repeatMode)?.[0] ||
+            RepeatMode.OFF;
+        await api.put(`/v1/me/player/repeat?state=${repeatSetting.toLowerCase()}`);
+    } catch (err) {
+        console.error(`Unable to set repeat mode for current player; err=${err.message}`);
     }
 };
 

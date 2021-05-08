@@ -9,11 +9,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle';
 import RepeatIcon from '@material-ui/icons/Repeat';
 import RepeatOneIcon from '@material-ui/icons/RepeatOne';
 
-const RepeatSetting = {
-    NO_REPEAT: 0,
-    ONCE_REPEAT: 1,
-    FULL_REPEAT: 2,
-};
+import { RepeatMode } from '../../../utils/spotify-data';
 
 const PrimaryControls = ({
     paused,
@@ -21,6 +17,7 @@ const PrimaryControls = ({
     repeat_mode,
     onPlayToggle,
     onShuffleToggle,
+    onRepeatToggle,
     onNext,
     onPrev,
     disabled,
@@ -57,10 +54,11 @@ const PrimaryControls = ({
 
             <Grid item>
                 <IconButton
-                    color={repeat_mode === RepeatSetting.NO_REPEAT ? 'secondary' : 'primary'}
+                    onClick={onRepeatToggle}
+                    color={repeat_mode === RepeatMode.OFF ? 'secondary' : 'primary'}
                     disabled={disabled}
                 >
-                    {repeat_mode === RepeatSetting.ONCE_REPEAT ? (
+                    {repeat_mode === RepeatMode.TRACK ? (
                         <RepeatOneIcon fontSize={'small'} />
                     ) : (
                         <RepeatIcon fontSize={'small'} />
@@ -76,6 +74,7 @@ PrimaryControls.propTypes = {
     onNext: PropTypes.func.isRequired,
     onPrev: PropTypes.func.isRequired,
     onShuffleToggle: PropTypes.func.isRequired,
+    onRepeatToggle: PropTypes.func.isRequired,
     paused: PropTypes.bool,
     shuffle: PropTypes.bool,
     repeat_mode: PropTypes.number,
