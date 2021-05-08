@@ -13,7 +13,7 @@ const LandingPage = () => {
     const { user } = useAuthContext();
     const { name, profilePic } = user || {};
 
-    const { primaryDarkColor } = useImageColors(profilePic?.url);
+    const { primaryDarkColor, primaryLightColor } = useImageColors(profilePic?.url);
 
     return (
         <Box mb={10}>
@@ -28,7 +28,7 @@ const LandingPage = () => {
                     <Box mb={4}>
                         <Grid container spacing={5}>
                             <Grid item xs={7} md={8}>
-                                <UserTopTracks />
+                                <UserTopTracks primaryColor={primaryLightColor} />
                             </Grid>
                             <Grid item xs={5} md={4}>
                                 <UserTopArtists />

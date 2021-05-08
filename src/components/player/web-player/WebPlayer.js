@@ -125,6 +125,9 @@ class WebPlayer extends React.Component {
         });
 
         this.player.addListener('playback_error', ({ message }) => {
+            // TODO: This will get hit if the access token is no longer
+            // valid. If that is the case, we should log the user out
+            // or attempt to refresh the token.
             console.error(message);
         });
 
@@ -239,7 +242,9 @@ class WebPlayer extends React.Component {
 
     handlePrev() {
         const restartRequested = this.state.playerState.position > 3 * 1000;
-        restartRequested ? this.handleSeek(0) : this.player.nextTrack();
+        // When restarting a song, the player will not accept 0.0 as a valid
+        // position to seek to, so we will use 0.01
+        restartRequested ? this.handleSeek(0.01) : this.player.previousTrack();
     }
 
     handleSeek(ms) {

@@ -5,6 +5,7 @@ import TrackTable, { COLUMNS } from '../../components/track/TrackTable';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../../utils/constants';
 import AlbumTracksSkeleton from './skeletons/AlbumTracksSkeleton';
+import { playContext } from '../../services/spotify-api';
 
 const TRACK_PAGE_SIZE = 15;
 
@@ -44,6 +45,10 @@ const AlbumTracks = ({ albumId, primaryColor, albumUri }) => {
 
     useInfiniteScroll(handleLoadMore, !!data?.albumTracks?.next, SCROLLABLE_CONTENT_CONTAINER_ID);
 
+    const handleTrackPlay = (trackNumber) => {
+        playContext(albumUri, trackNumber);
+    };
+
     if (loading) return <AlbumTracksSkeleton />;
 
     // TODO: Redirect/Display error message
@@ -55,6 +60,7 @@ const AlbumTracks = ({ albumId, primaryColor, albumUri }) => {
             primaryColor={primaryColor}
             contextUri={albumUri}
             columns={[COLUMNS.TRACK_NUMBER, COLUMNS.TITLE, COLUMNS.TIME]}
+            onTrackPlay={handleTrackPlay}
         />
     );
 };

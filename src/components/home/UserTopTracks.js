@@ -3,13 +3,13 @@ import { Box, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import TrackTable, { COLUMNS } from '../track/TrackTable';
-import TopTracksSkeleton from '../track/skeletons/TopTracksSkeleton';
 import { playTracks } from '../../services/spotify-api';
+import TopTracksSkeleton from '../track/skeletons/TopTracksSkeleton';
 
-const TOP_TRACKS_QUERY = gql`
-    query GetTopTracks($artistId: ID!) {
-        topTracks(artistId: $artistId) {
-            tracks {
+const USER_TOP_TRACKS_QUERY = gql`
+    query GetUserTopTracks($limit: Int, $offset: Int) {
+        userTopTracks(limit: $limit, offset: $offset) {
+            items {
                 id
                 uri
                 name
@@ -23,13 +23,18 @@ const TOP_TRACKS_QUERY = gql`
                         url
                     }
                 }
+                artists {
+                    id
+                    uri
+                    name
+                }
             }
         }
     }
 `;
 
-const ArtistTopTracks = ({ artistId, primaryColor }) => {
-    const { loading, error, data } = useQuery(TOP_TRACKS_QUERY, { variables: { artistId } });
+const UserTopTracks = ({ primaryColor }) => {
+    const { loading, error, data } = useQuery(USER_TOP_TRACKS_QUERY);
 
     if (loading) return <TopTracksSkeleton />;
 
@@ -37,16 +42,14 @@ const ArtistTopTracks = ({ artistId, primaryColor }) => {
         return (
             <>
                 <Box mb={2}>
-                    <Typography variant={'overline'}>Top Tracks</Typography>
+                    <Typography variant={'overline'}>YourTop Tracks</Typography>
                 </Box>
-                <Typography color={'textSecondary'}>
-                    Unable to get top tracks for artist.
-                </Typography>
+                <Typography color={'textSecondary'}>Unable to get your top tracks.</Typography>
             </>
         );
     }
 
-    const { tracks } = data.topTracks;
+    const { items: tracks } = data.userTopTracks;
 
     const handleTrackPlay = async (trackIndex) => {
         // Spotify does not allow you to provide an offset when playing a top-tracks context,
@@ -61,30 +64,32 @@ const ArtistTopTracks = ({ artistId, primaryColor }) => {
     return (
         <>
             <Box mb={2}>
-                <Typography variant={'overline'}>Top Tracks</Typography>
+                <Typography variant={'overline'}>Your Top Tracks</Typography>
             </Box>
 
             {!tracks.length ? (
-                <Typography color={'textSecondary'}>
-                    This artist does not have any top tracks.
-                </Typography>
+                <Typography color={'textSecondary'}>You do not have any top tracks.</Typography>
             ) : (
                 <TrackTable
                     tracks={tracks}
                     primaryColor={primaryColor}
                     indexAsTrackNumber
                     disableTableHead
-                    columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
                     onTrackPlay={handleTrackPlay}
+                    columns={[
+                        COLUMNS.ALBUM_ART,
+                        COLUMNS.TRACK_NUMBER,
+                        COLUMNS.TITLE,
+                        COLUMNS.ARTISTS,
+                    ]}
                 />
             )}
         </>
     );
 };
 
-ArtistTopTracks.propTypes = {
-    artistId: PropTypes.string.isRequired,
+UserTopTracks.propTypes = {
     primaryColor: PropTypes.string,
 };
 
-export default ArtistTopTracks;
+export default UserTopTracks;

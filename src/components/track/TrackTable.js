@@ -8,7 +8,6 @@ import TrackContextMenu from '../contextMenu/TrackContextMenu';
 import { useRecordSelect } from '../../hooks/useRecordSelect';
 import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
-import { playContext, playTracks } from '../../services/spotify-api';
 
 export const COLUMNS = Object.freeze({
     ALBUM_ART: 'albumArt',
@@ -27,6 +26,7 @@ const TrackTable = ({
     columns,
     indexAsTrackNumber,
     disableTableHead,
+    onTrackPlay,
 }) => {
     const tableRef = useRef();
     const { selectedRecords, handleRecordSelect } = useRecordSelect(tracks, tableRef);
@@ -38,10 +38,13 @@ const TrackTable = ({
         open(mouseX, mouseY, TrackContextMenu, {});
     };
 
-    const handleTrackPlay = async (trackNumber, uri) => {
-        // TODO: Figure out how to play top tracks correctly
-        trackNumber ? playContext(contextUri, trackNumber) : playTracks([uri]);
-    };
+    // Some use cases (eg Top Tracks) don't have a context uri that can be used.
+    // In those cases, we want to display a track as "playing" if the track uri
+    // matches regardless of what the context is.
+    const isTrackPlaying = (trackUri) =>
+        contextUri
+            ? contextUri === playingContextUri && trackUri === playingUri
+            : trackUri === playingUri;
 
     return (
         <TableContainer ref={tableRef}>
@@ -58,8 +61,8 @@ const TrackTable = ({
                             index={idx}
                             columns={columns}
                             onSelect={handleRecordSelect}
-                            onPlay={handleTrackPlay}
-                            isPlaying={track.uri === playingUri && contextUri === playingContextUri}
+                            onPlay={onTrackPlay}
+                            isPlaying={isTrackPlaying(track.uri)}
                             isSelected={selectedRecords.includes(track.id)}
                             primaryColor={primaryColor}
                             paused={paused}
@@ -80,10 +83,11 @@ TrackTable.defaultProps = {
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
     primaryColor: PropTypes.string,
-    contextUri: PropTypes.string.isRequired,
+    contextUri: PropTypes.string,
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
     indexAsTrackNumber: PropTypes.bool,
     disableTableHead: PropTypes.bool,
+    onTrackPlay: PropTypes.func.isRequired,
     tracks: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

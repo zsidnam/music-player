@@ -31,7 +31,6 @@ const ArtistDetails = ({ artist }) => {
                             <Grid item xs={7} md={8}>
                                 <ArtistTopTracks
                                     artistId={artist.id}
-                                    artistUri={artist.uri}
                                     primaryColor={primaryLightColor}
                                 />
                             </Grid>

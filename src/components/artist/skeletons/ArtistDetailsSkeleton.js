@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from '@material-ui/core';
 
 import ArtistSummarySkeleton from './ArtistSummarySkeleton';
-import TopTracksSkeleton from './TopTracksSkeleton';
+import TopTracksSkeleton from '../../track/skeletons/TopTracksSkeleton';
 import ArtistListSkeleton from './ArtistListSkeleton';
 import DiscographySkeleton from './DiscographySkeleton';
 

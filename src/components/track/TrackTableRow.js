@@ -38,7 +38,7 @@ const TrackTableRow = ({
         // If switching playback to a new track (vs toggling playback
         // of current track), make request through TrackTable so that
         // we play track as part of correct context
-        onPlay(track_number, uri);
+        onPlay(indexAsTrackNumber ? index : track_number, uri);
     };
 
     const handleContextClick = (e) => {
