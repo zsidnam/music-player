@@ -3,7 +3,6 @@
 // See Web Playback SDK guide for more info on loading sequence
 // https://developer.spotify.com/documentation/web-playback-sdk/quick-start/
 
-// TODO: Set max time to wait, handle error
 const _waitForSpotifyWebPlaybackSDKToLoad = () => {
     return new Promise((resolve) => {
         if (window.Spotify) {
@@ -17,22 +16,28 @@ const _waitForSpotifyWebPlaybackSDKToLoad = () => {
 };
 
 const loadWebPlayer = async (cb) => {
-    const existingScript = document.getElementById('web-player');
+    try {
+        const existingScript = document.getElementById('web-player');
+        if (existingScript) {
+            console.warn('Attempted to load Spotify Web Player SDK multiple times');
+            if (!window.Spotify?.Player) {
+                throw new Error('Script was loaded but Spotify Player was not available.');
+            }
 
-    if (existingScript) {
-        console.warn('Attempted to load Spotify Web Player SDK multiple times');
-        return cb && cb();
+            return cb(null, window.Spotify.Player);
+        }
+
+        const newScript = document.createElement('script');
+        newScript.src = 'https://sdk.scdn.co/spotify-player.js';
+        newScript.id = 'web-player';
+        newScript.crossOrigin = true;
+        document.body.appendChild(newScript);
+
+        const { Player } = await _waitForSpotifyWebPlaybackSDKToLoad();
+        return cb(null, Player);
+    } catch (err) {
+        return cb(err);
     }
-
-    const newScript = document.createElement('script');
-    newScript.crossOrigin = true;
-    newScript.src = 'https://sdk.scdn.co/spotify-player.js';
-    newScript.id = 'web-player';
-
-    document.body.appendChild(newScript);
-    const { Player } = await _waitForSpotifyWebPlaybackSDKToLoad();
-
-    return cb(Player);
 };
 
 export default loadWebPlayer;

@@ -31,8 +31,10 @@ const ArtistPage = () => {
 
     if (loading) return <ArtistDetailsSkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error) {
+        router.push('/client-error');
+        return null;
+    }
 
     return <ArtistDetails artist={data.artist} />;
 };

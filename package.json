@@ -25,6 +25,7 @@
         "lodash.pick": "^4.4.0",
         "moment": "^2.29.1",
         "next": "^10.0.7",
+        "notistack": "^1.0.7",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
         "react-palette": "^1.0.2"

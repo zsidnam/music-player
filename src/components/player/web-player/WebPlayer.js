@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
+import { withSnackbar } from 'notistack';
 
 import loadWebPlayer from './load-web-player';
 import LoadingModal from './LoadingModal';
@@ -89,10 +91,10 @@ class WebPlayer extends React.Component {
         }
     }
 
-    async initPlayer(Player) {
-        if (!Player) {
-            console.error('Failed to load Spotify Web Player');
+    async initPlayer(err, Player) {
+        if (err || !Player) {
             this.setState({ showLoadingModal: false });
+            this.props.enqueueSnackbar('Unable to load Spotify Web Player', { variant: 'error' });
             return;
         }
 
@@ -304,4 +306,8 @@ class WebPlayer extends React.Component {
     }
 }
 
-export default WebPlayer;
+WebPlayer.propTypes = {
+    enqueueSnackbar: PropTypes.func.isRequired,
+};
+
+export default withSnackbar(WebPlayer);

@@ -12,6 +12,7 @@ import { PlayStateContextProvider } from '../context/playStateContext';
 import { SearchContextProvider } from '../context/searchContext';
 import RouteProtector from '../components/auth/RouteProtector';
 import ExpirationWarningModal from '../components/app/ExpirationWarningModal';
+import Snackbar from '../components/app/Snackbar';
 import theme from '../styles/theme';
 
 const NoOp = ({ children }) => children;
@@ -39,20 +40,22 @@ function MyApp({ Component, pageProps }) {
             <ApolloProvider client={apolloClient}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <AuthContextProvider>
-                        <MenuContextProvider>
-                            <PlayStateContextProvider>
-                                <SearchContextProvider>
-                                    <Layout>
-                                        <RouteProtector>
-                                            <Component {...pageProps} />
-                                            <ExpirationWarningModal />
-                                        </RouteProtector>
-                                    </Layout>
-                                </SearchContextProvider>
-                            </PlayStateContextProvider>
-                        </MenuContextProvider>
-                    </AuthContextProvider>
+                    <Snackbar>
+                        <AuthContextProvider>
+                            <MenuContextProvider>
+                                <PlayStateContextProvider>
+                                    <SearchContextProvider>
+                                        <Layout>
+                                            <RouteProtector>
+                                                <Component {...pageProps} />
+                                                <ExpirationWarningModal />
+                                            </RouteProtector>
+                                        </Layout>
+                                    </SearchContextProvider>
+                                </PlayStateContextProvider>
+                            </MenuContextProvider>
+                        </AuthContextProvider>
+                    </Snackbar>
                 </ThemeProvider>
             </ApolloProvider>
         </>

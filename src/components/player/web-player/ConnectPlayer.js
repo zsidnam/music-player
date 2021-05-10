@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Component } from 'react';
 import isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
+import { withSnackbar } from 'notistack';
 
 import PlayerInterface from '../player-elements/PlayerInterface';
 import spotifyApi, {
@@ -19,11 +20,11 @@ import { getPlayerStateFromAPI } from '../../../utils/spotify-data';
 
 // Amount of time player can be idle (player is paused or no device
 // is connected) before device polling stops.
-const IDLE_THRESHOLD = 30; // sec
+const IDLE_THRESHOLD_SEC = 10;
 
-// This needs to be set to 1000ms for normal use. During development,
+// This needs to be set to 1s for normal use. During development,
 // raise as needed to avoid hitting Spotify API too frequently.
-const POLL_INTERVAL = 1000; // ms
+const POLL_INTERVAL_SEC = 1;
 
 // TODO: Add optimistic updates for player controls
 
@@ -78,12 +79,12 @@ class ConnectPlayer extends Component {
             this._removeIdleTimeTracking();
         }
 
-        if (this.state.idleTime >= IDLE_THRESHOLD && this.playerStateInterval) {
-            // TODO: Make message
-            console.log(
-                'Device polling stopped due to player inactivity. Use web player or reconnect to an active device'
+        if (this.state.idleTime >= IDLE_THRESHOLD_SEC && this.playerStateInterval) {
+            this.props.enqueueSnackbar(
+                'Device polling stopped due to player inactivity. Please use the web player or reconnect to an active device.'
             );
             this._removeActiveDevicePolling();
+            this._removeIdleTimeTracking();
         }
     }
 
@@ -102,7 +103,7 @@ class ConnectPlayer extends Component {
     }
 
     _setActiveDevicePolling() {
-        this.playerStateInterval = setInterval(this.pollPlayerState, POLL_INTERVAL);
+        this.playerStateInterval = setInterval(this.pollPlayerState, POLL_INTERVAL_SEC * 1000);
     }
 
     _removeActiveDevicePolling() {
@@ -134,7 +135,6 @@ class ConnectPlayer extends Component {
         // Prevent state update if component has unmounted by time this gets called
         if (!this.playerStateInterval) return;
 
-        // TODO: move to graphQL
         const { data: newState } = await spotifyApi.get('/v1/me/player');
 
         // If player has just gone offline, set playerState to empty object.
@@ -148,7 +148,14 @@ class ConnectPlayer extends Component {
     }
 
     handlePlayToggle() {
-        this.state.playerState.paused ? resumePlayback() : pausePlayback();
+        if (this.state.playerState.paused && !this.playerStateInterval) {
+            // Start device polling back up if it was turned off due to inactivity
+            this._setActiveDevicePolling();
+
+            resumePlayback();
+        } else {
+            pausePlayback();
+        }
     }
 
     handleNext() {
@@ -204,6 +211,8 @@ class ConnectPlayer extends Component {
 
 ConnectPlayer.propTypes = {
     onPlayerStateUpdate: PropTypes.func.isRequired,
+    enqueueSnackbar: PropTypes.func.isRequired,
+    closeSnackbar: PropTypes.func.isRequired,
 };
 
-export default ConnectPlayer;
+export default withSnackbar(ConnectPlayer);

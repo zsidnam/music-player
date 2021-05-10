@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 import spotifyApi from '../services/spotify-api';
 import { getURLHash } from '../utils/window';
@@ -19,6 +20,7 @@ const AuthContext = createContext({});
 
 export const AuthContextProvider = ({ children }) => {
     const router = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
     const [user, setUser] = useState(null);
     const [isLoading, setLoading] = useState(true);
     const [expires, setExpires] = useState(null);
@@ -47,12 +49,13 @@ export const AuthContextProvider = ({ children }) => {
                 uri: data.uri,
             });
         } catch (err) {
-            // TODO: Message user
-            console.error(err);
-
             setUser(null);
             setExpires(null);
             _clearLocalStorage();
+            enqueueSnackbar(
+                'Unable to get your user profile. Please refresh your browser and try again.',
+                { variant: 'error' }
+            );
         }
     }, []);
 
@@ -68,8 +71,10 @@ export const AuthContextProvider = ({ children }) => {
             const { data } = await axios.post('/api/auth/refresh-token', { refreshToken });
             _setAccessToken(data.accessToken, data.expiresIn);
         } catch (err) {
-            // TODO: Notify user
-            console.error(err.message);
+            enqueueSnackbar(
+                'Unable to refresh your user session. Please logout and then sign in again.',
+                { variant: 'error' }
+            );
         }
     };
 

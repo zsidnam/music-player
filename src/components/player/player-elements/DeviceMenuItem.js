@@ -4,6 +4,7 @@ import ComputerIcon from '@material-ui/icons/Computer';
 import PhoneIcon from '@material-ui/icons/PhoneIphone';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import UnknownIcon from '@material-ui/icons/DeviceUnknown';
+import { useSnackbar } from 'notistack';
 
 import spotifyApi from '../../../services/spotify-api';
 
@@ -49,18 +50,16 @@ const useStyles = makeStyles((theme) => ({
 
 const DeviceMenuItem = ({ device, onDeviceSelect, forcedActiveDeviceId }) => {
     const classes = useStyles();
+    const { enqueueSnackbar } = useSnackbar();
     const { id, name, is_restricted, is_active, type } = device;
 
     // Parent component may override is_active flag to allow for optimistic update
     // when user selects new device to connect to.
-    const showActive = forcedActiveDeviceId
-        ? forcedActiveDeviceId === id
-        : is_active;
+    const showActive = forcedActiveDeviceId ? forcedActiveDeviceId === id : is_active;
 
     const handleClick = async () => {
         try {
             if (showActive) return;
-
             await spotifyApi.put('/v1/me/player', {
                 device_ids: [id],
                 play: true,
@@ -68,22 +67,15 @@ const DeviceMenuItem = ({ device, onDeviceSelect, forcedActiveDeviceId }) => {
 
             onDeviceSelect(id);
         } catch (err) {
-            // TODO: Set up snackbar notification
-            console.error('Unable to transfer playback');
+            enqueueSnackbar('Unable to transfer playback to device.', { variant: 'error' });
         }
     };
 
     return (
-        <MenuItem
-            disabled={is_restricted}
-            className={classes.menuItem}
-            onClick={handleClick}
-        >
+        <MenuItem disabled={is_restricted} className={classes.menuItem} onClick={handleClick}>
             <Box display={'flex'} alignItems={'flex-start'}>
                 <Box mr={2}>{_getPlayerIcon(type, showActive)}</Box>
-                <Typography color={showActive ? 'primary' : 'textPrimary'}>
-                    {name}
-                </Typography>
+                <Typography color={showActive ? 'primary' : 'textPrimary'}>{name}</Typography>
             </Box>
         </MenuItem>
     );

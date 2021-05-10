@@ -59,8 +59,10 @@ const AlbumPage = () => {
 
     if (loading) return <AlbumDetailsSkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error) {
+        router.push('/client-error');
+        return null;
+    }
 
     return <AlbumDetails album={data.album} />;
 };
