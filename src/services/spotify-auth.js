@@ -50,23 +50,15 @@ export const getTokens = async (authCode) => {
 };
 
 export const refreshAccessToken = async (refreshToken) => {
-    try {
-        const { data } = await axios.post(
-            'https://accounts.spotify.com/api/token',
-            querystring.stringify({
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-                client_id: process.env.SPOTIFY_CLIENT_ID,
-                client_secret: process.env.SPOTIFY_CLIENT_SECRET,
-            })
-        );
+    const { data } = await axios.post(
+        'https://accounts.spotify.com/api/token',
+        querystring.stringify({
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken,
+            client_id: process.env.SPOTIFY_CLIENT_ID,
+            client_secret: process.env.SPOTIFY_CLIENT_SECRET,
+        })
+    );
 
-        console.log('Here is the refresh token data');
-        console.log(data);
-
-        return data.access_token;
-    } catch (err) {
-        console.error(`Unable to refresh access token. err=${err.message}`);
-        throw err;
-    }
+    return { accessToken: data.access_token, expiresIn: data.expires_in };
 };

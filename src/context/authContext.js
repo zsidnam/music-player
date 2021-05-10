@@ -1,9 +1,19 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import moment from 'moment';
+import axios from 'axios';
 
 import spotifyApi from '../services/spotify-api';
 import { getURLHash } from '../utils/window';
+
+const _getSecondsFromNowDate = (sec) => moment().add(sec, 'seconds').toISOString();
+
+const _clearLocalStorage = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('expires');
+};
 
 const AuthContext = createContext({});
 
@@ -11,8 +21,22 @@ export const AuthContextProvider = ({ children }) => {
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const [expires, setExpires] = useState(null);
 
-    const fetchUser = useCallback(async () => {
+    const _setAccessToken = useCallback((accessToken, expiresIn) => {
+        spotifyApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
+        localStorage.setItem('accessToken', accessToken);
+
+        const expirationDate = _getSecondsFromNowDate(expiresIn);
+        localStorage.setItem('expires', expirationDate);
+        setExpires(expirationDate);
+    }, []);
+
+    const _setRefreshToken = useCallback((refreshToken) => {
+        localStorage.setItem('refreshToken', refreshToken);
+    }, []);
+
+    const _fetchUser = useCallback(async () => {
         try {
             const { data } = await spotifyApi.get('/v1/me');
             setUser({
@@ -23,13 +47,31 @@ export const AuthContextProvider = ({ children }) => {
                 uri: data.uri,
             });
         } catch (err) {
+            // TODO: Message user
             console.error(err);
+
             setUser(null);
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('expiresIn');
+            setExpires(null);
+            _clearLocalStorage();
         }
     }, []);
+
+    const logout = () => {
+        // Force axios, apollo client, and everything else to be reset
+        _clearLocalStorage();
+        window.location = '/';
+    };
+
+    const refreshToken = async () => {
+        try {
+            const refreshToken = localStorage.getItem('refreshToken');
+            const { data } = await axios.post('/api/auth/refresh-token', { refreshToken });
+            _setAccessToken(data.accessToken, data.expiresIn);
+        } catch (err) {
+            // TODO: Notify user
+            console.error(err.message);
+        }
+    };
 
     useEffect(() => {
         async function initAuth() {
@@ -44,18 +86,16 @@ export const AuthContextProvider = ({ children }) => {
                 const existingToken = localStorage.getItem('accessToken');
                 if (existingToken) {
                     spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
-                    await fetchUser(existingToken);
+                    setExpires(localStorage.getItem('expiresIn'));
+                    await _fetchUser(existingToken);
                 }
             } else {
                 window.location.hash = '';
                 const { access_token, refresh_token, expires_in } = hash;
-
                 if (access_token && refresh_token) {
-                    localStorage.setItem('accessToken', access_token);
-                    localStorage.setItem('refreshToken', refresh_token);
-                    localStorage.setItem('expiresIn', expires_in);
-                    spotifyApi.defaults.headers.Authorization = `Bearer ${access_token}`;
-                    await fetchUser(access_token);
+                    _setAccessToken(access_token, expires_in);
+                    _setRefreshToken(refresh_token);
+                    await _fetchUser(access_token);
                     router.replace('/');
                 }
             }
@@ -64,20 +104,16 @@ export const AuthContextProvider = ({ children }) => {
         }
 
         initAuth();
-        // purposefully omit router from dependency array as we only need the replace fn
+        // purposefully omit router from dependency array
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchUser]);
+    }, [_fetchUser, _setAccessToken, _setRefreshToken]);
 
     const store = {
         user,
         isLoading,
-        logout: () => {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-
-            // Force axios, apollo client, and everything else to be reset
-            window.location = '/';
-        },
+        expires,
+        logout,
+        refreshToken,
     };
 
     return <AuthContext.Provider value={store}>{children}</AuthContext.Provider>;

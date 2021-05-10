@@ -1,6 +1,6 @@
 import { stringify } from 'querystring';
 
-import { SPOTIFY_STATE_KEY, getTokens } from '../../../services/spotify-connect';
+import { SPOTIFY_STATE_KEY, getTokens } from '../../../services/spotify-auth';
 import { clearCookie } from '../../../utils/http';
 
 export default async (req, res) => {

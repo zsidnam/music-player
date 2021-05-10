@@ -11,6 +11,7 @@ import { MenuContextProvider } from '../context/menuContext';
 import { PlayStateContextProvider } from '../context/playStateContext';
 import { SearchContextProvider } from '../context/searchContext';
 import RouteProtector from '../components/auth/RouteProtector';
+import ExpirationWarningModal from '../components/app/ExpirationWarningModal';
 import theme from '../styles/theme';
 
 const NoOp = ({ children }) => children;
@@ -45,6 +46,7 @@ function MyApp({ Component, pageProps }) {
                                     <Layout>
                                         <RouteProtector>
                                             <Component {...pageProps} />
+                                            <ExpirationWarningModal />
                                         </RouteProtector>
                                     </Layout>
                                 </SearchContextProvider>

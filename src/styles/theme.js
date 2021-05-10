@@ -177,6 +177,11 @@ theme = {
                 padding: theme.spacing(1.5),
             },
         },
+        MuiDialogTitle: {
+            root: {
+                color: theme.palette.common.black,
+            },
+        },
         MuiDialogContentText: {
             root: {
                 color: theme.palette.common.black,

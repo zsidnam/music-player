@@ -1,4 +1,4 @@
-import { refreshAccessToken } from '../../../services/spotify-connect';
+import { refreshAccessToken } from '../../../services/spotify-auth';
 
 export default async (req, res) => {
     try {
@@ -11,8 +11,8 @@ export default async (req, res) => {
             return res.status(400).end();
         }
 
-        const newAccessToken = await refreshAccessToken(refreshToken);
-        return res.status(200).json({ accessToken: newAccessToken });
+        const { accessToken, expiresIn } = await refreshAccessToken(refreshToken);
+        return res.status(200).json({ accessToken, expiresIn });
     } catch (err) {
         return res.status(500).end();
     }
