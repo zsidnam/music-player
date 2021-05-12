@@ -2,6 +2,7 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
+import { motion } from 'framer-motion';
 
 import SafeLink from '../common/SafeLink';
 import TextLink from '../common/TextLink';
@@ -21,7 +22,11 @@ const AlbumCover = ({ album }) => {
     const albumImgSrc = images.length && images[1].url;
 
     return (
-        <Box>
+        <motion.div
+            layoutId={`album-${album.id}`}
+            transition={{ duration: 0 }}
+            whileHover={{ scale: 1.1 }}
+        >
             <Box mb={1}>
                 <SafeLink href={`/albums/${id}`}>
                     <img className={classes.image} src={albumImgSrc} style={{ width: '100%' }} />
@@ -33,7 +38,7 @@ const AlbumCover = ({ album }) => {
             <Typography variant={'caption'} color={'textSecondary'}>
                 {moment(release_date).format('YYYY')}
             </Typography>
-        </Box>
+        </motion.div>
     );
 };
 

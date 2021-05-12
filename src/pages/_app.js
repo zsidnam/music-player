@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { ApolloProvider } from '@apollo/client';
 import Head from 'next/head';
+import { AnimateSharedLayout } from 'framer-motion';
 
 import { useApollo } from '../services/apollo-client';
 import { useScrollToTop } from '../hooks/useScrollToTop';
@@ -47,7 +48,9 @@ function MyApp({ Component, pageProps }) {
                                     <SearchContextProvider>
                                         <Layout>
                                             <RouteProtector>
-                                                <Component {...pageProps} />
+                                                <AnimateSharedLayout>
+                                                    <Component {...pageProps} />
+                                                </AnimateSharedLayout>
                                                 <ExpirationWarningModal />
                                             </RouteProtector>
                                         </Layout>

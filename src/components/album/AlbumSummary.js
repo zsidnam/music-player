@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Box, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
+import { motion } from 'framer-motion';
 
 import TextLink from '../common/TextLink';
 import PlayContextButton from '../common/PlayContextButton';
@@ -22,7 +23,11 @@ const AlbumSummary = ({ album, primaryColor }) => {
 
     return (
         <Box display={'flex'} alignItems={'center'}>
-            <img src={albumArtImgSrc} style={{ maxWidth: 300, maxHeight: 300 }} />
+            <motion.img
+                layoutId={`album-${album.id}`}
+                src={albumArtImgSrc}
+                style={{ maxWidth: 300, maxHeight: 300 }}
+            />
 
             <Box ml={4} flex={1}>
                 <Typography variant={'h3'} className={classes.titleText}>

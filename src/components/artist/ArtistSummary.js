@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Box, Typography, makeStyles } from '@material-ui/core';
+import { motion } from 'framer-motion';
 
 import PlayContextButton from '../common/PlayContextButton';
 
@@ -26,7 +27,12 @@ const ArtistSummary = ({ artist, primaryColor }) => {
     const classes = useStyles({ artistImgSrc });
 
     return (
-        <Box className={classes.container}>
+        <motion.div
+            className={classes.container}
+            initial={{ opacity: 0, backgroundPosition: '0% 0%' }}
+            animate={{ opacity: 1, backgroundPosition: '50% 20%' }}
+            transition={{ duration: 0.5 }}
+        >
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'flex-end'}>
                 <Typography variant={'h3'} className={classes.titleText}>
                     {artist.name}
@@ -36,7 +42,7 @@ const ArtistSummary = ({ artist, primaryColor }) => {
                     <PlayContextButton primaryColor={primaryColor} uri={artist.uri} />
                 </Box>
             </Box>
-        </Box>
+        </motion.div>
     );
 };
 

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Box, Typography, Grid } from '@material-ui/core';
+import { motion } from 'framer-motion';
 
 import Thumbnail from '../common/Thumbnail';
 
@@ -41,13 +42,15 @@ const RelatedArtists = ({
                 <Grid container direction={'column'} spacing={2}>
                     {artistsToDisplay.map((artist) => (
                         <Grid key={artist.id} item xs={12}>
-                            <Thumbnail
-                                href={`/artists/${artist.id}`}
-                                imageSrc={_getSmallestImgSrc(artist.images)}
-                                primaryText={artist.name}
-                                circularFrame
-                                imageSize={45}
-                            />
+                            <motion.div whileHover={{ scale: 1.1 }}>
+                                <Thumbnail
+                                    href={`/artists/${artist.id}`}
+                                    imageSrc={_getSmallestImgSrc(artist.images)}
+                                    primaryText={artist.name}
+                                    circularFrame
+                                    imageSize={45}
+                                />
+                            </motion.div>
                         </Grid>
                     ))}
                 </Grid>
