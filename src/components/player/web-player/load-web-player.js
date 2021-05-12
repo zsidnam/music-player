@@ -19,7 +19,6 @@ const loadWebPlayer = async (cb) => {
     try {
         const existingScript = document.getElementById('web-player');
         if (existingScript) {
-            console.warn('Attempted to load Spotify Web Player SDK multiple times');
             if (!window.Spotify?.Player) {
                 throw new Error('Script was loaded but Spotify Player was not available.');
             }

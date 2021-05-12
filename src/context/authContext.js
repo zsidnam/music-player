@@ -91,7 +91,7 @@ export const AuthContextProvider = ({ children }) => {
                 const existingToken = localStorage.getItem('accessToken');
                 if (existingToken) {
                     spotifyApi.defaults.headers.Authorization = `Bearer ${existingToken}`;
-                    setExpires(localStorage.getItem('expiresIn'));
+                    setExpires(localStorage.getItem('expires'));
                     await _fetchUser(existingToken);
                 }
             } else {
