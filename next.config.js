@@ -3,7 +3,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-    webpack(config) {
+    webpack(config, { webpack }) {
         config.module.rules.push({
             test: /\.svg$/,
             issuer: {
@@ -11,6 +11,8 @@ module.exports = withBundleAnalyzer({
             },
             use: ['@svgr/webpack'],
         });
+
+        config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
         return config;
     },
