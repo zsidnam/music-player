@@ -191,7 +191,7 @@ class ConnectPlayer extends Component {
     render() {
         return (
             <PlayerInterface
-                disabled={isEmpty(this.state.playerState)}
+                disabled={this.props.isNonPremiumAccount || isEmpty(this.state.playerState)}
                 connectMode={!isEmpty(this.state.playerState)}
                 playerState={this.state.playerState}
                 volume={this.state.playerState.volume || 0}
@@ -213,6 +213,7 @@ ConnectPlayer.propTypes = {
     onPlayerStateUpdate: PropTypes.func.isRequired,
     enqueueSnackbar: PropTypes.func.isRequired,
     closeSnackbar: PropTypes.func.isRequired,
+    isNonPremiumAccount: PropTypes.bool,
 };
 
 export default withSnackbar(ConnectPlayer);

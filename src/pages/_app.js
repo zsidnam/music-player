@@ -14,6 +14,7 @@ import { SearchContextProvider } from '../context/searchContext';
 import RouteProtector from '../components/auth/RouteProtector';
 import ExpirationWarningModal from '../components/app/ExpirationWarningModal';
 import Snackbar from '../components/app/Snackbar';
+import ErrorBoundary from '../components/app/ErrorBoundary';
 import theme from '../styles/theme';
 
 const NoOp = ({ children }) => children;
@@ -46,14 +47,16 @@ function MyApp({ Component, pageProps }) {
                             <MenuContextProvider>
                                 <PlayStateContextProvider>
                                     <SearchContextProvider>
-                                        <Layout>
-                                            <RouteProtector>
-                                                <AnimateSharedLayout>
-                                                    <Component {...pageProps} />
-                                                </AnimateSharedLayout>
-                                                <ExpirationWarningModal />
-                                            </RouteProtector>
-                                        </Layout>
+                                        <ErrorBoundary>
+                                            <Layout>
+                                                <RouteProtector>
+                                                    <AnimateSharedLayout>
+                                                        <Component {...pageProps} />
+                                                    </AnimateSharedLayout>
+                                                    <ExpirationWarningModal />
+                                                </RouteProtector>
+                                            </Layout>
+                                        </ErrorBoundary>
                                     </SearchContextProvider>
                                 </PlayStateContextProvider>
                             </MenuContextProvider>

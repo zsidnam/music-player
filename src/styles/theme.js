@@ -180,6 +180,7 @@ theme = {
         MuiDialogTitle: {
             root: {
                 color: theme.palette.common.black,
+                padding: `${theme.spacing(2)} 0`,
             },
         },
         MuiDialogContentText: {

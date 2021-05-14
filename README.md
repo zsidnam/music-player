@@ -12,9 +12,9 @@ Music Player was built with the following technologies:
 
 ## Try it Out
 
-Music Player is deployed to production through Vercel. Click here to try it out: https://music-player-zsidnam.vercel.app . (You will need a Spotify Premium account to log in).
+Music Player is deployed to production through Vercel. Click here to try it out: https://music-player-zsidnam.vercel.app . (You will need a Spotify account to log in).
 
-For best experience, please use Google Chrome.
+For best experience, please use Google Chrome. Note that many of the features including the in-browser web player and playback control are only available if you have a Spotify Premium account.
 
 ![Album Page](https://res.cloudinary.com/dtyq54zrf/image/upload/v1620950527/Music%20Player%20Album%202.png)
 
