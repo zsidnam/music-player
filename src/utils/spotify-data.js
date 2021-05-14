@@ -1,15 +1,14 @@
 import _get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
-// TODO: Clean this up and/or move to GraphQL
-const apiRepeatToWebPlayerRepeatMap = {
-    off: 0,
-    track: 1,
-    context: 2,
-};
+export const RepeatMode = Object.freeze({
+    OFF: 0,
+    CONTEXT: 1,
+    TRACK: 2,
+});
 
 const _getRepeatSettingFromAPI = (webApiRepeatSetting) =>
-    apiRepeatToWebPlayerRepeatMap[webApiRepeatSetting.toLowerCase()] || 0;
+    RepeatMode[webApiRepeatSetting.toUpperCase()] || 0;
 
 export const getPlayerStateFromAPI = (webApiPlayerState) => {
     if (!webApiPlayerState || isEmpty(webApiPlayerState)) return {};
@@ -50,7 +49,6 @@ export const getUrlFromSpotifyUri = (uri) => {
 
     const uriParts = uri.split(':');
     if (uriParts.length !== 3) {
-        console.warn(`Unrecognized uri encountered: ${uri}`);
         return null;
     }
 
@@ -75,7 +73,6 @@ export const getUrlFromSpotifyUri = (uri) => {
         }
 
         default: {
-            console.warn(`Unrecognized uri encountered: ${uri}`);
             return null;
         }
     }

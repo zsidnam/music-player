@@ -16,7 +16,6 @@ export const useScrollToTop = () => {
                 scrollableContainer.scroll({
                     top: 0,
                     left: 0,
-                    behavior: 'smooth',
                 });
             }
         }

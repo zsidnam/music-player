@@ -1,4 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 import SearchPrompt from '../../components/search/SearchPrompt';
 import SearchResults from '../../components/search/SearchResults';
@@ -64,6 +65,7 @@ const SEARCH_QUERY = gql`
 `;
 
 const SearchPage = () => {
+    const router = useRouter();
     const { searchText } = useSearchContext();
     const { loading, error, data } = useQuery(SEARCH_QUERY, {
         variables: {
@@ -72,8 +74,10 @@ const SearchPage = () => {
         skip: !searchText,
     });
 
-    // TODO: Add error handling
-    if (error) return <>Error</>;
+    if (error) {
+        router.push('/client-error');
+        return null;
+    }
 
     return searchText ? (
         <SearchResults loading={loading} results={data?.search} />

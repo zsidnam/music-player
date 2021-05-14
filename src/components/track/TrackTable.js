@@ -1,16 +1,13 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import pick from 'lodash.pick';
-import { useState } from 'react';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
 
 import TrackTableRow from './TrackTableRow';
 import TrackTableHead from './TrackTableHead';
 import TrackContextMenu from '../contextMenu/TrackContextMenu';
-import { getMultipleTrackSelection } from './helpers';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { useRecordSelect } from '../../hooks/useRecordSelect';
 import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
-import { playContext, playTracks } from '../../services/spotify-api';
 
 export const COLUMNS = Object.freeze({
     ALBUM_ART: 'albumArt',
@@ -29,48 +26,25 @@ const TrackTable = ({
     columns,
     indexAsTrackNumber,
     disableTableHead,
+    onTrackPlay,
 }) => {
-    const [selectedTracks, setSelectedTracks] = useState([]);
-    const { open, isOpen } = useMenuContext();
-    const {
-        playState: { playingUri, paused, contextUri: playingContextUri },
-    } = usePlayStateContext();
-
-    // Unselect tracks if user clicks outside of table (as long as context
-    // menu is not open).
-    const unSelectTracks = () => setSelectedTracks([]);
-    const tableRef = useOutsideClick(unSelectTracks, isOpen);
-
-    const handleTrackSelect = (e, trackId, trackIndex) => {
-        e.preventDefault();
-        const modifierKeys = pick(e, ['shiftKey', 'metaKey']);
-
-        let newSelectionList;
-        if (modifierKeys.shiftKey) {
-            // select multiple tracks
-            newSelectionList = getMultipleTrackSelection(tracks, selectedTracks, trackIndex);
-        } else if (modifierKeys.metaKey) {
-            // toggle selection of single track
-            const alreadySelected = selectedTracks.indexOf(trackId) >= 0;
-            newSelectionList = alreadySelected
-                ? selectedTracks.filter((id) => id !== trackId)
-                : [...selectedTracks, trackId];
-        } else {
-            // select single track
-            newSelectionList = [trackId];
-        }
-
-        setSelectedTracks([...new Set(newSelectionList)]);
-    };
+    const tableRef = useRef();
+    const { selectedRecords, handleRecordSelect } = useRecordSelect(tracks, tableRef);
+    const { open } = useMenuContext();
+    const { playState } = usePlayStateContext();
+    const { playingUri, paused, contextUri: playingContextUri } = playState;
 
     const handleContextMenuClick = (mouseX, mouseY) => {
         open(mouseX, mouseY, TrackContextMenu, {});
     };
 
-    const handleTrackPlay = async (trackNumber, uri) => {
-        // TODO: Figure out how to play top tracks correctly
-        trackNumber ? playContext(contextUri, trackNumber) : playTracks([uri], contextUri);
-    };
+    // Some use cases (eg Top Tracks) don't have a context uri that can be used.
+    // In those cases, we want to display a track as "playing" if the track uri
+    // matches regardless of what the context is.
+    const isTrackPlaying = (trackUri) =>
+        contextUri
+            ? contextUri === playingContextUri && trackUri === playingUri
+            : trackUri === playingUri;
 
     return (
         <TableContainer ref={tableRef}>
@@ -86,10 +60,10 @@ const TrackTable = ({
                             track={track}
                             index={idx}
                             columns={columns}
-                            onSelect={handleTrackSelect}
-                            onPlay={handleTrackPlay}
-                            isPlaying={track.uri === playingUri && contextUri === playingContextUri}
-                            isSelected={selectedTracks.includes(track.id)}
+                            onSelect={handleRecordSelect}
+                            onPlay={onTrackPlay}
+                            isPlaying={isTrackPlaying(track.uri)}
+                            isSelected={selectedRecords.includes(track.id)}
                             primaryColor={primaryColor}
                             paused={paused}
                             onContextClick={handleContextMenuClick}
@@ -109,10 +83,11 @@ TrackTable.defaultProps = {
 TrackTable.propTypes = {
     allowSorting: PropTypes.bool,
     primaryColor: PropTypes.string,
-    contextUri: PropTypes.string.isRequired,
+    contextUri: PropTypes.string,
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
     indexAsTrackNumber: PropTypes.bool,
     disableTableHead: PropTypes.bool,
+    onTrackPlay: PropTypes.func.isRequired,
     tracks: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

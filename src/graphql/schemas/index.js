@@ -115,5 +115,8 @@ export const typeDefs = gql`
         topTracks(artistId: ID!): TopTracksSummary!
         relatedArtists(artistId: ID!): RelatedArtistsSummary!
         artistAlbums(artistId: ID!, limit: Int, offset: Int, groups: String): SimplifiedAlbumPage!
+        albumTracks(albumId: ID!, limit: Int, offset: Int): TrackPage!
+        userTopTracks(limit: Int, offset: Int): TrackPage!
+        userTopArtists(limit: Int, offset: Int): ArtistPage!
     }
 `;

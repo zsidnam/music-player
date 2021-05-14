@@ -1,30 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Music Player
 
-## Getting Started
+Music Player is a serverless web application that allows you to listen to music and browse the Spotify library through your Spotify Premium account. Powered by Spotify's Web API and Web Playback SDK, the app allows you to use your browser as a music player directly (recommended experience) or control a connected device.
 
-First, run the development server:
+Music Player was built with the following technologies:
 
-```bash
+-   React
+-   Next JS
+-   GraphQL
+-   Material UI
+-   Framer Motion
+
+## Try it Out
+
+Music Player is deployed to production through Vercel. Click here to try it out: https://music-player-zsidnam.vercel.app . (You will need a Spotify Premium account to log in).
+
+For best experience, please use Google Chrome.
+
+![Album Page](https://res.cloudinary.com/dtyq54zrf/image/upload/v1620950527/Music%20Player%20Album%202.png)
+
+![Artist Page](https://res.cloudinary.com/dtyq54zrf/image/upload/v1620950525/Music%20Player%20Artist%201.png)
+
+## Run Locally
+
+To run Music Player on your machine, follow these steps:
+
+1. Ensure you have Node 12 or higher installed
+2. Clone this repository
+3. Run the following command from the project directory:
+
+```javascript
+// .../music-player
+
+npm i
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Notes from the Developer
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+1. I have been a huge fan of Spotify since its early days, so I thought it would be a fun exercise to re-create the Spotify UI with a few tweaks here and there. Since the purpose of this project was to re-create an existing app experience, most of the design elements were taken from Spotify. I do not own any of the designs or the content I used from Spotify, nor do I own the rights to any of the music shown in the screenshots of this README.
+2. This project is a practice application for me to play around with new libraries and technologies. Because of that, some engineering choices favored learning/experimentation over choosing the perfect tool for each problem. For example: I wanted to play around with React Context more, so I chose to use that instead of using a large state management library like Redux even if such a library might be better suited to an application like this long term.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Because this project was built for learning purposes, there are a few best practices I ignored during development for the sake of time, the biggest of which is testing. While unit and integration tests are vital for production applications (and still useful for personal projects), I wanted to focus my time on building more features instead of writing lots of tests for this application.

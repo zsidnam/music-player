@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Container, Box, Fade, makeStyles } from '@material-ui/core';
+import { Container, Box, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     gradient: {
@@ -16,11 +16,9 @@ const ColorizedContainer = ({ children, primaryColor, maxWidth, useGradient }) =
     const classes = useStyles({ primaryColor });
 
     return (
-        <Fade in={true}>
-            <Box className={useGradient ? classes.gradient : classes.solid}>
-                <Container maxWidth={maxWidth}>{children}</Container>
-            </Box>
-        </Fade>
+        <Box className={useGradient ? classes.gradient : classes.solid}>
+            <Container maxWidth={maxWidth}>{children}</Container>
+        </Box>
     );
 };
 

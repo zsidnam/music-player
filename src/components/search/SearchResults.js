@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Typography, Grid, Box, Container, useTheme } from '@material-ui/core';
+import { motion } from 'framer-motion';
 
 import SearchResultCategory from './SearchResultCategory';
 import ColorizedContainer from '../common/ColorizedContainer';
@@ -40,15 +41,19 @@ const SearchResults = ({ results, loading }) => {
                                     items={results.tracks.items}
                                     renderResult={(track) => (
                                         <Grid key={track.id} item xs={12}>
-                                            <Thumbnail
-                                                href={`/albums/${track.album.id}`}
-                                                imageSrc={_getSmallestImgSrc(track.album.images)}
-                                                onSelect={handleThumbnailSelect}
-                                                primaryText={track.name}
-                                                secondaryText={track.artists
-                                                    .map((artist) => artist.name)
-                                                    .join(', ')}
-                                            />
+                                            <motion.div whileHover={{ scale: 1.1 }}>
+                                                <Thumbnail
+                                                    href={`/albums/${track.album.id}`}
+                                                    imageSrc={_getSmallestImgSrc(
+                                                        track.album.images
+                                                    )}
+                                                    onSelect={handleThumbnailSelect}
+                                                    primaryText={track.name}
+                                                    secondaryText={track.artists
+                                                        .map((artist) => artist.name)
+                                                        .join(', ')}
+                                                />
+                                            </motion.div>
                                         </Grid>
                                     )}
                                 />
@@ -64,13 +69,15 @@ const SearchResults = ({ results, loading }) => {
                                     items={results.artists.items}
                                     renderResult={(artist) => (
                                         <Grid key={artist.id} item xs={12}>
-                                            <Thumbnail
-                                                href={`/artists/${artist.id}`}
-                                                imageSrc={_getSmallestImgSrc(artist.images)}
-                                                onSelect={handleThumbnailSelect}
-                                                primaryText={artist.name}
-                                                circularFrame
-                                            />
+                                            <motion.div whileHover={{ scale: 1.1 }}>
+                                                <Thumbnail
+                                                    href={`/artists/${artist.id}`}
+                                                    imageSrc={_getSmallestImgSrc(artist.images)}
+                                                    onSelect={handleThumbnailSelect}
+                                                    primaryText={artist.name}
+                                                    circularFrame
+                                                />
+                                            </motion.div>
                                         </Grid>
                                     )}
                                 />
@@ -86,15 +93,20 @@ const SearchResults = ({ results, loading }) => {
                                     items={results.albums.items}
                                     renderResult={(album) => (
                                         <Grid key={album.id} item xs={12}>
-                                            <Thumbnail
-                                                href={`/albums/${album.id}`}
-                                                imageSrc={_getSmallestImgSrc(album.images)}
-                                                onSelect={handleThumbnailSelect}
-                                                primaryText={album.name}
-                                                secondaryText={album.artists
-                                                    .map((artist) => artist.name)
-                                                    .join(', ')}
-                                            />
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                layoutId={`album-${album.id}`}
+                                            >
+                                                <Thumbnail
+                                                    href={`/albums/${album.id}`}
+                                                    imageSrc={_getSmallestImgSrc(album.images)}
+                                                    onSelect={handleThumbnailSelect}
+                                                    primaryText={album.name}
+                                                    secondaryText={album.artists
+                                                        .map((artist) => artist.name)
+                                                        .join(', ')}
+                                                />
+                                            </motion.div>
                                         </Grid>
                                     )}
                                 />

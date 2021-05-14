@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { ApolloProvider } from '@apollo/client';
 import Head from 'next/head';
+import { AnimateSharedLayout } from 'framer-motion';
 
 import { useApollo } from '../services/apollo-client';
 import { useScrollToTop } from '../hooks/useScrollToTop';
@@ -11,6 +12,8 @@ import { MenuContextProvider } from '../context/menuContext';
 import { PlayStateContextProvider } from '../context/playStateContext';
 import { SearchContextProvider } from '../context/searchContext';
 import RouteProtector from '../components/auth/RouteProtector';
+import ExpirationWarningModal from '../components/app/ExpirationWarningModal';
+import Snackbar from '../components/app/Snackbar';
 import theme from '../styles/theme';
 
 const NoOp = ({ children }) => children;
@@ -38,19 +41,24 @@ function MyApp({ Component, pageProps }) {
             <ApolloProvider client={apolloClient}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <AuthContextProvider>
-                        <MenuContextProvider>
-                            <PlayStateContextProvider>
-                                <SearchContextProvider>
-                                    <Layout>
-                                        <RouteProtector>
-                                            <Component {...pageProps} />
-                                        </RouteProtector>
-                                    </Layout>
-                                </SearchContextProvider>
-                            </PlayStateContextProvider>
-                        </MenuContextProvider>
-                    </AuthContextProvider>
+                    <Snackbar>
+                        <AuthContextProvider>
+                            <MenuContextProvider>
+                                <PlayStateContextProvider>
+                                    <SearchContextProvider>
+                                        <Layout>
+                                            <RouteProtector>
+                                                <AnimateSharedLayout>
+                                                    <Component {...pageProps} />
+                                                </AnimateSharedLayout>
+                                                <ExpirationWarningModal />
+                                            </RouteProtector>
+                                        </Layout>
+                                    </SearchContextProvider>
+                                </PlayStateContextProvider>
+                            </MenuContextProvider>
+                        </AuthContextProvider>
+                    </Snackbar>
                 </ThemeProvider>
             </ApolloProvider>
         </>

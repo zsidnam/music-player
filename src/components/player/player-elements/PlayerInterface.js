@@ -38,6 +38,7 @@ const PlayerInterface = ({
     onSeek,
     onVolumeChange,
     onShuffleToggle,
+    onRepeatToggle,
     connectMode,
     disabled,
     pollingPlayerState,
@@ -68,6 +69,7 @@ const PlayerInterface = ({
                                 onNext={onNext}
                                 onPrev={onPrev}
                                 onShuffleToggle={onShuffleToggle}
+                                onRepeatToggle={onRepeatToggle}
                                 disabled={disabled}
                             />
                             <ProgressBar
@@ -123,6 +125,7 @@ PlayerInterface.propTypes = {
     onSeek: PropTypes.func.isRequired,
     onVolumeChange: PropTypes.func.isRequired,
     onShuffleToggle: PropTypes.func.isRequired,
+    onRepeatToggle: PropTypes.func.isRequired,
     connectMode: PropTypes.bool,
     disabled: PropTypes.bool,
     // The following props are optional and used

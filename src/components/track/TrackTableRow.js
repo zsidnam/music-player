@@ -4,6 +4,7 @@ import PlayIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseIcon from '@material-ui/icons/PauseCircleOutline';
 import { Box, TableCell, TableRow, Typography, IconButton, makeStyles } from '@material-ui/core';
 import _get from 'lodash.get';
+import clsx from 'clsx';
 
 import { COLUMNS } from './TrackTable';
 import { formatTime } from '../../utils/format';
@@ -13,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
     dynamicColor: ({ isPlaying, primaryColor }) => ({
         color: isPlaying ? primaryColor : theme.palette.text.primary,
     }),
+    iconButton: {
+        '&:hover': {
+            transform: 'scale(1.1)',
+        },
+    },
 }));
 
 const TrackTableRow = ({
@@ -38,7 +44,7 @@ const TrackTableRow = ({
         // If switching playback to a new track (vs toggling playback
         // of current track), make request through TrackTable so that
         // we play track as part of correct context
-        onPlay(track_number, uri);
+        onPlay(indexAsTrackNumber ? index : track_number, uri);
     };
 
     const handleContextClick = (e) => {
@@ -75,7 +81,10 @@ const TrackTableRow = ({
         >
             <TableCell padding={'none'} align={'center'} style={{ width: 50, cursor: 'pointer' }}>
                 {showControls || isPlaying ? (
-                    <IconButton className={classes.dynamicColor} onClick={handlePlayToggle}>
+                    <IconButton
+                        className={clsx(classes.dynamicColor, classes.iconButton)}
+                        onClick={handlePlayToggle}
+                    >
                         {paused || !isPlaying ? <PlayIcon /> : <PauseIcon />}
                     </IconButton>
                 ) : (

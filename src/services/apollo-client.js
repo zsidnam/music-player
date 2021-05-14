@@ -2,9 +2,10 @@
 // https://github.com/vercel/next.js/blob/canary/examples/with-apollo/lib/apolloClient.js
 import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, concat } from '@apollo/client';
-import merge from 'deepmerge';
+import deepMerge from 'deepmerge';
 import isEqual from 'lodash.isequal';
-import omit from 'lodash.omit';
+
+import { buildMergePageItemsById } from '../utils/graphql';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -24,48 +25,20 @@ function createApolloClient() {
     });
 
     return new ApolloClient({
+        connectToDevTools: process.env.NODE_ENV === 'development',
         ssrMode: typeof window === 'undefined',
         link: concat(authMiddleware, httpLink),
         cache: new InMemoryCache({
             typePolicies: {
                 Query: {
                     fields: {
+                        albumTracks: {
+                            keyArgs: ['albumId'],
+                            merge: buildMergePageItemsById(),
+                        },
                         artistAlbums: {
                             keyArgs: ['artistId'],
-                            merge(existing, incoming, { readField, mergeObjects }) {
-                                const mergedAlbums = existing?.items ? existing.items.slice() : [];
-                                const newPageMetadata = omit(incoming, ['items']);
-                                const albumIdToIndex = {};
-
-                                if (existing) {
-                                    existing.items.forEach((album, index) => {
-                                        const id = readField('id', album);
-                                        albumIdToIndex[id] = index;
-                                    });
-                                }
-
-                                incoming.items.forEach((album) => {
-                                    const id = readField('id', album);
-                                    const existingIndex = albumIdToIndex[id];
-                                    if (typeof existingIndex === 'number') {
-                                        // We already have an album with the same name,
-                                        // so it is highly likely this is a duplicate.
-                                        mergedAlbums[existingIndex] = mergeObjects(
-                                            mergedAlbums[existingIndex],
-                                            album
-                                        );
-                                    } else {
-                                        // New album; add as normal
-                                        albumIdToIndex[id] = mergedAlbums.length;
-                                        mergedAlbums.push(album);
-                                    }
-                                });
-
-                                return {
-                                    ...newPageMetadata,
-                                    items: mergedAlbums,
-                                };
-                            },
+                            merge: buildMergePageItemsById(),
                         },
                     },
                 },
@@ -84,7 +57,7 @@ export function initializeApollo(initialState = null) {
         const existingCache = _apolloClient.extract();
 
         // Merge the existing cache into data passed from getStaticProps/getServerSideProps
-        const data = merge(initialState, existingCache, {
+        const data = deepMerge(initialState, existingCache, {
             // combine arrays using object equality (like in sets)
             arrayMerge: (destinationArray, sourceArray) => [
                 ...sourceArray,

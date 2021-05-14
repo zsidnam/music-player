@@ -3,7 +3,8 @@ import { Box, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 
 import TrackTable, { COLUMNS } from '../track/TrackTable';
-import TopTracksSkeleton from './skeletons/TopTracksSkeleton';
+import TopTracksSkeleton from '../track/skeletons/TopTracksSkeleton';
+import { playTracks } from '../../services/spotify-api';
 
 const TOP_TRACKS_QUERY = gql`
     query GetTopTracks($artistId: ID!) {
@@ -27,7 +28,7 @@ const TOP_TRACKS_QUERY = gql`
     }
 `;
 
-const TopTracks = ({ artistId, artistUri, primaryColor }) => {
+const ArtistTopTracks = ({ artistId, primaryColor }) => {
     const { loading, error, data } = useQuery(TOP_TRACKS_QUERY, { variables: { artistId } });
 
     if (loading) return <TopTracksSkeleton />;
@@ -47,8 +48,18 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
 
     const { tracks } = data.topTracks;
 
+    const handleTrackPlay = async (trackIndex) => {
+        // Spotify does not allow you to provide an offset when playing a top-tracks context,
+        // so unlike playing a specific song on an album or playlist, we need to explicitly
+        // provide any other song uris we want to enter the play queue.
+        const tracksToPlay = [...tracks.slice(trackIndex), ...tracks.slice(0, trackIndex)].map(
+            (t) => t.uri
+        );
+        playTracks(tracksToPlay);
+    };
+
     return (
-        <Box>
+        <>
             <Box mb={2}>
                 <Typography variant={'overline'}>Top Tracks</Typography>
             </Box>
@@ -59,22 +70,21 @@ const TopTracks = ({ artistId, artistUri, primaryColor }) => {
                 </Typography>
             ) : (
                 <TrackTable
-                    contextUri={artistUri}
                     tracks={tracks}
                     primaryColor={primaryColor}
                     indexAsTrackNumber
                     disableTableHead
                     columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
+                    onTrackPlay={handleTrackPlay}
                 />
             )}
-        </Box>
+        </>
     );
 };
 
-TopTracks.propTypes = {
+ArtistTopTracks.propTypes = {
     artistId: PropTypes.string.isRequired,
-    artistUri: PropTypes.string.isRequired,
     primaryColor: PropTypes.string,
 };
 
-export default TopTracks;
+export default ArtistTopTracks;

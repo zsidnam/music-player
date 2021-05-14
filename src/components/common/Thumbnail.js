@@ -39,8 +39,6 @@ const Thumbnail = (props) => {
         router.push(href);
     };
 
-    // TODO: Get fallback image
-
     return (
         <Box
             display={'flex'}

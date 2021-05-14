@@ -4,7 +4,7 @@ import omit from 'lodash.omit';
 
 import AlbumSummary from './AlbumSummary';
 import AlbumInfoFooter from './AlbumInfoFooter';
-import TrackTable, { COLUMNS } from '../track/TrackTable';
+import AlbumTracks from './AlbumTracks';
 import ColorizedContainer from '../common/ColorizedContainer';
 import { useImageColors } from '../../hooks/useImageColors';
 
@@ -25,11 +25,10 @@ const AlbumDetails = ({ album }) => {
 
             <Container maxWidth={'lg'}>
                 <Box px={5} mb={6}>
-                    <TrackTable
-                        tracks={album.tracks.items}
+                    <AlbumTracks
+                        albumId={album.id}
+                        albumUri={album.uri}
                         primaryColor={primaryLightColor}
-                        contextUri={album.uri}
-                        columns={[COLUMNS.TRACK_NUMBER, COLUMNS.TITLE, COLUMNS.TIME]}
                     />
                 </Box>
 

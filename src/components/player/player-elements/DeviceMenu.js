@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DevicesIcon from '@material-ui/icons/Devices';
+import { useSnackbar } from 'notistack';
 import {
     Box,
     IconButton,
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 // relying on player for implementation.
 const DeviceMenu = ({ connectMode, syncActiveDevice, pollingPlayerState }) => {
     const classes = useStyles();
+    const { enqueueSnackbar } = useSnackbar();
     const [anchorEl, setAnchorEl] = useState(null);
     const [devices, setDevices] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -48,9 +50,9 @@ const DeviceMenu = ({ connectMode, syncActiveDevice, pollingPlayerState }) => {
                 setDevices(devices);
                 setLoading(false);
             } catch (err) {
-                // TODO: Set up snackbar notification
                 setDevices([]);
                 setLoading(false);
+                enqueueSnackbar('Unable to get devices.', { variant: 'error' });
             }
         }
 
