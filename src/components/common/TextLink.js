@@ -13,12 +13,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TextLink = ({ href, text, TypographyProps }) => {
+const TextLink = ({ href, text, TypographyProps, onMouseOver }) => {
     const classes = useStyles();
+    const optionalProps = {};
+    if (onMouseOver) {
+        optionalProps.onMouseOver = onMouseOver;
+    }
 
     return (
         <SafeLink href={href}>
-            <Typography {...TypographyProps} className={classes.link}>
+            <Typography {...TypographyProps} className={classes.link} {...optionalProps}>
                 {text}
             </Typography>
         </SafeLink>
@@ -28,6 +32,7 @@ const TextLink = ({ href, text, TypographyProps }) => {
 TextLink.propTypes = {
     text: PropTypes.string.isRequired,
     TypographyProps: PropTypes.object,
+    onMouseOver: PropTypes.func,
 };
 
 export default TextLink;

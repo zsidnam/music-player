@@ -16,8 +16,8 @@ const NonPremiumMessageModal = ({ open, onClose }) => (
         maxWidth={'sm'}
         fullWidth
     >
+        <DialogTitle>Non-Premium Account</DialogTitle>
         <DialogContent>
-            <DialogTitle>Non-Premium Account</DialogTitle>
             <DialogContentText align={'left'}>
                 It looks like you are using the free version of Spotify. Without a Premium account,
                 you will not be able to use the in-browser Web Player or control music playback.

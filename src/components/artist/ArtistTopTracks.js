@@ -1,32 +1,11 @@
 import PropTypes from 'prop-types';
 import { Box, Typography } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import TrackTable, { COLUMNS } from '../track/TrackTable';
 import TopTracksSkeleton from '../track/skeletons/TopTracksSkeleton';
 import { playTracks } from '../../services/spotify-api';
-
-const TOP_TRACKS_QUERY = gql`
-    query GetTopTracks($artistId: ID!) {
-        topTracks(artistId: $artistId) {
-            tracks {
-                id
-                uri
-                name
-                explicit
-                album {
-                    id
-                    uri
-                    images {
-                        width
-                        height
-                        url
-                    }
-                }
-            }
-        }
-    }
-`;
+import { TOP_TRACKS_QUERY } from '../../graphql/queries/artist';
 
 const ArtistTopTracks = ({ artistId, primaryColor }) => {
     const { loading, error, data } = useQuery(TOP_TRACKS_QUERY, { variables: { artistId } });

@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     clickable: {
         cursor: 'pointer',
         '&:hover': {
-            backgroundColor: theme.palette.common.darkGrey,
+            backgroundColor: theme.palette.common.nearBlack,
         },
     },
     image: ({ circularFrame, imageSize }) => ({

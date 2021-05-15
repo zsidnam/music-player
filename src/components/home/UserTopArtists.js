@@ -1,24 +1,8 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import ArtistList from '../artist/ArtistList';
 import ArtistListSkeleton from '../artist/skeletons/ArtistListSkeleton';
-
-const USER_TOP_ARTISTS_QUERY = gql`
-    query GetUserTopArtists($limit: Int, $offset: Int) {
-        userTopArtists(limit: $limit, offset: $offset) {
-            items {
-                id
-                uri
-                name
-                images {
-                    width
-                    height
-                    url
-                }
-            }
-        }
-    }
-`;
+import { USER_TOP_ARTISTS_QUERY } from '../../graphql/queries/user';
 
 const UserTopArtists = () => {
     const { loading, error, data } = useQuery(USER_TOP_ARTISTS_QUERY);

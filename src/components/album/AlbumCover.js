@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AlbumCover = ({ album }) => {
+const AlbumCover = ({ album, onMouseEnter }) => {
     const classes = useStyles();
     const { id, name, release_date, images } = album;
     const albumImgSrc = images.length && images[1].url;
@@ -26,6 +26,7 @@ const AlbumCover = ({ album }) => {
             layoutId={`album-${album.id}`}
             transition={{ duration: 0 }}
             whileHover={{ scale: 1.1 }}
+            onMouseEnter={() => onMouseEnter(album.id)}
         >
             <Box mb={1}>
                 <SafeLink href={`/albums/${id}`}>
@@ -43,6 +44,7 @@ const AlbumCover = ({ album }) => {
 };
 
 AlbumCover.propTypes = {
+    onMouseEnter: PropTypes.func.isRequired,
     album: PropTypes.shape({
         id: PropTypes.string.isRequired,
         uri: PropTypes.string.isRequired,

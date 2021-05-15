@@ -1,10 +1,17 @@
-import React, { memo } from 'react';
+import React, { Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Box, makeStyles } from '@material-ui/core';
 
 import TextLink from '../../common/TextLink';
 import SafeLink from '../../common/SafeLink';
 import { getUrlFromSpotifyUri } from '../../../utils/spotify-data';
+import { usePrefetch } from '../../../hooks/usePrefetch';
+import { ALBUM_QUERY, ALBUM_TRACKS_QUERY } from '../../../graphql/queries/album';
+import {
+    ARTIST_QUERY,
+    RELATED_ARTISTS_QUERY,
+    TOP_TRACKS_QUERY,
+} from '../../../graphql/queries/artist';
 
 // Note: In order to get text to not wrap, we need the parent
 // container to have a width set. In order to simulate responsive
@@ -29,8 +36,49 @@ const _getSmallestImageUrl = (album) => {
     return [...album.images].sort((a, b) => a.width - b.width)[0].url;
 };
 
-const PlayingInfo = ({ currentTrack, contextUri, uri }) => {
+const PlayingInfo = ({ currentTrack, contextUri }) => {
     const classes = useStyles();
+    const prefetch = usePrefetch();
+
+    const handleArtistMouseOver = (artistUri) => {
+        const artistId = artistUri.split(':artist:')?.[1];
+        if (!artistId) return;
+
+        prefetch([
+            {
+                query: ARTIST_QUERY,
+                variables: { id: artistId },
+            },
+            {
+                query: RELATED_ARTISTS_QUERY,
+                variables: { artistId },
+            },
+            {
+                query: TOP_TRACKS_QUERY,
+                variables: { artistId },
+            },
+        ]);
+    };
+
+    const handleTrackMouseOver = (albumUri) => {
+        const albumId = albumUri.split(':album:')?.[1];
+        if (!albumId) return;
+
+        prefetch([
+            {
+                query: ALBUM_QUERY,
+                variables: { id: albumId },
+            },
+            {
+                query: ALBUM_TRACKS_QUERY,
+                variables: {
+                    albumId,
+                    limit: 15,
+                    offset: 0,
+                },
+            },
+        ]);
+    };
 
     if (!currentTrack) return null;
 
@@ -56,7 +104,7 @@ const PlayingInfo = ({ currentTrack, contextUri, uri }) => {
                         <Box className={classes.noWrapTextContainer}>
                             <TextLink
                                 text={name}
-                                // Take user to album associated with track
+                                onMouseOver={() => handleTrackMouseOver(album.uri)}
                                 href={getUrlFromSpotifyUri(album.uri)}
                                 TypographyProps={{
                                     noWrap: true,
@@ -67,24 +115,26 @@ const PlayingInfo = ({ currentTrack, contextUri, uri }) => {
                     </Grid>
                     <Grid item xs zeroMinWidth>
                         <Box className={classes.noWrapTextContainer} style={{ display: 'flex' }}>
-                            {
-                                // TODO: Fix spacing issue
-                                artists.map((artist) => (
-                                    <TextLink
-                                        key={artist.uri}
-                                        text={artist.name}
-                                        // Take user to artist page
-                                        href={getUrlFromSpotifyUri(artist.uri)}
-                                        TypographyProps={{
-                                            noWrap: true,
-                                            variant: 'caption',
-                                            // Caption variant renders a span which will not work
-                                            // for the noWrap look
-                                            component: 'h6',
-                                        }}
-                                    />
-                                ))
-                            }
+                            {artists.map((artist, index) => {
+                                const isLastItem = index === artists.length - 1;
+                                return (
+                                    <Fragment key={artist.uri}>
+                                        <TextLink
+                                            text={artist.name + (!isLastItem ? ',' : '')}
+                                            href={getUrlFromSpotifyUri(artist.uri)}
+                                            onMouseOver={() => handleArtistMouseOver(artist.uri)}
+                                            TypographyProps={{
+                                                noWrap: true,
+                                                variant: 'caption',
+                                                // Caption variant renders a span which will not work
+                                                // for the noWrap look
+                                                component: 'h6',
+                                            }}
+                                        />
+                                        {!isLastItem && <Box mr={1} />}
+                                    </Fragment>
+                                );
+                            })}
                         </Box>
                     </Grid>
                 </Grid>

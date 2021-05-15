@@ -6,7 +6,7 @@ Music Player was built with the following technologies:
 
 -   React
 -   Next JS
--   GraphQL
+-   Apollo + GraphQL
 -   Material UI
 -   Framer Motion
 
@@ -26,7 +26,20 @@ To run Music Player on your machine, follow these steps:
 
 1. Ensure you have Node 12 or higher installed
 2. Clone this repository
-3. Run the following command from the project directory:
+3. Set up a Spotify Developer account and register Music Player as an app
+4. Create a .env.local file in the project directory and add the clientId and clientSecret given to you by Spotify, along with the redirectURI your application will use to receive the authorization callback
+5. Edit your project from the Spotify Dashboard and add your redirectURI to the whitelist
+
+```javascript
+// .env.local
+
+SPOTIFY_CLIENT_ID=foo // your clientID here
+SPOTIFY_CLIENT_SECRET=bar // your clientSecret here
+SPOTIFY_REDIRECT_URI='http://localhost:3001/api/auth/callback' // remove quotes (used for markdown display only)
+NEXT_PUBLIC_ALLOW_PREFETCH=true // set to false if you want to disable pre-fetching (substantially reducing Spotify API calls)
+```
+
+6. Run the following command from the project directory:
 
 ```javascript
 // .../music-player

@@ -1,35 +1,14 @@
 import PropTypes from 'prop-types';
 import { Box, Typography } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import AlbumGroup from '../album/AlbumGroup';
 import DiscographySkeleton from './skeletons/DiscographySkeleton';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../../utils/constants';
+import { ARTIST_ALBUMS_QUERY } from '../../graphql/queries/artist';
 
 const ALBUM_PAGE_SIZE = 20;
-
-const ARTIST_ALBUMS_QUERY = gql`
-    query GetArtistAlbums($artistId: ID!, $limit: Int, $offset: Int) {
-        artistAlbums(artistId: $artistId, limit: $limit, offset: $offset) {
-            next
-            items {
-                id
-                uri
-                name
-                images {
-                    width
-                    height
-                    url
-                }
-                release_date
-                release_date_precision
-                album_group
-                album_type
-            }
-        }
-    }
-`;
 
 // Albums are returned in date desc order, so we will keep the first
 // (most recent version of a duplicate album)

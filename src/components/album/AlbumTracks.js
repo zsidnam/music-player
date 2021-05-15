@@ -1,4 +1,4 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
 
 import TrackTable, { COLUMNS } from '../../components/track/TrackTable';
@@ -6,27 +6,9 @@ import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { SCROLLABLE_CONTENT_CONTAINER_ID } from '../../utils/constants';
 import AlbumTracksSkeleton from './skeletons/AlbumTracksSkeleton';
 import { playContext } from '../../services/spotify-api';
+import { ALBUM_TRACKS_QUERY } from '../../graphql/queries/album';
 
 const TRACK_PAGE_SIZE = 15;
-
-const ALBUM_TRACKS_QUERY = gql`
-    query GetAlbumTracks($albumId: ID!, $limit: Int, $offset: Int) {
-        albumTracks(albumId: $albumId, limit: $limit, offset: $offset) {
-            next
-            items {
-                id
-                uri
-                name
-                duration_ms
-                track_number
-                artists {
-                    id
-                    name
-                }
-            }
-        }
-    }
-`;
 
 const AlbumTracks = ({ albumId, primaryColor, albumUri }) => {
     const { loading, error, data, fetchMore } = useQuery(ALBUM_TRACKS_QUERY, {

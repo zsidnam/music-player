@@ -6,7 +6,14 @@ import SearchResultCategory from './SearchResultCategory';
 import ColorizedContainer from '../common/ColorizedContainer';
 import Thumbnail from '../common/Thumbnail';
 import { useSearchContext } from '../../context/searchContext';
+import { usePrefetch } from '../../hooks/usePrefetch';
 import SearchResultCategorySkeleton from './skeletons/SearchResultCategorySkeleton';
+import {
+    ARTIST_QUERY,
+    RELATED_ARTISTS_QUERY,
+    TOP_TRACKS_QUERY,
+} from '../../graphql/queries/artist';
+import { ALBUM_QUERY, ALBUM_TRACKS_QUERY } from '../../graphql/queries/album';
 
 // Spotify returns images in order of widest -> smallest
 const _getSmallestImgSrc = (images) => (images.length ? images[images.length - 1].url : null);
@@ -14,9 +21,44 @@ const _getSmallestImgSrc = (images) => (images.length ? images[images.length - 1
 const SearchResults = ({ results, loading }) => {
     const theme = useTheme();
     const { addRecentSearch } = useSearchContext();
+    const prefetch = usePrefetch();
 
     const handleThumbnailSelect = (thumbnailProps) => {
         addRecentSearch(thumbnailProps);
+    };
+
+    const handleArtistMouseEnter = (artistId) => {
+        prefetch([
+            {
+                query: ARTIST_QUERY,
+                variables: { id: artistId },
+            },
+            {
+                query: RELATED_ARTISTS_QUERY,
+                variables: { artistId },
+            },
+            {
+                query: TOP_TRACKS_QUERY,
+                variables: { artistId },
+            },
+        ]);
+    };
+
+    const handleTrackAndAlbumMouseEnter = (albumId) => {
+        prefetch([
+            {
+                query: ALBUM_QUERY,
+                variables: { id: albumId },
+            },
+            {
+                query: ALBUM_TRACKS_QUERY,
+                variables: {
+                    albumId,
+                    limit: 15,
+                    offset: 0,
+                },
+            },
+        ]);
     };
 
     return (
@@ -41,7 +83,12 @@ const SearchResults = ({ results, loading }) => {
                                     items={results.tracks.items}
                                     renderResult={(track) => (
                                         <Grid key={track.id} item xs={12}>
-                                            <motion.div whileHover={{ scale: 1.1 }}>
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                onMouseEnter={() =>
+                                                    handleTrackAndAlbumMouseEnter(track.album.id)
+                                                }
+                                            >
                                                 <Thumbnail
                                                     href={`/albums/${track.album.id}`}
                                                     imageSrc={_getSmallestImgSrc(
@@ -69,7 +116,12 @@ const SearchResults = ({ results, loading }) => {
                                     items={results.artists.items}
                                     renderResult={(artist) => (
                                         <Grid key={artist.id} item xs={12}>
-                                            <motion.div whileHover={{ scale: 1.1 }}>
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                onMouseEnter={() =>
+                                                    handleArtistMouseEnter(artist.id)
+                                                }
+                                            >
                                                 <Thumbnail
                                                     href={`/artists/${artist.id}`}
                                                     imageSrc={_getSmallestImgSrc(artist.images)}
@@ -96,6 +148,9 @@ const SearchResults = ({ results, loading }) => {
                                             <motion.div
                                                 whileHover={{ scale: 1.1 }}
                                                 layoutId={`album-${album.id}`}
+                                                onMouseEnter={() =>
+                                                    handleTrackAndAlbumMouseEnter(album.id)
+                                                }
                                             >
                                                 <Thumbnail
                                                     href={`/albums/${album.id}`}

@@ -1,24 +1,10 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import MainLayout from '../../layouts/MainLayout';
 import ArtistDetails from '../../components/artist/ArtistDetails';
 import ArtistDetailsSkeleton from '../../components/artist/skeletons/ArtistDetailsSkeleton';
-
-const ARTIST_QUERY = gql`
-    query GetArtist($id: ID!) {
-        artist(id: $id) {
-            id
-            name
-            uri
-            images {
-                height
-                width
-                url
-            }
-        }
-    }
-`;
+import { ARTIST_QUERY } from '../../graphql/queries/artist';
 
 const ArtistPage = () => {
     const router = useRouter();
