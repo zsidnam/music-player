@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
 
 import SafeLink from './SafeLink';
 
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TextLink = ({ href, text, TypographyProps, onMouseOver }) => {
+const TextLink = ({ href, text, TypographyProps, onMouseOver, className }) => {
     const classes = useStyles();
     const optionalProps = {};
     if (onMouseOver) {
@@ -22,7 +23,11 @@ const TextLink = ({ href, text, TypographyProps, onMouseOver }) => {
 
     return (
         <SafeLink href={href}>
-            <Typography {...TypographyProps} className={classes.link} {...optionalProps}>
+            <Typography
+                className={clsx(classes.link, className)}
+                {...TypographyProps}
+                {...optionalProps}
+            >
                 {text}
             </Typography>
         </SafeLink>
@@ -33,6 +38,7 @@ TextLink.propTypes = {
     text: PropTypes.string.isRequired,
     TypographyProps: PropTypes.object,
     onMouseOver: PropTypes.func,
+    className: PropTypes.string,
 };
 
 export default TextLink;

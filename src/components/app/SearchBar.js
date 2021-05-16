@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Box, TextField, makeStyles } from '@material-ui/core';
+import React, { useState, useCallback, useRef } from 'react';
+import { TextField, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import debounce from 'lodash.debounce';
@@ -24,6 +24,7 @@ const SearchBar = ({ loggedIn }) => {
     const classes = useStyles();
     const [searchText, setSearchText] = useState('');
     const { setSearchText: updateSearchContext } = useSearchContext();
+    const inputRef = useRef();
 
     const search = (text) => {
         updateSearchContext(text);
@@ -47,26 +48,25 @@ const SearchBar = ({ loggedIn }) => {
     const handleClear = () => {
         setSearchText('');
         debouncedSearch('');
-        // TODO: refocus input
+        inputRef.current.focus();
     };
 
     return (
-        <Box>
-            <TextField
-                fullWidth
-                value={searchText}
-                onFocus={handleClick}
-                onChange={handleChange}
-                placeholder={'Search Music'}
-                disabled={!loggedIn}
-                InputProps={{
-                    startAdornment: <SearchIcon className={classes.searchIcon} />,
-                    endAdornment: loggedIn ? (
-                        <ClearIcon onClick={handleClear} className={classes.clearIcon} />
-                    ) : null,
-                }}
-            />
-        </Box>
+        <TextField
+            fullWidth
+            inputRef={inputRef}
+            value={searchText}
+            onFocus={handleClick}
+            onChange={handleChange}
+            placeholder={'Search Music'}
+            disabled={!loggedIn}
+            InputProps={{
+                startAdornment: <SearchIcon className={classes.searchIcon} />,
+                endAdornment: loggedIn ? (
+                    <ClearIcon onClick={handleClear} className={classes.clearIcon} />
+                ) : null,
+            }}
+        />
     );
 };
 

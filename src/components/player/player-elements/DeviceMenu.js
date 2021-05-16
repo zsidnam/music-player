@@ -26,8 +26,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// TODO: Consider memoizing component
-
 // Device Menu implementation is the same regardless of whether Web Player
 // or Connect Player is active. Component will fetch it's own data instead of
 // relying on player for implementation.

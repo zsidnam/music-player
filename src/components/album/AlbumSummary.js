@@ -3,8 +3,14 @@ import { Box, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import { motion } from 'framer-motion';
 
-import TextLink from '../common/TextLink';
 import PlayContextButton from '../common/PlayContextButton';
+import ArtistLinks from '../artist/ArtistLinks';
+import { usePrefetch } from '../../hooks/usePrefetch';
+import {
+    ARTIST_QUERY,
+    RELATED_ARTISTS_QUERY,
+    TOP_TRACKS_QUERY,
+} from '../../graphql/queries/artist';
 
 const useStyles = makeStyles((theme) => ({
     titleText: {
@@ -17,9 +23,27 @@ const useStyles = makeStyles((theme) => ({
 
 const AlbumSummary = ({ album, primaryColor }) => {
     const classes = useStyles();
+    const prefetch = usePrefetch();
     const { uri, artists, name, release_date, total_tracks, images } = album;
     const albumArtImgSrc = images.length && images[1].url;
     const metaDataString = `${moment(release_date).format('MMM YYYY')}, ${total_tracks} songs`;
+
+    const handleArtistMouseOver = (artistId) => {
+        prefetch([
+            {
+                query: ARTIST_QUERY,
+                variables: { id: artistId },
+            },
+            {
+                query: RELATED_ARTISTS_QUERY,
+                variables: { artistId },
+            },
+            {
+                query: TOP_TRACKS_QUERY,
+                variables: { artistId },
+            },
+        ]);
+    };
 
     return (
         <Box display={'flex'} alignItems={'center'}>
@@ -34,13 +58,11 @@ const AlbumSummary = ({ album, primaryColor }) => {
                     {name}
                 </Typography>
 
-                <Box mt={1}>
-                    <TextLink
-                        text={artists[0].name}
-                        href={`/artists/${artists[0].id}`}
-                        TypographyProps={{
-                            variant: 'h4',
-                        }}
+                <Box mt={1} display={'flex'}>
+                    <ArtistLinks
+                        artists={artists}
+                        onMouseOver={handleArtistMouseOver}
+                        TypographyProps={{ variant: 'h4' }}
                     />
                 </Box>
 

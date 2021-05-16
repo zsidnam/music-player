@@ -12,10 +12,6 @@ const ArtistDetails = ({ artist }) => {
     const artistImgSrc = artist.images.length && artist.images[0].url;
     const { primaryDarkColor, primaryLightColor } = useImageColors(artistImgSrc);
 
-    // TODO: The artist summary could probably be refactored to fetch
-    // its own data. Briefly tried this and ran into some weird caching issues,
-    // so decided to revisit later.
-
     return (
         <Box mb={10}>
             <ColorizedContainer primaryColor={primaryDarkColor} maxWidth={'lg'}>

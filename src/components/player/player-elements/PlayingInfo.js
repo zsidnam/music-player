@@ -1,9 +1,10 @@
-import React, { Fragment, memo } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Box, makeStyles } from '@material-ui/core';
 
 import TextLink from '../../common/TextLink';
 import SafeLink from '../../common/SafeLink';
+import ArtistLinks from '../../artist/ArtistLinks';
 import { getUrlFromSpotifyUri } from '../../../utils/spotify-data';
 import { usePrefetch } from '../../../hooks/usePrefetch';
 import { ALBUM_QUERY, ALBUM_TRACKS_QUERY } from '../../../graphql/queries/album';
@@ -115,26 +116,18 @@ const PlayingInfo = ({ currentTrack, contextUri }) => {
                     </Grid>
                     <Grid item xs zeroMinWidth>
                         <Box className={classes.noWrapTextContainer} style={{ display: 'flex' }}>
-                            {artists.map((artist, index) => {
-                                const isLastItem = index === artists.length - 1;
-                                return (
-                                    <Fragment key={artist.uri}>
-                                        <TextLink
-                                            text={artist.name + (!isLastItem ? ',' : '')}
-                                            href={getUrlFromSpotifyUri(artist.uri)}
-                                            onMouseOver={() => handleArtistMouseOver(artist.uri)}
-                                            TypographyProps={{
-                                                noWrap: true,
-                                                variant: 'caption',
-                                                // Caption variant renders a span which will not work
-                                                // for the noWrap look
-                                                component: 'h6',
-                                            }}
-                                        />
-                                        {!isLastItem && <Box mr={1} />}
-                                    </Fragment>
-                                );
-                            })}
+                            <ArtistLinks
+                                useUri
+                                artists={artists}
+                                onMouseOver={handleArtistMouseOver}
+                                TypographyProps={{
+                                    noWrap: true,
+                                    variant: 'caption',
+                                    // Caption variant renders a span which will not work
+                                    // for the noWrap look
+                                    component: 'h6',
+                                }}
+                            />
                         </Box>
                     </Grid>
                 </Grid>

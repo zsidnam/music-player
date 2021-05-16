@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
+import { Box, Typography } from '@material-ui/core';
 
 import TrackTable, { COLUMNS } from '../../components/track/TrackTable';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -33,8 +34,12 @@ const AlbumTracks = ({ albumId, primaryColor, albumUri }) => {
 
     if (loading) return <AlbumTracksSkeleton />;
 
-    // TODO: Redirect/Display error message
-    if (error) return <p>There was an error</p>;
+    if (error)
+        return (
+            <Box minHeight={100} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                <Typography>Unable to get tracks for album. Please try again later.</Typography>
+            </Box>
+        );
 
     return (
         <TrackTable

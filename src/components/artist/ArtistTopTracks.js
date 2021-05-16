@@ -53,8 +53,8 @@ const ArtistTopTracks = ({ artistId, primaryColor }) => {
                     primaryColor={primaryColor}
                     indexAsTrackNumber
                     disableTableHead
-                    columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
                     onTrackPlay={handleTrackPlay}
+                    columns={[COLUMNS.ALBUM_ART, COLUMNS.TRACK_NUMBER, COLUMNS.TITLE]}
                 />
             )}
         </>
