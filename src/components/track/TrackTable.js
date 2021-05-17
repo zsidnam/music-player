@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
 
@@ -8,6 +8,7 @@ import TrackContextMenu from '../contextMenu/TrackContextMenu';
 import { useRecordSelect } from '../../hooks/useRecordSelect';
 import { usePlayStateContext } from '../../context/playStateContext';
 import { useMenuContext } from '../../context/menuContext';
+import { usePrefetch } from '../../hooks/usePrefetch';
 
 export const COLUMNS = Object.freeze({
     ALBUM_ART: 'albumArt',
@@ -31,6 +32,7 @@ const TrackTable = ({
     const tableRef = useRef();
     const { selectedRecords, handleRecordSelect } = useRecordSelect(tracks, tableRef);
     const { open } = useMenuContext();
+    const prefetch = usePrefetch();
     const { playState } = usePlayStateContext();
     const { playingUri, paused, contextUri: playingContextUri } = playState;
 
@@ -66,6 +68,7 @@ const TrackTable = ({
                             isSelected={selectedRecords.includes(track.id)}
                             primaryColor={primaryColor}
                             paused={paused}
+                            prefetch={prefetch}
                             onContextClick={handleContextMenuClick}
                             indexAsTrackNumber={indexAsTrackNumber}
                         />

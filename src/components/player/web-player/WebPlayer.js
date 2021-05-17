@@ -6,6 +6,7 @@ import { withSnackbar } from 'notistack';
 
 import loadWebPlayer from './load-web-player';
 import LoadingModal from './LoadingModal';
+import NonPremiumMessageModal from './NonPremiumMessageModal';
 import PlayerInterface from '../player-elements/PlayerInterface';
 import ConnectPlayer from './ConnectPlayer';
 import { PlayStateContext } from '../../../context/playStateContext';
@@ -31,6 +32,8 @@ class WebPlayer extends React.Component {
             showLoadingModal: true,
             playerState: {},
             playerVolume: 0,
+            isNonPremiumAccount: false,
+            showPermissionsMessage: false,
         };
 
         this.player = null;
@@ -38,7 +41,8 @@ class WebPlayer extends React.Component {
         this.playerVolumeInterval = null;
 
         this.transferPlayback = this.transferPlayback.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.closeLoadingModal = this.closeLoadingModal.bind(this);
+        this.closeNonPremiumMessageModal = this.closeNonPremiumMessageModal.bind(this);
         this.handleStateUpdate = this.handleStateUpdate.bind(this);
         this.initPlayer = this.initPlayer.bind(this);
         this.handlePlayToggle = this.handlePlayToggle.bind(this);
@@ -124,14 +128,17 @@ class WebPlayer extends React.Component {
             console.error(message);
         });
 
-        this.player.addListener('account_error', ({ message }) => {
-            console.error(message);
+        this.player.addListener('account_error', () => {
+            // If this gets hit, it means that the user does not have a
+            // a Spotify Premium account.
+            this.setState({
+                showLoadingModal: false,
+                isNonPremiumAccount: true,
+                showPermissionsMessage: true,
+            });
         });
 
         this.player.addListener('playback_error', ({ message }) => {
-            // TODO: This will get hit if the access token is no longer
-            // valid. If that is the case, we should log the user out
-            // or attempt to refresh the token.
             console.error(message);
         });
 
@@ -233,8 +240,12 @@ class WebPlayer extends React.Component {
         transferPlayback(this.state.deviceId);
     }
 
-    closeModal() {
+    closeLoadingModal() {
         this.setState({ showLoadingModal: false });
+    }
+
+    closeNonPremiumMessageModal() {
+        this.setState({ showPermissionsMessage: false });
     }
 
     handlePlayToggle() {
@@ -293,13 +304,21 @@ class WebPlayer extends React.Component {
                         onRepeatToggle={this.handleRepeatToggle}
                     />
                 ) : (
-                    <ConnectPlayer onPlayerStateUpdate={this._syncPlayerStateWithContext} />
+                    <ConnectPlayer
+                        onPlayerStateUpdate={this._syncPlayerStateWithContext}
+                        isNonPremiumAccount={this.state.isNonPremiumAccount}
+                    />
                 )}
 
                 <LoadingModal
                     open={this.state.showLoadingModal}
-                    onClose={this.closeModal}
+                    onClose={this.closeLoadingModal}
                     transferPlayback={this.transferPlayback}
+                />
+
+                <NonPremiumMessageModal
+                    open={this.state.showPermissionsMessage}
+                    onClose={this.closeNonPremiumMessageModal}
                 />
             </>
         );

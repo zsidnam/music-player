@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Typography, Menu, MenuItem, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import ProfileIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -48,12 +49,16 @@ const UserMenu = ({ user, logout }) => {
     return (
         <>
             <Button className={classes.button} onClick={handleClick}>
-                <img
-                    src={user.profilePic.url}
-                    className={classes.profilePic}
-                    width={36}
-                    height={36}
-                />
+                {user.profilePic?.url ? (
+                    <img
+                        src={user.profilePic.url}
+                        className={classes.profilePic}
+                        width={36}
+                        height={36}
+                    />
+                ) : (
+                    <ProfileIcon />
+                )}
                 <Typography variant={'button'} className={classes.buttonText}>
                     {user.name}
                 </Typography>

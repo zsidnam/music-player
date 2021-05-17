@@ -16,7 +16,7 @@ const _clearLocalStorage = () => {
     localStorage.removeItem('expires');
 };
 
-const AuthContext = createContext({});
+export const AuthContext = createContext({});
 
 export const AuthContextProvider = ({ children }) => {
     const router = useRouter();

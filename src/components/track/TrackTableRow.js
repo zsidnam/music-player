@@ -9,10 +9,19 @@ import clsx from 'clsx';
 import { COLUMNS } from './TrackTable';
 import { formatTime } from '../../utils/format';
 import { resumePlayback, pausePlayback } from '../../services/spotify-api';
+import ArtistLinks from '../artist/ArtistLinks';
+import {
+    ARTIST_QUERY,
+    RELATED_ARTISTS_QUERY,
+    TOP_TRACKS_QUERY,
+} from '../../graphql/queries/artist';
 
 const useStyles = makeStyles((theme) => ({
     dynamicColor: ({ isPlaying, primaryColor }) => ({
         color: isPlaying ? primaryColor : theme.palette.text.primary,
+        '&:hover': {
+            color: isPlaying ? primaryColor : theme.palette.text.primary,
+        },
     }),
     iconButton: {
         '&:hover': {
@@ -32,6 +41,7 @@ const TrackTableRow = ({
     primaryColor,
     paused,
     columns,
+    prefetch,
     indexAsTrackNumber,
 }) => {
     const classes = useStyles({ isPlaying, primaryColor });
@@ -49,7 +59,6 @@ const TrackTableRow = ({
 
     const handleContextClick = (e) => {
         e.preventDefault();
-
         if (!isSelected) {
             onSelect(e, id, index);
         }
@@ -68,6 +77,23 @@ const TrackTableRow = ({
         } else {
             paused ? resumePlayback() : pausePlayback();
         }
+    };
+
+    const handleArtistMouseOver = (artistId) => {
+        prefetch([
+            {
+                query: ARTIST_QUERY,
+                variables: { id: artistId },
+            },
+            {
+                query: RELATED_ARTISTS_QUERY,
+                variables: { artistId },
+            },
+            {
+                query: TOP_TRACKS_QUERY,
+                variables: { artistId },
+            },
+        ]);
     };
 
     return (
@@ -92,12 +118,6 @@ const TrackTableRow = ({
                 )}
             </TableCell>
 
-            {_hasColumn(COLUMNS.ALBUM_ART) && (
-                <TableCell padding={'none'} align={'center'} style={{ paddingTop: '4px' }}>
-                    <img src={_get(album, 'images[2].url')} height={33} />
-                </TableCell>
-            )}
-
             {_hasColumn(COLUMNS.TRACK_NUMBER) && (
                 <TableCell align={'center'}>
                     <Typography className={classes.dynamicColor}>
@@ -106,23 +126,36 @@ const TrackTableRow = ({
                 </TableCell>
             )}
 
+            {_hasColumn(COLUMNS.ALBUM_ART) && (
+                <TableCell padding={'none'} align={'center'} style={{ paddingTop: '4px' }}>
+                    <img src={_get(album, 'images[2].url')} height={33} />
+                </TableCell>
+            )}
+
             {_hasColumn(COLUMNS.TITLE) && (
                 <TableCell>
-                    <Typography className={classes.dynamicColor}>{name}</Typography>
+                    <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'}>
+                        <Typography variant={'h6'} className={classes.dynamicColor}>
+                            {name}
+                        </Typography>
+
+                        {_hasColumn(COLUMNS.ARTISTS) && (
+                            <ArtistLinks
+                                artists={artists}
+                                onMouseOver={handleArtistMouseOver}
+                                className={classes.dynamicColor}
+                                TypographyProps={{
+                                    variant: 'caption',
+                                }}
+                            />
+                        )}
+                    </Box>
                 </TableCell>
             )}
 
             {_hasColumn(COLUMNS.ALBUM) && (
                 <TableCell>
                     <Typography className={classes.dynamicColor}>{album.name}</Typography>
-                </TableCell>
-            )}
-
-            {_hasColumn(COLUMNS.ARTISTS) && (
-                <TableCell>
-                    <Typography className={classes.dynamicColor}>
-                        {artists.map((x) => x.name).join(', ')}
-                    </Typography>
                 </TableCell>
             )}
 
@@ -148,6 +181,7 @@ TrackTableRow.propTypes = {
     primaryColor: PropTypes.string,
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
     indexAsTrackNumber: PropTypes.bool,
+    prefetch: PropTypes.func.isRequired,
     track: PropTypes.shape({
         id: PropTypes.string.isRequired,
         uri: PropTypes.string.isRequired,

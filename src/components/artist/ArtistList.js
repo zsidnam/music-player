@@ -3,6 +3,12 @@ import { Box, Typography, Grid } from '@material-ui/core';
 import { motion } from 'framer-motion';
 
 import Thumbnail from '../common/Thumbnail';
+import { usePrefetch } from '../../hooks/usePrefetch';
+import {
+    ARTIST_QUERY,
+    RELATED_ARTISTS_QUERY,
+    TOP_TRACKS_QUERY,
+} from '../../graphql/queries/artist';
 
 const DEFAULT_ARTISTS_TO_SHOW = 8;
 
@@ -17,6 +23,24 @@ const RelatedArtists = ({
     error,
     errorMessage,
 }) => {
+    const prefetch = usePrefetch();
+    const handleMouseEnter = (artistId) => {
+        prefetch([
+            {
+                query: ARTIST_QUERY,
+                variables: { id: artistId },
+            },
+            {
+                query: RELATED_ARTISTS_QUERY,
+                variables: { artistId },
+            },
+            {
+                query: TOP_TRACKS_QUERY,
+                variables: { artistId },
+            },
+        ]);
+    };
+
     const artistsToDisplay = numRecordsToShow > 0 ? artists.slice(0, numRecordsToShow) : artists;
     const titleBlock = !title ? null : (
         <Box mb={2}>
@@ -42,7 +66,10 @@ const RelatedArtists = ({
                 <Grid container direction={'column'} spacing={2}>
                     {artistsToDisplay.map((artist) => (
                         <Grid key={artist.id} item xs={12}>
-                            <motion.div whileHover={{ scale: 1.1 }}>
+                            <motion.div
+                                whileHover={{ scale: 1.1 }}
+                                onMouseEnter={() => handleMouseEnter(artist.id)}
+                            >
                                 <Thumbnail
                                     href={`/artists/${artist.id}`}
                                     imageSrc={_getSmallestImgSrc(artist.images)}
